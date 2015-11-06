@@ -19,7 +19,7 @@ npm install datatables.net
 
 ```
 var $ = require( 'jquery' );
-require( 'datatables.net' )( $ );
+require( 'datatables.net' )( window, $ );
 ```
 
 ### bower
