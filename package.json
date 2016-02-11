@@ -1,6 +1,6 @@
 {
     "name": "datatables.net",
-    "version": "1.10.10",
+    "version": "1.10.11",
     "description": "DataTables for jQuery ",
     "files": [
         "js/jquery.dataTables.js"
