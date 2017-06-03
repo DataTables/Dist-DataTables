@@ -11807,7 +11807,8 @@
 		 *     </li>
 		 *   </ul>
 		 *  @type string
-		 *  @default lftrip
+		 *  @default lfrtip <i>(when `jQueryUI` is false)</i> <b>or</b>
+		 *    <"H"lfr>t<"F"ip> <i>(when `jQueryUI` is true)</i>
 		 *
 		 *  @dtopt Options
 		 *  @name DataTable.defaults.dom
@@ -11819,7 +11820,7 @@
 		 *      } );
 		 *    } );
 		 */
-		"sDom": "lftrip",
+		"sDom": "lfrtip",
 	
 	
 		/**
