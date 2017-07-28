@@ -29,7 +29,7 @@
 
 	if ( typeof define === 'function' && define.amd ) {
 		// AMD
-		define( ['jquery'], function ( $ ) {
+		define('datatables.net', ['jquery'], function ( $ ) {
 			return factory( $, window, document );
 		} );
 	}
