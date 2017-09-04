@@ -3,8 +3,7 @@
     "version": "1.10.16",
     "description": "DataTables for jQuery ",
     "files": [
-        "js/jquery.dataTables.js",
-        "js/jquery.dataTables.min.js"
+        "js/**/*.js"
     ],
     "main": "./js/jquery.dataTables.js",
     "keywords": [
