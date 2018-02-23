@@ -5,7 +5,7 @@
     "files": [
         "js/**/*.js"
     ],
-    "main": "./js/jquery.dataTables.js",
+    "main": "js/jquery.dataTables.js",
     "keywords": [
         "filter",
         "sort",
