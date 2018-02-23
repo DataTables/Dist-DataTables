@@ -14744,8 +14744,7 @@
 	$.extend( _ext.type.order, {
 		// Dates
 		"date-pre": function ( d ) {
-			var ts = Date.parse( d );
-			return isNaN(ts) ? -Infinity : ts;
+			return Date.parse( d ) || -Infinity;
 		},
 	
 		// html
