@@ -1,6 +1,6 @@
 {
     "name": "datatables.net",
-    "version": "1.10.18",
+    "version": "1.10.19",
     "description": "DataTables for jQuery ",
     "files": [
         "js/**/*.js"
