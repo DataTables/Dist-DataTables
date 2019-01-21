@@ -3078,7 +3078,7 @@
 			rowData = row._aData,
 			cells = [],
 			nTr, nTd, oCol,
-			i, iLen, create;
+			i, iLen;
 	
 		if ( row.nTr === null )
 		{
@@ -3099,9 +3099,8 @@
 			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 			{
 				oCol = oSettings.aoColumns[i];
-				create = nTrIn ? false : true;
 	
-				nTd = create ? document.createElement( oCol.sCellType ) : anTds[i];
+				nTd = nTrIn ? anTds[i] : document.createElement( oCol.sCellType );
 				nTd._DT_CellIndex = {
 					row: iRow,
 					column: i
@@ -3109,11 +3108,10 @@
 				
 				cells.push( nTd );
 	
-				console.log( 'create', i, create );
 				// Need to create the HTML if new, or if a rendering function is defined
-				if ( create || ((!nTrIn || oCol.mRender || oCol.mData !== i) &&
+				if ( (!nTrIn || oCol.mRender || oCol.mData !== i) &&
 					 (!$.isPlainObject(oCol.mData) || oCol.mData._ !== i+'.display')
-				)) {
+				) {
 					nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
 				}
 	
