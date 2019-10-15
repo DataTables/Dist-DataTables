@@ -3487,7 +3487,7 @@
 			anRows[ 0 ] = $( '<tr/>', { 'class': iStripes ? asStripeClasses[0] : '' } )
 				.append( $('<td />', {
 					'valign':  'top',
-					'colSpan': _fnVisbleColumns( oSettings ),
+					'colspan': _fnVisbleColumns( oSettings ),
 					'class':   oSettings.oClasses.sRowEmpty
 				} ).html( sZero ) )[0];
 		}
