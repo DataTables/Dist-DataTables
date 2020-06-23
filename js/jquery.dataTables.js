@@ -251,7 +251,7 @@
 			var api = this.api( true );
 		
 			/* Check if we want to add multiple rows or not */
-			var rows = $.isArray(data) && ( $.isArray(data[0]) || $.isPlainObject(data[0]) ) ?
+			var rows = Array.isArray(data) && ( Array.isArray(data[0]) || $.isPlainObject(data[0]) ) ?
 				api.rows.add( data ) :
 				api.row.add( data );
 		
@@ -975,7 +975,7 @@
 			// If the length menu is given, but the init display length is not, use the length menu
 			if ( oInit.aLengthMenu && ! oInit.iDisplayLength )
 			{
-				oInit.iDisplayLength = $.isArray( oInit.aLengthMenu[0] ) ?
+				oInit.iDisplayLength = Array.isArray( oInit.aLengthMenu[0] ) ?
 					oInit.aLengthMenu[0][0] : oInit.aLengthMenu[0];
 			}
 			
@@ -1066,7 +1066,7 @@
 			if ( oInit.iDeferLoading !== null )
 			{
 				oSettings.bDeferLoading = true;
-				var tmp = $.isArray( oInit.iDeferLoading );
+				var tmp = Array.isArray( oInit.iDeferLoading );
 				oSettings._iRecordsDisplay = tmp ? oInit.iDeferLoading[0] : oInit.iDeferLoading;
 				oSettings._iRecordsTotal = tmp ? oInit.iDeferLoading[1] : oInit.iDeferLoading;
 			}
@@ -1841,7 +1841,7 @@
 	
 		// orderData can be given as an integer
 		var dataSort = init.aDataSort;
-		if ( typeof dataSort === 'number' && ! $.isArray( dataSort ) ) {
+		if ( typeof dataSort === 'number' && ! Array.isArray( dataSort ) ) {
 			init.aDataSort = [ dataSort ];
 		}
 	}
@@ -2325,7 +2325,7 @@
 					def.targets :
 					def.aTargets;
 	
-				if ( ! $.isArray( aTargets ) )
+				if ( ! Array.isArray( aTargets ) )
 				{
 					aTargets = [ aTargets ];
 				}
@@ -2644,7 +2644,7 @@
 							innerSrc = a.join('.');
 	
 							// Traverse each entry in the array getting the properties requested
-							if ( $.isArray( data ) ) {
+							if ( Array.isArray( data ) ) {
 								for ( var j=0, jLen=data.length ; j<jLen ; j++ ) {
 									out.push( fetchData( data[j], type, innerSrc ) );
 								}
@@ -2747,7 +2747,7 @@
 						innerSrc = b.join('.');
 	
 						// Traverse each entry in the array setting the properties requested
-						if ( $.isArray( val ) )
+						if ( Array.isArray( val ) )
 						{
 							for ( var j=0, jLen=val.length ; j<jLen ; j++ )
 							{
@@ -3834,7 +3834,7 @@
 	
 		// Convert to object based for 1.10+ if using the old array scheme which can
 		// come from server-side processing or serverParams
-		if ( data && $.isArray(data) ) {
+		if ( data && Array.isArray(data) ) {
 			var tmp = {};
 			var rbracket = /(.*?)\[\]$/;
 	
@@ -4819,7 +4819,7 @@
 			classes  = settings.oClasses,
 			tableId  = settings.sTableId,
 			menu     = settings.aLengthMenu,
-			d2       = $.isArray( menu[0] ),
+			d2       = Array.isArray( menu[0] ),
 			lengths  = d2 ? menu[0] : menu,
 			language = d2 ? menu[1] : menu;
 	
@@ -5865,7 +5865,7 @@
 			fixedObj = $.isPlainObject( fixed ),
 			nestedSort = [],
 			add = function ( a ) {
-				if ( a.length && ! $.isArray( a[0] ) ) {
+				if ( a.length && ! Array.isArray( a[0] ) ) {
 					// 1D array
 					nestedSort.push( a );
 				}
@@ -5877,7 +5877,7 @@
 	
 		// Build the sort array, with pre-fix and post-fix options if they have been
 		// specified
-		if ( $.isArray( fixed ) ) {
+		if ( Array.isArray( fixed ) ) {
 			add( fixed );
 		}
 	
@@ -6506,9 +6506,9 @@
 	 */
 	function _fnMap( ret, src, name, mappedName )
 	{
-		if ( $.isArray( name ) ) {
+		if ( Array.isArray( name ) ) {
 			$.each( name, function (i, val) {
-				if ( $.isArray( val ) ) {
+				if ( Array.isArray( val ) ) {
 					_fnMap( ret, src, val[0], val[1] );
 				}
 				else {
@@ -6560,7 +6560,7 @@
 					}
 					$.extend( true, out[prop], val );
 				}
-				else if ( breakRefs && prop !== 'data' && prop !== 'aaData' && $.isArray(val) ) {
+				else if ( breakRefs && prop !== 'data' && prop !== 'aaData' && Array.isArray(val) ) {
 					out[prop] = val.slice();
 				}
 				else {
@@ -6904,7 +6904,7 @@
 			}
 		};
 	
-		if ( $.isArray( context ) ) {
+		if ( Array.isArray( context ) ) {
 			for ( var i=0, ien=context.length ; i<ien ; i++ ) {
 				ctxSettings( context[i] );
 			}
@@ -7262,7 +7262,7 @@
 	
 	_Api.register = _api_register = function ( name, val )
 	{
-		if ( $.isArray( name ) ) {
+		if ( Array.isArray( name ) ) {
 			for ( var j=0, jen=name.length ; j<jen ; j++ ) {
 				_Api.register( name[j], val );
 			}
@@ -7332,7 +7332,7 @@
 				// New API instance returned, want the value from the first item
 				// in the returned array for the singular result.
 				return ret.length ?
-					$.isArray( ret[0] ) ?
+					Array.isArray( ret[0] ) ?
 						new _Api( ret.context, ret[0] ) : // Array results are 'enhanced'
 						ret[0] :
 					undefined;
@@ -7355,7 +7355,7 @@
 	 */
 	var __table_selector = function ( selector, a )
 	{
-		if ( $.isArray(selector) ) {
+		if ( Array.isArray(selector) ) {
 			return $.map( selector, function (item) {
 				return __table_selector(item, a);
 			} );
@@ -8170,7 +8170,7 @@
 		row._aData = data;
 	
 		// If the DOM has an id, and the data source is an array
-		if ( $.isArray( data ) && row.nTr && row.nTr.id ) {
+		if ( Array.isArray( data ) && row.nTr && row.nTr.id ) {
 			_fnSetObjectDataFn( ctx[0].rowId )( data, row.nTr.id );
 		}
 	
@@ -8216,7 +8216,7 @@
 		var rows = [];
 		var addRow = function ( r, k ) {
 			// Recursion to allow for arrays of jQuery objects
-			if ( $.isArray( r ) || r instanceof $ ) {
+			if ( Array.isArray( r ) || r instanceof $ ) {
 				for ( var i=0, ien=r.length ; i<ien ; i++ ) {
 					addRow( r[i], k );
 				}
@@ -9005,7 +9005,7 @@
 			// Simple column / direction passed in
 			order = [ [ order, dir ] ];
 		}
-		else if ( order.length && ! $.isArray( order[0] ) ) {
+		else if ( order.length && ! Array.isArray( order[0] ) ) {
 			// Arguments passed in (list of 1D arrays)
 			order = Array.prototype.slice.call( arguments );
 		}
@@ -9041,7 +9041,7 @@
 				ctx[0].aaSortingFixed :
 				undefined;
 	
-			return $.isArray( fixed ) ?
+			return Array.isArray( fixed ) ?
 				{ pre: fixed } :
 				fixed;
 		}
@@ -14575,7 +14575,7 @@
 					for ( i=0, ien=buttons.length ; i<ien ; i++ ) {
 						button = buttons[i];
 	
-						if ( $.isArray( button ) ) {
+						if ( Array.isArray( button ) ) {
 							var inner = $( '<'+(button.DT_el || 'div')+'/>' )
 								.appendTo( container );
 							attach( inner, button );
