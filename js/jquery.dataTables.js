@@ -3001,7 +3001,7 @@
 		var cellProcess = function ( cell ) {
 			if ( colIdx === undefined || colIdx === i ) {
 				col = columns[i];
-				contents = $.trim(cell.innerHTML);
+				contents = (cell.innerHTML).trim();
 	
 				if ( col && col._bAttrSrc ) {
 					var setter = _fnSetObjectDataFn( col.mData._ );
