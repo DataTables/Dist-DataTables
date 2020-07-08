@@ -7751,7 +7751,7 @@
 				[ selector[i] ];
 	
 			for ( j=0, jen=a.length ; j<jen ; j++ ) {
-				res = selectFn( typeof a[j] === 'string' ? $.trim(a[j]) : a[j] );
+				res = selectFn( typeof a[j] === 'string' ? (a[j]).trim() : a[j] );
 	
 				if ( res && res.length ) {
 					out = out.concat( res );
