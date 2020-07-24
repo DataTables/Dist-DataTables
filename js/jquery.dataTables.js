@@ -1584,6 +1584,21 @@
 		return out;
 	};
 	
+	// Surprisingly this is faster than [].concat.apply
+	// https://jsperf.com/flatten-an-array-loop-vs-reduce/2
+	var _flatten = function (out, val) {
+		if (Array.isArray(val)) {
+			for (var i=0 ; i<val.length ; i++) {
+				_flatten(out, val[i]);
+			}
+		}
+		else {
+			out.push(val);
+		}
+	  
+		return out;
+	}
+	
 	// Array.isArray polyfill.
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
 	if (! Array.isArray) {
@@ -8741,14 +8756,12 @@
 		return _selector_first( this.columns( selector, opts ) );
 	} );
 	
-	
-	
 	var __cell_selector = function ( settings, selector, opts )
 	{
 		var data = settings.aoData;
 		var rows = _selector_row_indexes( settings, opts );
 		var cells = _removeEmpty( _pluck_order( data, rows, 'anCells' ) );
-		var allCells = $( [].concat.apply([], cells) );
+		var allCells = $(_flatten( [], cells ));
 		var row;
 		var columns = settings.aoColumns.length;
 		var a, i, ien, j, o, host;
