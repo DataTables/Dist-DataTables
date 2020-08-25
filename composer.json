@@ -16,7 +16,7 @@
 		"forum": "https://datatables.net/forums",
 		"source": "https://github.com/DataTables/Dist-DataTables/"
     },
-    "keywords": ["DataTables", "jQuery", "table", "", ""],
+    "keywords": ["DataTables", "jQuery", "table"],
     "require": {
         "components/jquery": "3.5.1"
     }
