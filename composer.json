@@ -11,7 +11,8 @@
 	"license": [
 		"MIT"
 	],
-	"prefer-stable": true,
+    "prefer-stable": true,
+    "minimum-stability": "dev",
 	"support": {
 		"forum": "https://datatables.net/forums",
 		"source": "https://github.com/DataTables/Dist-DataTables/"
