@@ -14,7 +14,7 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="js/datatables..js"/>
-        <file src="js/datatables..min.js"/>
+        <file src="js/jquery.dataTables.js"/>
+        <file src="js/jquery.dataTables.min.js"/>
     </files>
 </package>
