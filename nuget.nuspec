@@ -17,7 +17,7 @@
         </contentFiles>
     </metadata>
     <files>
-        <file src="js/jquery.dataTables.js" target="content\Script"/>
+        <file src="js/jquery.dataTables.js" target="content\Scripts"/>
         <file src="js/jquery.dataTables.min.js" target="content\Scripts"/>
 
         <file src="js/jquery.dataTables.js" target="contentFiles\any\any\wwwroot\js"/>
