@@ -2,6 +2,7 @@
     "name": "datatables.net",
     "description": "jQuery DataTables",
     "main": "js/jquery.dataTables.js",
+    "types": "./types/types.d.ts",
     "version": "1.10.24",
     "files": [
         "js/**/*.js"
