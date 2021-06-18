@@ -10,7 +10,7 @@
         <license type="expression">MIT</license>
         <tags> Datatables jQuery table</tags>
         <dependencies>
-            <dependency id="jquery" version=">=1.7.0"/>
+            <dependency id="jquery" version="1.7.0"/>
         </dependencies>
         <contentFiles>
             <files include="**/*" buildAction="Content"/>
