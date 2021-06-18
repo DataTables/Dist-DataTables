@@ -1,5 +1,5 @@
 {
-    "version": "1.10.24",
+    "version": "1.10.26-dev",
     "name": "datatables.net/datatables.net",
     "description": "DataTables is a plug-in for the jQuery Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, which will add advanced interaction controls to any HTML table. This is jQuery DataTables",
     "support": {
