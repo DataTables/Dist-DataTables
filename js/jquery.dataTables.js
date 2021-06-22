@@ -8257,6 +8257,24 @@
 	} );
 	
 	
+	$(document).on('init.dt', function (e, context) {
+		var api = new _Api( context );
+		api.on( 'stateSaveParams', function ( e, settings, data ) {
+			var indexes = api.rows().iterator( 'row', function ( settings, idx ) {
+				return settings.aoData[idx]._detailsShow ? idx : undefined;
+			});
+	
+			data.childRows = api.rows( indexes ).ids( true ).toArray();
+		})
+	
+		var loaded = api.state.loaded();
+	
+		if ( loaded && loaded.childRows ) {
+			api.rows( loaded.childRows ).every( function () {
+				_fnCallbackFire( context, null, 'requestChild', [ this ] )
+			})
+		}
+	})
 	
 	var __details_add = function ( ctx, row, data, klass )
 	{
@@ -8315,6 +8333,8 @@
 	
 				row._detailsShow = undefined;
 				row._details = undefined;
+				$( row.nTr ).removeClass( 'dt-hasChild' );
+				_fnSaveState( ctx[0] );
 			}
 		}
 	};
@@ -8331,12 +8351,17 @@
 	
 				if ( show ) {
 					row._details.insertAfter( row.nTr );
+					$( row.nTr ).addClass( 'dt-hasChild' );
 				}
 				else {
 					row._details.detach();
+					$( row.nTr ).removeClass( 'dt-hasChild' );
 				}
 	
+				_fnCallbackFire( ctx[0], null, 'childrow', [ show, api.row( api[0] ) ] )
+	
 				__details_events( ctx[0] );
+				_fnSaveState( ctx[0] );
 			}
 		}
 	};
