@@ -1691,14 +1691,14 @@
 		 * @param {*} source JSON notation string
 		 * @returns Write function
 		 */
-		nestedSet: function ( source ) {
+		set: function ( source ) {
 			if ( $.isPlainObject( source ) ) {
 				/* Unlike get, only the underscore (global) option is used for for
 				 * setting data since we don't know the type here. This is why an object
 				 * option is not documented for `mData` (which is read/write), but it is
 				 * for `mRender` which is read only.
 				 */
-				return _fnSetObjectDataFn( source._ );
+				return DataTable.util.nestedSet( source._ );
 			}
 			else if ( source === null ) {
 				// Nothing to do when the data source is null
@@ -1799,7 +1799,7 @@
 		 * @param {*} source JSON notation string
 		 * @returns Value read
 		 */
-		nestedGet: function ( source ) {
+		get: function ( source ) {
 			if ( $.isPlainObject( source ) ) {
 				// Build an object of get functions, and wrap them in a single call
 				var o = {};
