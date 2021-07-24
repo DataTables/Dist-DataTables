@@ -3287,9 +3287,6 @@
 		if ( createHeader ) {
 			_fnDetectHeader( oSettings.aoHeader, thead );
 		}
-		
-		/* ARIA role for the rows */
-		$(thead).children('tr').attr('role', 'row');
 	
 		/* Deal with the footer - add classes if required */
 		$(thead).children('tr').children('th, td').addClass( classes.sHeaderTH );
@@ -5106,9 +5103,6 @@
 	function _fnFeatureHtmlTable ( settings )
 	{
 		var table = $(settings.nTable);
-	
-		// Add the ARIA grid role to the table
-		table.attr( 'role', 'grid' );
 	
 		// Scrolling from here on in
 		var scroll = settings.oScroll;
