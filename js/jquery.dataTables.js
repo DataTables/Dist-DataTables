@@ -4247,18 +4247,21 @@
 			} )
 			.append( $('<label/>' ).append( str ) );
 	
-		var searchFn = function() {
+		var searchFn = function(event) {
 			/* Update all other filter input elements for the new display */
 			var n = features.f;
 			var val = !this.value ? "" : this.value; // mental IE8 fix :-(
-	
+			if(previousSearch.return && event.key !== "Enter") {
+				return;
+			}
 			/* Now do the filter */
 			if ( val != previousSearch.sSearch ) {
 				_fnFilterComplete( settings, {
 					"sSearch": val,
 					"bRegex": previousSearch.bRegex,
 					"bSmart": previousSearch.bSmart ,
-					"bCaseInsensitive": previousSearch.bCaseInsensitive
+					"bCaseInsensitive": previousSearch.bCaseInsensitive,
+					"return": previousSearch.return
 				} );
 	
 				// Need to redraw, without resorting
@@ -4287,7 +4290,7 @@
 				// on the clear icon (Edge bug 17584515). This is safe in other browsers as `searchFn`
 				// checks the value to see if it has changed. In other browsers it won't have.
 				setTimeout( function () {
-					searchFn.call(jqFilter[0]);
+					searchFn.call(jqFilter[0], e);
 				}, 10);
 			} )
 			.on( 'keypress.DT', function(e) {
@@ -4333,6 +4336,7 @@
 			oPrevSearch.bRegex = oFilter.bRegex;
 			oPrevSearch.bSmart = oFilter.bSmart;
 			oPrevSearch.bCaseInsensitive = oFilter.bCaseInsensitive;
+			oPrevSearch.return = oFilter.return;
 		};
 		var fnRegex = function ( o ) {
 			// Backwards compatibility with the bEscapeRegex option
@@ -4347,7 +4351,7 @@
 		if ( _fnDataSource( oSettings ) != 'ssp' )
 		{
 			/* Global filter */
-			_fnFilter( oSettings, oInput.sSearch, iForce, fnRegex(oInput), oInput.bSmart, oInput.bCaseInsensitive );
+			_fnFilter( oSettings, oInput.sSearch, iForce, fnRegex(oInput), oInput.bSmart, oInput.bCaseInsensitive, oInput.return );
 			fnSaveFilter( oInput );
 	
 			/* Now do the individual column filter */
@@ -9634,7 +9638,15 @@
 		 *  @type boolean
 		 *  @default true
 		 */
-		"bSmart": true
+		"bSmart": true,
+	
+		/**
+		 * Flag to indicate if DataTables should only trigger a search when
+		 * the return key is pressed.
+		 *  @type boolean
+		 *  @default false
+		 */
+		"return": false
 	};
 	
 	
