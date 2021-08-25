@@ -5,7 +5,8 @@
     "types": "./types/types.d.ts",
     "version": "1.10.25",
     "files": [
-        "js/**/*.js"
+        "js/**/*.js",
+     "types/**/*.d.ts"
     ],
     "keywords": [
         "Datatables",
