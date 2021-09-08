@@ -3,7 +3,7 @@
     "description": "jQuery DataTables",
     "main": "js/jquery.dataTables.js",
     "types": "./types/types.d.ts",
-    "version": "1.11.1",
+    "version": "1.11.2",
     "files": [
         "js/**/*.js",
         "types/**/*.d.ts"
