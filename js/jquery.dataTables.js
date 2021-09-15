@@ -6423,6 +6423,10 @@
 		var i, ien;
 		var columns = settings.aoColumns;
 	
+		// When StateRestore was introduced the state could now be implemented at any time
+		// Not just initialisation. To do this an api instance is required in some places
+		var api = settings._bInitComplete ? new DataTable.Api(settings) : null;
+	
 		if ( ! s || ! s.time ) {
 			callback();
 			return;
@@ -6486,13 +6490,25 @@
 	
 				// Visibility
 				if ( col.visible !== undefined ) {
-					columns[i].bVisible = col.visible;
+					// If the api is defined, the table has been initialised so we need to use it rather than internal settings
+					if (api) {
+						// Don't redraw the columns on every iteration of this loop, we will do this at the end instead
+						api.column(i).visible(col.visible, false);
+					}
+					else {
+						columns[i].bVisible = col.visible;
+					}
 				}
 	
 				// Search
 				if ( col.search !== undefined ) {
 					$.extend( settings.aoPreSearchCols[i], _fnSearchToHung( col.search ) );
 				}
+			}
+			
+			// If the api is defined then we need to adjust the columns once the visibility has been changed
+			if (api) {
+				api.columns.adjust();
 			}
 		}
 	
