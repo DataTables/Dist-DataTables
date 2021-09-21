@@ -15064,6 +15064,10 @@
 	 */
 	
 	var __htmlEscapeEntities = function ( d ) {
+		if (Array.isArray(d)) {
+			d = d.join(',');
+		}
+	
 		return typeof d === 'string' ?
 			d
 				.replace(/&/g, '&amp;')
