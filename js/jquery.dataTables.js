@@ -1614,6 +1614,14 @@
 		return out;
 	}
 	
+	var _includes = function (search, start) {
+		if (start === undefined) {
+			start = 0;
+		}
+	
+		return this.indexOf(search, start) !== -1;	
+	};
+	
 	// Array.isArray polyfill.
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
 	if (! Array.isArray) {
@@ -1623,13 +1631,7 @@
 	}
 	
 	if (! Array.prototype.includes) {
-		Array.prototype.includes = function (search, start) {
-			if (start === undefined) {
-				start = 0;
-			}
-	
-			return this.indexOf(search, start) !== -1;	
-		};
+		Array.prototype.includes = _includes;
 	}
 	
 	// .trim() polyfill
@@ -1638,6 +1640,10 @@
 	  String.prototype.trim = function () {
 	    return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
 	  };
+	}
+	
+	if (! String.prototype.includes) {
+		String.prototype.includes = _includes;
 	}
 	
 	/**
