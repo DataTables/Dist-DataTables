@@ -6382,6 +6382,11 @@
 	 */
 	function _fnSaveState ( settings )
 	{
+		if (settings._bLoadingState) {
+			console.log(settings._bLoadingState)
+			return;
+		}
+	
 		/* Store the interesting variables */
 		var state = {
 			time:    +new Date(),
@@ -6438,12 +6443,14 @@
 	function _fnImplementState ( settings, s, callback) {
 		var i, ien;
 		var columns = settings.aoColumns;
+		settings._bLoadingState = true;
 	
 		// When StateRestore was introduced the state could now be implemented at any time
 		// Not just initialisation. To do this an api instance is required in some places
 		var api = settings._bInitComplete ? new DataTable.Api(settings) : null;
 	
 		if ( ! s || ! s.time ) {
+			settings._bLoadingState = false;
 			callback();
 			return;
 		}
@@ -6452,6 +6459,7 @@
 		// cancelling of loading by returning false
 		var abStateLoad = _fnCallbackFire( settings, 'aoStateLoadParams', 'stateLoadParams', [settings, s] );
 		if ( $.inArray( false, abStateLoad ) !== -1 ) {
+			settings._bLoadingState = false;
 			callback();
 			return;
 		}
@@ -6459,12 +6467,14 @@
 		// Reject old data
 		var duration = settings.iStateDuration;
 		if ( duration > 0 && s.time < +new Date() - (duration*1000) ) {
+			settings._bLoadingState = false;
 			callback();
 			return;
 		}
 	
 		// Number of columns have changed - all bets are off, no restore of settings
 		if ( s.columns && columns.length !== s.columns.length ) {
+			settings._bLoadingState = false;
 			callback();
 			return;
 		}
@@ -6529,6 +6539,7 @@
 			}
 		}
 	
+		settings._bLoadingState = false;
 		_fnCallbackFire( settings, 'aoStateLoaded', 'stateLoaded', [settings, s] );
 		callback();
 	};
