@@ -6383,7 +6383,6 @@
 	function _fnSaveState ( settings )
 	{
 		if (settings._bLoadingState) {
-			console.log(settings._bLoadingState)
 			return;
 		}
 	
