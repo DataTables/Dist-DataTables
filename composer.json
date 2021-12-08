@@ -22,8 +22,5 @@
         "Datatables",
         "jQuery",
         "table"
-    ],
-    "require": {
-        "components/jquery": ">=1.7"
-    }
+    ]
 }
