@@ -3939,8 +3939,8 @@
 		var ajax = oSettings.ajax;
 		var instance = oSettings.oInstance;
 		var callback = function ( json ) {
-			var status = oSettings.jqXhr
-				? oSettings.jqXhr.status
+			var status = oSettings.jqXHR
+				? oSettings.jqXHR.status
 				: null;
 	
 			if ( json === null || (typeof status === 'number' && status == 204 ) ) {
