@@ -8302,7 +8302,7 @@
 	$(document).on('plugin-init.dt', function (e, context) {
 		var api = new _Api( context );
 	
-		api.on( 'stateSaveParams', function ( e, settings, data ) {
+		api.on( 'stateSaveParams', function ( e, settings, d ) {
 			// This could be more compact with the API, but it is a lot faster as a simple
 			// internal loop
 			var idFn = settings.rowIdFn;
@@ -8311,11 +8311,11 @@
 	
 			for (var i=0 ; i<data.length ; i++) {
 				if (data[i]._detailsShow) {
-					ids.push( '#' + idFn(data) );
+					ids.push( '#' + idFn(data[i]._aData) );
 				}
 			}
 	
-			data.childRows = ids;
+			d.childRows = ids;
 		})
 	
 		var loaded = api.state.loaded();
@@ -8376,6 +8376,15 @@
 	};
 	
 	
+	// Make state saving of child row details async to allow them to be batch processed
+	var __details_state = DataTable.util.throttle(
+		function (ctx) {
+			_fnSaveState( ctx[0] )
+		},
+		500
+	);
+	
+	
 	var __details_remove = function ( api, idx )
 	{
 		var ctx = api.context;
@@ -8389,7 +8398,7 @@
 				row._detailsShow = undefined;
 				row._details = undefined;
 				$( row.nTr ).removeClass( 'dt-hasChild' );
-				_fnSaveState( ctx[0] );
+				__details_state( ctx );
 			}
 		}
 	};
@@ -8416,7 +8425,7 @@
 				_fnCallbackFire( ctx[0], null, 'childRow', [ show, api.row( api[0] ) ] )
 	
 				__details_events( ctx[0] );
-				_fnSaveState( ctx[0] );
+				__details_state( ctx );
 			}
 		}
 	};
