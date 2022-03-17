@@ -6459,6 +6459,17 @@
 		// Store the saved state so it might be accessed at any time
 		settings.oLoadedState = $.extend( true, {}, s );
 	
+		// Page Length
+		if ( s.length !== undefined ) {
+			// If already initialised just set the value directly so that the select element is also updated
+			if (api) {
+				api.page.len(s.length)
+			}
+			else {
+				settings._iDisplayLength   = s.length;
+			}
+		}
+	
 		// Restore key features - todo - for 1.11 this needs to be done by
 		// subscribed events
 		if ( s.start !== undefined ) {
@@ -6467,17 +6478,7 @@
 				settings.iInitDisplayStart = s.start;
 			}
 			else {
-				_fnPageChange(settings, s.start/s.length);
-	
-			}
-		}
-		if ( s.length !== undefined ) {
-			// If already initialised just set the value directly so that the select element is also updated
-			if (api) {
-				api.page.len(s.length)
-			}
-			else {
-				settings._iDisplayLength   = s.length;
+				_fnPageChange(settings, s.start/settings._iDisplayLength);
 			}
 		}
 	
