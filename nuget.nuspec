@@ -21,8 +21,6 @@
         <file src="js/jquery.dataTables.js" target="contentFiles\any\any\wwwroot\js"/>
         <file src="js/jquery.dataTables.min.js" target="content\Scripts"/>
         <file src="js/jquery.dataTables.min.js" target="contentFiles\any\any\wwwroot\js"/>
-        <file src="types/types.d.ts" target="content\Scripts"/>
-        <file src="types/types.d.ts" target="contentFiles\any\any\wwwroot\js"/>
     </files>
 </package>
 
