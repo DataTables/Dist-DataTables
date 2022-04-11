@@ -5077,6 +5077,7 @@
 				'class': settings.oClasses.sProcessing
 			} )
 			.html( settings.oLanguage.sProcessing )
+			.append('<div><div></div><div></div><div></div><div></div></div>')
 			.insertBefore( settings.nTable )[0];
 	}
 	
@@ -11850,7 +11851,6 @@
 				 * Text which is displayed when the table is processing a user action
 				 * (usually a sort command or similar).
 				 *  @type string
-				 *  @default Processing...
 				 *
 				 *  @dtopt Language
 				 *  @name DataTable.defaults.language.processing
@@ -11864,7 +11864,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sProcessing": "Processing...",
+				"sProcessing": "",
 		
 		
 				/**
