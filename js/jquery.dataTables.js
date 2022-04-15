@@ -15116,34 +15116,30 @@
 				d;
 		};
 		
-		var __mlWarning = false;
-		function __ml( momentFn, luxonFn ) {
+		function __mld( dt, momentFn, luxonFn, dateFn, arg1 ) {
 			if (window.moment) {
-				return momentFn;
+				return dt[momentFn]( arg1 );
 			}
 			else if (window.luxon) {
-				return luxonFn;
+				return dt[luxonFn]( arg1 );
 			}
-		
-			if (! __mlWarning) {
-				alert('DataTables warning: Formatted date without Moment.js or Luxon - https://datatables.net/tn/17');
-			}
-		
-			__mlWarning = true;
+			
+			return dateFn ? dt[dateFn]( arg1 ) : dt;
 		}
 		
 		
-		function __mlObj (d, format, locale) {
+		var __mlWarning = false;
+		function __mldObj (d, format, locale) {
 			var dt;
 		
-			if (__ml('m', 'l') === 'm') {
+			if (window.moment) {
 				dt = window.moment.utc( d, format, locale, true );
 		
 				if (! dt.isValid()) {
 					return null;
 				}
 			}
-			else {
+			else if (window.luxon) {
 				dt = format
 					? window.luxon.DateTime.fromFormat( d, format )
 					: window.luxon.DateTime.fromISO( d );
@@ -15153,6 +15149,17 @@
 				}
 		
 				dt.setLocale(locale);
+			}
+			else if (! format) {
+				// No format given, must be ISO
+				dt = new Date(d);
+			}
+			else {
+				if (! __mlWarning) {
+					alert('DataTables warning: Formatted date without Moment.js or Luxon - https://datatables.net/tn/17');
+				}
+		
+				__mlWarning = true;
 			}
 		
 			return dt;
@@ -15190,20 +15197,26 @@
 						return d === typeName ? typeName : false;
 					});
 		
-					// Use moment to sort dates - the dates are already moment objects from the `sort` renderer
+					// The renderer gives us Moment, Luxon or Date obects for the sorting, all of which have a
+					// `valueOf` which gives milliseconds epoch
 					DataTable.ext.type.order[typeName + '-asc'] = function (a, b) {
-						// equals needs a function call, but <> will work directly
-						return a[__ml('isSame', 'equals')](b)
+						var x = a.valueOf();
+						var y = b.valueOf();
+		
+						return x === y
 							? 0
-							: a < b
+							: x < y
 								? -1
 								: 1;
 					}
 		
 					DataTable.ext.type.order[typeName + '-desc'] = function (a, b) {
-						return a[__ml('isSame', 'equals')](b)
+						var x = a.valueOf();
+						var y = b.valueOf();
+		
+						return x === y
 							? 0
-							: a > b
+							: x > y
 								? -1
 								: 1;
 					}
@@ -15235,9 +15248,7 @@
 					if (d === '') {
 						return type !== 'sort'
 							? ''
-							: __ml('m', 'l') === 'm'
-								? moment('0000-01-01 00:00:00')
-								: luxon.DateTime.fromISO('0000-01-01 00:00:00');
+							: __mldObj('0000-01-01 00:00:00', null, locale);
 					}
 		
 					// Shortcut. If `from` and `to` are the same, we are using the renderer to
@@ -15246,7 +15257,7 @@
 						return d;
 					}
 		
-					var dt = __mlObj(d, from, locale);
+					var dt = __mldObj(d, from, locale);
 		
 					if (dt === null) {
 						return d;
@@ -15255,10 +15266,10 @@
 					if (type === 'sort') {
 						return dt;
 					}
-		
+					
 					var formatted = to === null
-						? dt[__ml('toDate', 'toJSDate')]()[localeString]()
-						: dt[__ml('format', 'toFormat')]( to );
+						? __mld(dt, 'toDate', 'toJSDate', '')[localeString]()
+						: __mld(dt, 'format', 'toFormat', 'toISOString', to);
 		
 					// XSS protection
 					return type === 'display' ?
@@ -15278,12 +15289,12 @@
 		
 			if (! DataTable.ext.type.order[typeName]) {
 				DataTable.ext.type.detect.unshift(function (d) {
-					var dt = __mlObj(d, format, locale);
+					var dt = __mldObj(d, format, locale);
 					return d === '' || dt ? typeName : false;
 				});
 		
 				DataTable.ext.type.order[typeName + '-pre'] = function (d) {
-					return __mlObj(d, format, locale) || 0;
+					return __mldObj(d, format, locale) || 0;
 				}
 			}
 		}
