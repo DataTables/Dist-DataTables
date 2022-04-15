@@ -2573,9 +2573,11 @@
 				def = aoColDefs[i];
 	
 				/* Each definition can target multiple columns, as it is an array */
-				var aTargets = def.targets !== undefined ?
-					def.targets :
-					def.aTargets;
+				var aTargets = def.target
+					? def.target
+					: def.targets !== undefined
+						? def.targets
+						: def.aTargets;
 	
 				if ( ! Array.isArray( aTargets ) )
 				{
