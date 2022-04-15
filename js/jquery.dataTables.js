@@ -1065,7 +1065,7 @@
 					success: function ( json ) {
 						_fnCamelToHungarian( defaults.oLanguage, json );
 						_fnLanguageCompat( json );
-						$.extend( true, oLanguage, json );
+						$.extend( true, oLanguage, json, oSettings.oInit.oLanguage );
 			
 						_fnCallbackFire( oSettings, null, 'i18n', [oSettings]);
 						_fnInitialise( oSettings );
@@ -15116,6 +15116,7 @@
 				d;
 		};
 		
+		// Common logic for moment, luxon or a date action
 		function __mld( dt, momentFn, luxonFn, dateFn, arg1 ) {
 			if (window.moment) {
 				return dt[momentFn]( arg1 );
@@ -15279,6 +15280,17 @@
 			}
 		}
 		
+		// Based on locale, determine standard number formatting
+		var __thousands = '';
+		var __decimal = '';
+		
+		if (Intl) {
+			var num = new Intl.NumberFormat().formatToParts(1000.1);
+		
+			__thousands = num[1].value;
+			__decimal = num[3].value;
+		}
+		
 		// Formatted date time detection - use by declaring the formats you are going to use
 		DataTable.datetime = function ( format, locale ) {
 			var typeName = 'datetime-detect-' + format;
@@ -15330,6 +15342,15 @@
 			datetime: __mlHelper('toLocaleString'),
 			time: __mlHelper('toLocaleTimeString'),
 			number: function ( thousands, decimal, precision, prefix, postfix ) {
+				// Auto locale detection
+				if (thousands === null || thousands === undefined) {
+					thousands = __thousands;
+				}
+		
+				if (decimal === null || decimal === undefined) {
+					decimal = __decimal;
+				}
+		
 				return {
 					display: function ( d ) {
 						if ( typeof d !== 'number' && typeof d !== 'string' ) {
