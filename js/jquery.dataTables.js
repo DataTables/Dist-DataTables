@@ -15157,7 +15157,7 @@
 			}
 		}
 		else if (window.luxon) {
-			dt = format
+			dt = format && typeof format === 'string'
 				? window.luxon.DateTime.fromFormat( d, format )
 				: window.luxon.DateTime.fromISO( d );
 	
