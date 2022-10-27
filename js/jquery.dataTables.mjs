@@ -1096,6 +1096,10 @@ var DataTable = function ( selector, options )
 			$( rowOne[0] ).children('th, td').each( function (i, cell) {
 				var col = oSettings.aoColumns[i];
 		
+				if (! col) {
+					_fnLog( oSettings, 0, 'Incorrect column count', 18 );
+				}
+		
 				if ( col.mData === i ) {
 					var sort = a( cell, 'sort' ) || a( cell, 'order' );
 					var filter = a( cell, 'filter' ) || a( cell, 'search' );
@@ -3100,6 +3104,11 @@ function _fnCreateTr ( oSettings, iRow, nTrIn, anTds )
 			create = nTrIn ? false : true;
 
 			nTd = create ? document.createElement( oCol.sCellType ) : anTds[i];
+
+			if (! nTd) {
+				_fnLog( oSettings, 0, 'Incorrect column count', 18 );
+			}
+
 			nTd._DT_CellIndex = {
 				row: iRow,
 				column: i
