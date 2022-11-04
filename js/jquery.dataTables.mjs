@@ -1,4 +1,4 @@
-/*! DataTables 1.12.1
+/*! DataTables 1.13.0
  * ©2008-2022 SpryMedia Ltd - datatables.net/license
  */
 
@@ -3263,10 +3263,16 @@ function _fnBuildHead( oSettings )
 
 		for ( i=0, ien=cells.length ; i<ien ; i++ ) {
 			column = columns[i];
-			column.nTf = cells[i].cell;
 
-			if ( column.sClass ) {
-				$(column.nTf).addClass( column.sClass );
+			if (column) {
+				column.nTf = cells[i].cell;
+	
+				if ( column.sClass ) {
+					$(column.nTf).addClass( column.sClass );
+				}
+			}
+			else {
+				_fnLog( oSettings, 0, 'Incorrect column count', 18 );
 			}
 		}
 	}
@@ -9629,7 +9635,7 @@ _api_register( 'i18n()', function ( token, def, plural ) {
  *  @type string
  *  @default Version number
  */
-DataTable.version = "1.12.1";
+DataTable.version = "1.13.0";
 
 /**
  * Private data store, containing all of the settings objects that are
