@@ -14817,7 +14817,9 @@
 							}
 	
 							if ( btnDisplay !== null ) {
-								node = $('<a>', {
+								var tag = settings.oInit.pagingTag || 'a';
+	
+								node = $('<'+tag+'>', {
 										'class': classes.sPageButton+' '+btnClass,
 										'aria-controls': settings.sTableId,
 										'aria-label': aria[ button ],
