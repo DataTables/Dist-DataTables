@@ -1370,7 +1370,12 @@
 	
 	
 	var _isNumber = function ( d, decimalPoint, formatted ) {
-		var strType = typeof d === 'string';
+		let type = typeof d;
+		var strType = type === 'string';
+	
+		if ( type === 'number' || type === 'bigint') {
+			return true;
+		}
 	
 		// If empty return immediately so there must be a number if it is a
 		// formatted string (this stops the string "k", or "kr", etc being detected
@@ -14958,6 +14963,12 @@
 	var __numericReplace = function ( d, decimalPlace, re1, re2 ) {
 		if ( d !== 0 && (!d || d === '-') ) {
 			return -Infinity;
+		}
+		
+		let type = typeof d;
+	
+		if (type === 'number' || type === 'bigint') {
+			return d;
 		}
 	
 		// If a decimal place other than `.` is used, it needs to be given to the
