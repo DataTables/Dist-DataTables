@@ -1,4 +1,4 @@
-/*! DataTables 1.13.3
+/*! DataTables 1.13.4
  * ©2008-2023 SpryMedia Ltd - datatables.net/license
  */
 
@@ -9696,7 +9696,7 @@ _api_register( 'i18n()', function ( token, def, plural ) {
  *  @type string
  *  @default Version number
  */
-DataTable.version = "1.13.3";
+DataTable.version = "1.13.4";
 
 /**
  * Private data store, containing all of the settings objects that are
