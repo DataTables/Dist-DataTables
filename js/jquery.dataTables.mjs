@@ -9317,7 +9317,8 @@ _api_register( 'state.save()', function () {
  * Set the jQuery or window object to be used by DataTables
  *
  * @param {*} module Library / container object
- * @param {string} type Library or container type `lib` or `win`.
+ * @param {string} [type] Library or container type `lib`, `win` or `datetime`.
+ *   If not provided, automatic detection is attempted.
  */
 DataTable.use = function (module, type) {
 	if (type === 'lib' || module.fn) {
@@ -9326,6 +9327,9 @@ DataTable.use = function (module, type) {
 	else if (type == 'win' || module.document) {
 		window = module;
 		document = module.document;
+	}
+	else if (type === 'datetime' || module.type === 'DateTime') {
+		DataTable.DateTime = module;
 	}
 }
 
@@ -9686,7 +9690,9 @@ _api_register( 'i18n()', function ( token, def, plural ) {
 			resolved._;
 	}
 
-	return resolved.replace( '%d', plural ); // nb: plural might be undefined,
+	return typeof resolved === 'string'
+		? resolved.replace( '%d', plural ) // nb: plural might be undefined,
+		: resolved;
 } );
 /**
  * Version string for plug-ins to check compatibility. Allowed format is
