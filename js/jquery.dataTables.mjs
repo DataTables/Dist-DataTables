@@ -1835,7 +1835,10 @@ DataTable.util = {
 							continue;
 						}
 	
-						if ( data === null || data[ a[i] ] === undefined ) {
+						if (data === null || data[ a[i] ] === null) {
+							return null;
+						}
+						else if ( data === undefined || data[ a[i] ] === undefined ) {
 							return undefined;
 						}
 
