@@ -14901,7 +14901,7 @@
 										'aria-controls': settings.sTableId,
 										'aria-disabled': disabled ? 'true' : null,
 										'aria-label': aria[ button ],
-										'aria-role': 'link',
+										'role': 'link',
 										'aria-current': btnClass === classes.sPageButtonActive ? 'page' : null,
 										'data-dt-idx': button,
 										'tabindex': tabIndex,
