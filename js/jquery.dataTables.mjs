@@ -6,7 +6,7 @@ import jQuery from 'jquery';
 
 // DataTables code uses $ internally, but we want to be able to
 // reassign $ with the `use` method, so it is a regular var.
-let $ = jQuery;
+var $ = jQuery;
 
 
 var DataTable = function ( selector, options )
@@ -1327,7 +1327,7 @@ var _numToDecimal = function ( num, decimalPoint ) {
 
 
 var _isNumber = function ( d, decimalPoint, formatted ) {
-	let type = typeof d;
+	var type = typeof d;
 	var strType = type === 'string';
 
 	if ( type === 'number' || type === 'bigint') {
@@ -14981,7 +14981,7 @@ var __numericReplace = function ( d, decimalPlace, re1, re2 ) {
 		return -Infinity;
 	}
 	
-	let type = typeof d;
+	var type = typeof d;
 
 	if (type === 'number' || type === 'bigint') {
 		return d;

@@ -1384,7 +1384,7 @@
 	
 	
 	var _isNumber = function ( d, decimalPoint, formatted ) {
-		let type = typeof d;
+		var type = typeof d;
 		var strType = type === 'string';
 	
 		if ( type === 'number' || type === 'bigint') {
@@ -15038,7 +15038,7 @@
 			return -Infinity;
 		}
 		
-		let type = typeof d;
+		var type = typeof d;
 	
 		if (type === 'number' || type === 'bigint') {
 			return d;
