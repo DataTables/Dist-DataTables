@@ -4593,7 +4593,7 @@ function _fnFilterData ( settings )
 				// If it looks like there is an HTML entity in the string,
 				// attempt to decode it so sorting works as expected. Note that
 				// we could use a single line of jQuery to do this, but the DOM
-				// method used here is much faster http://jsperf.com/html-decode
+				// method used here is much faster https://jsperf.com/html-decode
 				if ( cellData.indexOf && cellData.indexOf('&') !== -1 ) {
 					__filter_div.innerHTML = cellData;
 					cellData = __filter_div_textContent ?
@@ -9733,7 +9733,7 @@ _api_register( 'i18n()', function ( token, def, plural ) {
 /**
  * Version string for plug-ins to check compatibility. Allowed format is
  * `a.b.c-d` where: a:int, b:int, c:int, d:string(dev|beta|alpha). `d` is used
- * only for non-release builds. See http://semver.org/ for more information.
+ * only for non-release builds. See https://semver.org/ for more information.
  *  @member
  *  @type string
  *  @default Version number
@@ -15099,7 +15099,7 @@ $.extend( _ext.type.order, {
 	// string
 	"string-pre": function ( a ) {
 		// This is a little complex, but faster than always calling toString,
-		// http://jsperf.com/tostring-v-check
+		// https://jsperf.com/tostring-v-check
 		return _empty(a) ?
 			'' :
 			typeof a === 'string' ?
