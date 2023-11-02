@@ -4313,7 +4313,7 @@
 			/* Update all other filter input elements for the new display */
 			var n = features.f;
 			var val = !this.value ? "" : this.value; // mental IE8 fix :-(
-			if(previousSearch.return && event.key !== "Enter") {
+			if(previousSearch['return'] && event.key !== "Enter") {
 				return;
 			}
 			/* Now do the filter */
@@ -4323,7 +4323,7 @@
 					"bRegex": previousSearch.bRegex,
 					"bSmart": previousSearch.bSmart ,
 					"bCaseInsensitive": previousSearch.bCaseInsensitive,
-					"return": previousSearch.return
+					"return": previousSearch['return']
 				} );
 	
 				// Need to redraw, without resorting
@@ -4398,7 +4398,7 @@
 			oPrevSearch.bRegex = oFilter.bRegex;
 			oPrevSearch.bSmart = oFilter.bSmart;
 			oPrevSearch.bCaseInsensitive = oFilter.bCaseInsensitive;
-			oPrevSearch.return = oFilter.return;
+			oPrevSearch['return'] = oFilter['return'];
 		};
 		var fnRegex = function ( o ) {
 			// Backwards compatibility with the bEscapeRegex option
