@@ -8583,7 +8583,12 @@
 					row = data[i];
 	
 					if ( row._details ) {
-						row._details.children('td[colspan]').attr('colspan', visible );
+						row._details.each(function () {
+							var el = $(this);
+							if (el.children('td').length == 1) {
+								el.children('td[colspan]').attr('colspan', visible);
+							}
+						});
 					}
 				}
 			} );
