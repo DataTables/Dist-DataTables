@@ -8584,9 +8584,10 @@
 	
 					if ( row._details ) {
 						row._details.each(function () {
-							var el = $(this);
-							if (el.children('td').length == 1) {
-								el.children('td[colspan]').attr('colspan', visible);
+							var el = $(this).children('td');
+	
+							if (el.length == 1) {
+								el.attr('colspan', visible);
 							}
 						});
 					}
