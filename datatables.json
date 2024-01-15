@@ -1,9 +1,9 @@
 {
     "js": [
-        "js/jquery.dataTables.js",
-        "js/jquery.dataTables.min.js",
-        "js/jquery.dataTables.min.mjs",
-        "js/jquery.dataTables.mjs"
+        "js/dataTables.js",
+        "js/dataTables.min.js",
+        "js/dataTables.min.mjs",
+        "js/dataTables.mjs"
     ],
     "css": [],
     "types": [
