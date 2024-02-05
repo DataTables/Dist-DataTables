@@ -3770,6 +3770,7 @@
 		var rows = $(thead).children('tr');
 		var row, cell;
 		var i, k, l, iLen, shifted, column, colspan, rowspan;
+		var isHeader = thead && thead.nodeName.toLowerCase() === 'thead';
 		var layout = [];
 		var unique;
 		var shift = function ( a, i, j ) {
@@ -3830,7 +3831,7 @@
 	
 							columnDef.sWidthOrig = columnDef.sWidth || width;
 	
-							if (thead.nodeName.toLowerCase() === 'thead') {
+							if (isHeader) {
 								// Column title handling - can be user set, or read from the DOM
 								// This happens before the render, so the original is still in place
 								if ( columnDef.sTitle !== null && ! columnDef.autoTitle ) {
@@ -3866,6 +3867,12 @@
 							$('<span>')
 								.addClass('dt-column-title')
 								.append(cell.childNodes)
+								.appendTo(cell);
+						}
+	
+						if ( isHeader && $('span.dt-column-order', cell).length === 0) {
+							$('<span>')
+								.addClass('dt-column-order')
 								.appendTo(cell);
 						}
 					}
@@ -5344,7 +5351,8 @@
 		var target = settings.nTHead;
 		var headerRows = target.querySelectorAll('tr');
 		var legacyTop = settings.bSortCellsTop;
-	
+		var notSelector = ':not([data-dt-order="disable"]):not([data-dt-order="icon-only"])';
+		
 		// Legacy support for `orderCellsTop`
 		if (legacyTop === true) {
 			target = headerRows[0];
@@ -5353,11 +5361,12 @@
 			target = headerRows[ headerRows.length - 1 ];
 		}
 	
-		var notSelector = ':not([data-dt-order="disable"]):not([data-dt-order="icon-only"])';
 		_fnSortAttachListener(
 			settings,
 			target,
-			'tr'+notSelector+' th'+notSelector+', tr'+notSelector+' td'+notSelector+''
+			target === settings.nTHead
+				? 'tr'+notSelector+' th'+notSelector+', tr'+notSelector+' td'+notSelector
+				: 'th'+notSelector+', td'+notSelector
 		);
 	
 		// Need to resolve the user input array into our internal structure
@@ -12932,6 +12941,10 @@
 					var klass = ! val.table ?
 						'dt-'+key+' ' :
 						'';
+	
+					if (val.table) {
+						row.addClass('dt-layout-table');
+					}
 	
 					$('<div/>')
 						.attr({
