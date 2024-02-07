@@ -2024,7 +2024,7 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 
 	// The `render` option can be given as an array to access the helper rendering methods.
 	// The first element is the rendering method to use, the rest are the parameters to pass
-	if ( oCol.mRender && $.isArray( oCol.mRender ) ) {
+	if ( oCol.mRender && Array.isArray( oCol.mRender ) ) {
 		var copy = oCol.mRender.slice();
 		var name = copy.shift();
 
@@ -2420,7 +2420,7 @@ function _fnApplyColumnDefs( oSettings, aoColDefs, aoCols, headerLayout, fn )
  * @returns Combined CSS value
  */
 function _fnColumnsSumWidth( settings, targets, original, incVisible ) {
-	if ( ! $.isArray( targets ) ) {
+	if ( ! Array.isArray( targets ) ) {
 		targets = _fnColumnsFromHeader( targets );
 	}
 
@@ -3481,7 +3481,7 @@ function _layoutArray ( settings, layout, side )
 		}
 
 		// And make contents an array
-		if ( ! $.isArray( group[ align ].contents ) ) {
+		if ( ! Array.isArray( group[ align ].contents ) ) {
 			group[ align ].contents = [ group[ align ].contents ];
 		}
 	} );
