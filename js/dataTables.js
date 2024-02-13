@@ -1238,7 +1238,9 @@
 		}
 		else {
 			for ( ; i<ien ; i++ ) {
-				out.push( a[ order[i] ][ prop ] );
+				if ( a[ order[i] ] ) {
+					out.push( a[ order[i] ][ prop ] );
+				}
 			}
 		}
 	
