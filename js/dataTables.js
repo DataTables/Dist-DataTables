@@ -2429,12 +2429,18 @@
 					else if ( typeof target === 'string' )
 					{
 						for ( k=0, kLen=columns.length ; k<kLen ; k++ ) {
-							if (target.indexOf(':name') !== -1) {
+							if (target === '_all') {
+								// Apply to all columns
+								fn( k, def );
+							}
+							else if (target.indexOf(':name') !== -1) {
+								// Column selector
 								if (columns[k].sName === target.replace(':name', '')) {
 									fn( k, def );
 								}
 							}
 							else {
+								// Cell selector
 								headerLayout.forEach(function (row) {
 									var cell = $(row[k].cell);
 	
@@ -2445,7 +2451,7 @@
 										target = '.' + target;
 									}
 	
-									if (target === '_all' || cell.is( target )) {
+									if (cell.is( target )) {
 										fn( k, def );
 									}
 								});
