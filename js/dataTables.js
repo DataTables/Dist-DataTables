@@ -9416,6 +9416,8 @@
 				jqTable.append( tfoot );
 			}
 	
+			settings.colgroup.remove();
+	
 			settings.aaSorting = [];
 			settings.aaSortingFixed = [];
 			_fnSortingClasses( settings );
