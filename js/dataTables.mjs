@@ -4372,6 +4372,9 @@ function _fnFilterCreateSearch( search, inOpts )
 		search = search.toString();
 	}
 
+	// Remove diacritics if normalize is set up to do so
+	search = _normalize(search);
+
 	if (options.exact) {
 		return new RegExp(
 			'^'+_fnEscapeRegex(search)+'$',
@@ -12209,7 +12212,7 @@ $.extend( true, DataTable.ext.renderer, {
 } );
 
 // Common function to remove new lines, strip HTML and diacritic control
-var _filterString = function (stripHtml, diacritics) {
+var _filterString = function (stripHtml, normalize) {
 	return function (str) {
 		if (_empty(str) || typeof str !== 'string') {
 			return str;
@@ -12221,8 +12224,8 @@ var _filterString = function (stripHtml, diacritics) {
 			str = _stripHtml(str);
 		}
 
-		if (diacritics) {
-			str = _normalize(str, true);
+		if (normalize) {
+			str = _normalize(str, false);
 		}
 
 		return str;
