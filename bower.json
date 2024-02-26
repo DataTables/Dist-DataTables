@@ -2,7 +2,7 @@
     "name": "datatables.net",
     "description": "DataTables for jQuery ",
     "main": [
-        "js/jquery.dataTables.js"
+        "js/dataTables.js"
     ],
     "keywords": [
         "filter",

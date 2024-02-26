@@ -17,10 +17,10 @@
         </contentFiles>
     </metadata>
     <files>
-        <file src="js/jquery.dataTables.js" target="content\Scripts"/>
-        <file src="js/jquery.dataTables.js" target="contentFiles\any\any\wwwroot\js"/>
-        <file src="js/jquery.dataTables.min.js" target="content\Scripts"/>
-        <file src="js/jquery.dataTables.min.js" target="contentFiles\any\any\wwwroot\js"/>
+        <file src="js/dataTables.js" target="content\Scripts"/>
+        <file src="js/dataTables.js" target="contentFiles\any\any\wwwroot\js"/>
+        <file src="js/dataTables.min.js" target="content\Scripts"/>
+        <file src="js/dataTables.min.js" target="contentFiles\any\any\wwwroot\js"/>
     </files>
 </package>
 
