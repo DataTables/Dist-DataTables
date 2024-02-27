@@ -3036,7 +3036,7 @@
 			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 			{
 				oCol = oSettings.aoColumns[i];
-				create = nTrIn ? false : true;
+				create = nTrIn && anTds[i] ? false : true;
 	
 				nTd = create ? document.createElement( oCol.sCellType ) : anTds[i];
 	
@@ -3065,11 +3065,11 @@
 				}
 	
 				// Visibility - add or remove as required
-				if ( oCol.bVisible && ! nTrIn )
+				if ( oCol.bVisible && create )
 				{
 					nTr.appendChild( nTd );
 				}
-				else if ( ! oCol.bVisible && nTrIn )
+				else if ( ! oCol.bVisible && ! create )
 				{
 					nTd.parentNode.removeChild( nTd );
 				}
@@ -3153,14 +3153,23 @@
 		}
 	
 		// If no cells yet and we have content for them, then create
-		if ( $('th, td', target).length === 0 && (side === 'header' || _pluck(settings.aoColumns, titleProp).join('')) ) {
-			row = $('<tr/>')
-				.appendTo( target );
+		if (side === 'header' || _pluck(settings.aoColumns, titleProp).join('')) {
+			row = $('tr', target);
 	
-			for ( i=0, ien=columns.length ; i<ien ; i++ ) {
-				$('<th/>')
-					.html( columns[i][titleProp] || '' )
-					.appendTo( row );
+			// Add a row if needed
+			if (! row.length) {
+				row = $('<tr/>').appendTo(target)
+			}
+	
+			// Add the number of cells needed to make up to the number of columns
+			if (row.length === 1) {
+				var cells = $('td, th', row);
+	
+				for ( i=cells.length, ien=columns.length ; i<ien ; i++ ) {
+					$('<th/>')
+						.html( columns[i][titleProp] || '' )
+						.appendTo( row );
+				}
 			}
 		}
 	
@@ -5418,9 +5427,13 @@
 				// Allow the processing display to show
 				setTimeout( function () {
 					for ( var i=0, ien=columns.length ; i<ien ; i++ ) {
-						var append = e.shiftKey || i > 0;
-			
-						_fnSortAdd( settings, columns[i], append );
+						_fnSortAdd( settings, columns[i], i, e.shiftKey );
+	
+						// If the first entry is no sort, then subsequent
+						// sort columns are ignored
+						if (settings.aaSorting.length === 1 && settings.aaSorting[0][1] === '') {
+							break;
+						}
 					}
 	
 					_fnSort( settings );
@@ -5710,12 +5723,12 @@
 	 *  @param {object} settings dataTables settings object
 	 *  @param {node} attachTo node to attach the handler to
 	 *  @param {int} colIdx column sorting index
-	 *  @param {boolean} [append=false] Append the requested sort to the existing
-	 *    sort if true (i.e. multi-column sort)
+	 *  @param {int} addIndex Counter
+	 *  @param {boolean} [shift=false] Shift click add
 	 *  @param {function} [callback] callback function
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnSortAdd ( settings, colIdx, append )
+	function _fnSortAdd ( settings, colIdx, addIndex, shift )
 	{
 		var col = settings.aoColumns[ colIdx ];
 		var sorting = settings.aaSorting;
@@ -5744,7 +5757,7 @@
 		}
 	
 		// If appending the sort then we are multi-column sorting
-		if ( append && settings.oFeatures.bSortMulti ) {
+		if ( (shift || addIndex) && settings.oFeatures.bSortMulti ) {
 			// Are we already doing some kind of sort on this column?
 			var sortIdx = _pluck(sorting, '0').indexOf(colIdx);
 	
@@ -5764,9 +5777,16 @@
 					sorting[sortIdx]._idx = nextSortIdx;
 				}
 			}
-			else {
-				// No sort on this column yet
+			else if (shift) {
+				// No sort on this column yet, being added by shift click
+				// add it as itself
 				sorting.push( [ colIdx, asSorting[0], 0 ] );
+				sorting[sorting.length-1]._idx = 0;
+			}
+			else {
+				// No sort on this column yet, being added from a colspan
+				// so add with same direction as first column
+				sorting.push( [ colIdx, sorting[0][1], 0 ] );
 				sorting[sorting.length-1]._idx = 0;
 			}
 		}
