@@ -317,7 +317,7 @@
 						_fnCamelToHungarian( defaults.oLanguage, json );
 						$.extend( true, oLanguage, json, oSettings.oInit.oLanguage );
 			
-						_fnCallbackFire( oSettings, null, 'i18n', [oSettings]);
+						_fnCallbackFire( oSettings, null, 'i18n', [oSettings], true);
 						_fnInitialise( oSettings );
 					},
 					error: function () {
