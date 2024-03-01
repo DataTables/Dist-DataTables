@@ -3266,11 +3266,15 @@
 						colspan++;
 					}
 	
+					var titleSpan = $('span.dt-column-title', cell);
+	
 					structure[row][column] = {
 						cell: cell,
 						colspan: colspan,
 						rowspan: rowspan,
-						title: $('span.dt-column-title', cell).html()
+						title: titleSpan.length
+							? titleSpan.html()
+							: $(cell).html()
 					};
 				}
 			}
