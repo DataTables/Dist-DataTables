@@ -8081,7 +8081,7 @@
 				for ( var i=0, ien=data.length ; i<ien ; i++ ) {
 					row = data[i];
 	
-					if ( row._details ) {
+					if ( row && row._details ) {
 						row._details.each(function () {
 							var el = $(this).children('td');
 	
@@ -8100,7 +8100,7 @@
 				}
 	
 				for ( var i=0, ien=data.length ; i<ien ; i++ ) {
-					if ( data[i]._details ) {
+					if ( data[i] && data[i]._details ) {
 						__details_remove( api, i );
 					}
 				}
@@ -8122,9 +8122,9 @@
 	
 		if ( data === undefined ) {
 			// get
-			return ctx.length && this.length ?
-				ctx[0].aoData[ this[0] ]._details :
-				undefined;
+			return ctx.length && this.length && ctx[0].aoData[ this[0] ]
+				? ctx[0].aoData[ this[0] ]._details
+				: undefined;
 		}
 		else if ( data === true ) {
 			// show
