@@ -2355,7 +2355,7 @@
 	 */
 	function _columnAutoClass(container, colIdx, className) {
 		container.forEach(function (row) {
-			if (row[colIdx].unique) {
+			if (row[colIdx] && row[colIdx].unique) {
 				_addClass(row[colIdx].cell, className);
 			}
 		});
@@ -2442,17 +2442,19 @@
 							else {
 								// Cell selector
 								headerLayout.forEach(function (row) {
-									var cell = $(row[k].cell);
+									if (row[k]) {
+										var cell = $(row[k].cell);
 	
-									// Legacy support. Note that it means that we don't support
-									// an element name selector only, since they are treated as
-									// class names for 1.x compat.
-									if (target.match(/^[a-z][\w-]*$/i)) {
-										target = '.' + target;
-									}
+										// Legacy support. Note that it means that we don't support
+										// an element name selector only, since they are treated as
+										// class names for 1.x compat.
+										if (target.match(/^[a-z][\w-]*$/i)) {
+											target = '.' + target;
+										}
 	
-									if (cell.is( target )) {
-										fn( k, def );
+										if (cell.is( target )) {
+											fn( k, def );
+										}
 									}
 								});
 							}
