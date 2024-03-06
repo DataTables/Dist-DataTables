@@ -12695,7 +12695,7 @@
 		};
 	
 		// prop is optional
-		if (! val) {
+		if (val === undefined) {
 			val = prop;
 			prop = null;
 		}
