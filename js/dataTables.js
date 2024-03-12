@@ -5454,7 +5454,7 @@
 					// Allow the processing display to show
 					setTimeout( function () {
 						_fnSort( settings );
-						_fnSortDisplay( settings );
+						_fnSortDisplay( settings, settings.aiDisplay );
 						_fnReDraw( settings, false, false );
 						_fnProcessingDisplay( settings, false );
 	
@@ -5471,8 +5471,7 @@
 	 * Sort the display array to match the master's order
 	 * @param {*} settings
 	 */
-	function _fnSortDisplay(settings) {
-		var display = settings.aiDisplay;
+	function _fnSortDisplay(settings, display) {
 		var master = settings.aiDisplayMaster;
 		var masterMap = {};
 		var map = {};
@@ -7693,11 +7692,7 @@
 		var matched = _selector_run( 'row', selector, run, settings, opts );
 	
 		if (opts.order === 'current' || opts.order === 'applied') {
-			var master = settings.aiDisplayMaster;
-	
-			matched.sort(function(a, b) {  
-				return master.indexOf(a) - master.indexOf(b);
-			});
+			_fnSortDisplay(settings, matched);
 		}
 	
 		return matched;
