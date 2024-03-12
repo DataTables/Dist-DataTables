@@ -5402,8 +5402,11 @@ function _fnSortAttachListener(settings, node, selector, column, callback) {
 				setTimeout( function () {
 					_fnSort( settings );
 					_fnSortDisplay( settings, settings.aiDisplay );
-					_fnReDraw( settings, false, false );
+
+					// Sort processing done - redraw has its own processing display
 					_fnProcessingDisplay( settings, false );
+
+					_fnReDraw( settings, false, false );
 
 					if (callback) {
 						callback();
