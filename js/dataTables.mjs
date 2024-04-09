@@ -1231,10 +1231,19 @@ var _removeEmpty = function ( a )
 };
 
 // Replaceable function in api.util
-var _stripHtml = function ( d ) {
-	return d
-		.replace( _re_html, '' ) // Complete tags
-		.replace(/<script/i, ''); // Safety for incomplete script tag
+var _stripHtml = function (input) {
+	var previous;
+
+	input = input.replace(_re_html, ''); // Complete tags
+
+	// Safety for incomplete script tag - use do / while to ensure that
+	// we get all instances
+	do {
+		previous = input;
+		input = input.replace(/<script/i, '');
+	} while (input !== previous);
+
+	return previous;
 };
 
 // Replaceable function in api.util
@@ -3834,7 +3843,7 @@ function _fnDetectHeader ( settings, thead, write )
 							}
 
 							if (! columnDef.sTitle && unique) {
-								columnDef.sTitle = cell.innerHTML.replace( /<.*?>/g, "" );
+								columnDef.sTitle = _stripHtml(cell.innerHTML);
 								columnDef.autoTitle = true;
 							}
 						}
@@ -4455,7 +4464,7 @@ function _fnFilterCreateSearch( search, inOpts )
 				word = '';
 			}
 
-			return word.replace('"', '');
+			return word.replace(/"/g, '');
 		} );
 
 		var match = not.length
@@ -7881,8 +7890,9 @@ var __details_state_load = function (api, state)
 {
 	if ( state && state.childRows ) {
 		api
-			.rows( state.childRows.map(function (id){
-				return id.replace(/:/g, '\\:')
+			.rows( state.childRows.map(function (id) {
+				// Escape any `:` characters from the row id, unless previously escaped
+				return id.replace(/(?<!\\):/g, '\\:');
 			}) )
 			.every( function () {
 				_fnCallbackFire( api.settings()[0], null, 'requestChild', [ this ] )
