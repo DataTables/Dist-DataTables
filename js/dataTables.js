@@ -1285,9 +1285,13 @@
 	
 	// Replaceable function in api.util
 	var _stripHtml = function (input) {
+		if (! input.length) {
+			return input;
+		}
+	
 		var previous;
 	
-		input = input.replace(/<[^>]*>/g, ''); // Complete tags
+		input = input.replace(_re_html, ''); // Complete tags
 	
 		// Safety for incomplete script tag - use do / while to ensure that
 		// we get all instances
