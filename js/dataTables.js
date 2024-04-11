@@ -8236,6 +8236,17 @@
 	};
 	
 	
+	var __column_header = function ( settings, column, row ) {
+		var header = settings.aoHeader;
+		var target = row !== undefined
+			? row
+			: settings.bSortCellsTop // legacy support
+				? 0
+				: header.length - 1;
+	
+		return header[target][column].cell;
+	};
+	
 	var __column_selector = function ( settings, selector, opts )
 	{
 		var
@@ -8268,7 +8279,8 @@
 				return columns.map(function (col, idx) {
 					return s(
 							idx,
-							__columnData( settings, idx, 0, 0, rows )
+							__columnData( settings, idx, 0, 0, rows ),
+							__column_header( settings, idx )
 						) ? idx : null;
 				});
 			}
@@ -8413,15 +8425,8 @@
 	} );
 	
 	_api_registerPlural( 'columns().header()', 'column().header()', function ( row ) {
-		return this.iterator( 'column', function ( settings, column ) {
-			var header = settings.aoHeader;
-			var target = row !== undefined
-				? row
-				: settings.bSortCellsTop // legacy support
-					? 0
-					: header.length - 1;
-	
-			return header[target][column].cell;
+		return this.iterator( 'column', function (settings, column) {
+			return __column_header(settings, column, row);
 		}, 1 );
 	} );
 	
