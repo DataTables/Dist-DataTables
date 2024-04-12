@@ -2017,7 +2017,7 @@
 			"mData": oDefaults.mData ? oDefaults.mData : iCol,
 			idx: iCol,
 			searchFixed: {},
-			colEl: $('<col>')
+			colEl: $('<col>').attr('data-dt-column', iCol)
 		} );
 		oSettings.aoColumns.push( oCol );
 	
