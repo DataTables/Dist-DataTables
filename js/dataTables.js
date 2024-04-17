@@ -2647,7 +2647,7 @@
 	
 		var row = settings.aoData[rowIdx];
 	
-		if (row === null) {
+		if (! row) {
 			return undefined;
 		}
 	
