@@ -5523,6 +5523,10 @@
 	 * @param {*} settings
 	 */
 	function _fnSortDisplay(settings, display) {
+		if (display.length < 2) {
+			return;
+		}
+	
 		var master = settings.aiDisplayMaster;
 		var masterMap = {};
 		var map = {};
