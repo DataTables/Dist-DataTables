@@ -4099,11 +4099,11 @@
 		else {
 			// Object to extend the base settings
 			oSettings.jqXHR = $.ajax( baseAjax );
+		}
 	
-			// Restore for next time around
-			if ( ajaxData ) {
-				ajax.data = ajaxData;
-			}
+		// Restore for next time around
+		if ( ajaxData ) {
+			ajax.data = ajaxData;
 		}
 	}
 	
