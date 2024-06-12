@@ -68,7 +68,7 @@ export type CellIdxWithVisible = {
 }
 
 export type SearchInput<T> = string | RegExp | ((data: string, rowData: T) => boolean);
-export type SearchInputColumn<T> = string | RegExp | ((data: string, rowData: T, column: number) => boolean);
+export type SearchInputColumn<T> = string | RegExp | ((data: string, rowData: T, rowIndex: number, columnIndex: number) => boolean);
 
 export type HeaderStructure = {
     cell: HTMLElement;
