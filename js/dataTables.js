@@ -5893,6 +5893,7 @@
 		if (col === undefined) {
 			// Tell the draw function that we have sorted the data
 			oSettings.bSorted = true;
+			oSettings.sortDetails = aSort;
 	
 			_fnCallbackFire( oSettings, null, 'order', [oSettings, aSort] );
 		}
@@ -12693,7 +12694,7 @@
 				// `DT` namespace will allow the event to be removed automatically
 				// on destroy, while the `dt` namespaced event is the one we are
 				// listening for
-				$(settings.nTable).on( 'order.dt.DT', function ( e, ctx, sorting ) {
+				$(settings.nTable).on( 'order.dt.DT column-visibility.dt.DT', function ( e, ctx ) {
 					if ( settings !== ctx ) { // need to check this this is the host
 						return;               // table, not a nested one
 					}
@@ -12705,9 +12706,15 @@
 					var ariaType = '';
 					var indexes = columns.indexes();
 					var sortDirs = columns.orderable(true).flatten();
-					var orderedColumns = ',' + sorting.map( function (val) {
-						return val.col;
-					} ).join(',') + ',';
+					var sorting = ctx.sortDetails;
+					var orderedColumns = ',' + sorting
+						.filter( function (sort) {
+							// Filter to just the visible columns
+							return ctx.aoColumns[sort.col].bVisible;
+						} )
+						.map( function (sort) {
+							return sort.col;
+						} ).join(',') + ',';
 	
 					cell
 						.removeClass(
@@ -12717,7 +12724,8 @@
 						.toggleClass( orderClasses.none, ! orderable )
 						.toggleClass( orderClasses.canAsc, orderable && sortDirs.includes('asc') )
 						.toggleClass( orderClasses.canDesc, orderable && sortDirs.includes('desc') );
-					
+	
+					// Get the index of this cell in the sort array
 					var sortIdx = orderedColumns.indexOf( ',' + indexes.toArray().join(',') + ',' );
 	
 					if ( sortIdx !== -1 ) {
