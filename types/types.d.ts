@@ -117,7 +117,7 @@ export type Order = OrderCombined | OrderCombined[];
 
 export interface DataType {
     className?: string;
-    detect?: ((data: any) => string);
+    detect?: ExtTypeSettingsDetect;
     order?: {
         pre?: ((a: any, b: any) => number);
         asc?: ((a: any, b: any) => number);
@@ -163,11 +163,14 @@ export interface Feature {
         /** Paging button display options */
         type?: 'numbers' | 'simple' | 'simple_numbers' | 'full' | 'full_numbers' | 'first_last_numbers';
 
-        /**
-         * Set the maximum number of paging number buttons
-         * @deprecated Use `buttons` instead.
-         */
-        numbers?: number;
+        /** Display the buttons in the pager (default true) */
+        numbers?: boolean;
+        
+        /** Display the first and last buttons in the pager (default true) */
+        firstLast?: boolean;
+
+        /** Display the previous and next buttons in the pager (default true) */
+        previousNext?: boolean;
 
         /** Include the extreme page numbers, if separated by ellipsis, or not */
         boundaryNumbers?: boolean;
@@ -178,12 +181,15 @@ export interface Feature {
         /** Placeholder for the input element */
         placeholder?: string;
 
+        /** Show the processing icon when searching */
+        processing?: boolean;
+
         /** Text for search control */
         text?: string;
     }
 }
 
-type LayoutNumber = '' | '1' | '2' | '3' | '4' | '5';
+type LayoutNumber = '' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
 
 type LayoutSide = 'top' | 'bottom';
 
@@ -191,7 +197,15 @@ type LayoutEdge = 'Start' | 'End';
 
 type LayoutKeys = `${LayoutSide}${LayoutNumber}${LayoutEdge}` | `${LayoutSide}${LayoutNumber}`;
 
-type Layout = Partial<Record<LayoutKeys, keyof Feature | Feature | Array<keyof Feature> | Feature[] | null>>;
+type LayoutFeatures = keyof Feature | Feature | Array<keyof Feature> | Feature[];
+
+type LayoutElement = {
+    id?: string;
+    className?: string;
+    features: Array<LayoutFeatures>;
+}
+
+type Layout = Partial<Record<LayoutKeys, LayoutElement | LayoutFeatures | null>>;
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -357,6 +371,11 @@ export interface Config {
      * Highlight the columns being ordered in the table's body.
      */
     orderClasses?: boolean;
+
+    /**
+     * Reverse the initial data order when `desc` ordering
+     */
+    orderDescReverse?: boolean;
 
     /**
      * Initial order (sort) to apply to the table.
@@ -2659,18 +2678,77 @@ export interface DataTablesStatic {
     type(name: string, definition: DataType): void;
 
     /**
-     * Set an individual property value for a a given data type.
+     * Set a class name for a given data type
      *
      * @param name Data type name to set a property value for
      * @param property Name of the data type property to set
-     * @param val The value to set (typically a function or string)
+     * @param val Class name to set
      */
-    type(name: string, property: keyof(DataType), val: any): void;
+    type(name: string, property: 'className', val: DataType['className']): void;
+
+    /**
+     * Set the detection function(s) for a given data type
+     *
+     * @param name Data type name to set a property value for
+     * @param property Name of the data type property to set
+     * @param val Detection function / object to set
+     */
+    type(name: string, property: 'detect', val: DataType['detect']): void;
+
+    /**
+     * Set the order functions for a given data type
+     *
+     * @param name Data type name to set a property value for
+     * @param property Name of the data type property to set
+     * @param val Object of functions to set
+     */
+    type(name: string, property: 'order', val: DataType['order']): void;
+
+    /**
+     * Set a rendering function for a given data type
+     *
+     * @param name Data type name to set a property value for
+     * @param property Name of the data type property to set
+     * @param val Rendering function
+     */
+    type(name: string, property: 'render', val: DataType['render']): void;
+
+    /**
+     * Set a search data renderer for a given data type
+     *
+     * @param name Data type name to set a property value for
+     * @param property Name of the data type property to set
+     * @param val Function to set
+     */
+    type(name: string, property: 'search', val: DataType['search']): void;
+
 
     /**
      * Get the names of the registered data types DataTables can work with.
      */
     types(): string[];
+
+    /**
+     * Get the libraries that DataTables uses, or the global objects.
+     *
+     * @param type The library needed
+     */
+    use(type: 'lib' | 'win' | 'datetime' | 'luxon' | 'moment');
+
+    /**
+     * Set the libraries that DataTables uses, or the global objects, with automatic
+     * detection of what the library is. Used for module loading environments.
+     */
+    use(library: any);
+
+    /**
+     * Set the libraries that DataTables uses, or the global objects, explicity staing
+     * what library is to be considered. Used for module loading environments.
+     *
+     * @param type Indicate the library that is being loaded.
+     * @param library The library (e.g. Moment or Luxon)
+     */
+    use(type: 'lib' | 'win' | 'datetime' | 'luxon' | 'moment', library: any);
 
     /**
      * Utils
@@ -3028,6 +3106,17 @@ export interface DataTablesStaticExtButtons {
 		container: string;
 	};
 
+    /** Layout grid classes */
+    layout: {
+		row: string;
+		cell: string;
+		tableRow: string;
+		tableCell: string;
+		start: string;
+		end: string;
+		full: string;
+    },
+
     /** Length feature classes */
 	length: {
         /** Container `<div>` class */
@@ -3153,7 +3242,7 @@ export interface ExtTypeSettings {
      *
      * @see https://datatables.net/manual/plug-ins/type-detection
      */
-    detect: FunctionExtTypeSettingsDetect[];
+    detect: ExtTypeSettingsDetect[];
 
     /**
      * Type based ordering functions for plug-in development.
@@ -3179,7 +3268,25 @@ export interface ExtTypeSettings {
  * @param data Data from the column cell to be analysed.
  * @param DataTables settings object.
  */
-type FunctionExtTypeSettingsDetect = (data: any, settings: InternalSettings) => (string | null);
+export type ExtTypeSettingsDetect = ((data: any, settings: InternalSettings) => (boolean | string | null)) | {
+    /**
+     * All data points in the column must pass this function to allow a column
+     * to take this data type.
+     */
+    allOf: (data: any, settings: InternalSettings) => boolean,
+
+    /**
+     * At least one of the data points in the column must pass this function to
+     * allow the column to take this data type.
+     */
+    oneOf: (data: any, settings: InternalSettings) => boolean,
+
+    /**
+     * Run when type detection starts, to see if a column can be assigned a data type
+     * based on a property of the column other than the data.
+     */
+    init?: (settings: InternalSettings, column: any, index: number) => boolean
+};
 
 type FunctionAjax = (data: object, callback: ((data: any) => void), settings: InternalSettings) => void;
 
