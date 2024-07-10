@@ -13391,10 +13391,11 @@
 		}
 	
 		// Wrapper element - use a span as a holder for where the select will go
+		var tmpId = 'tmp-' + (+new Date())
 		var div = $('<div/>')
 			.addClass( classes.container )
 			.append(
-				str.replace( '_MENU_', '<span></span>' )
+				str.replace( '_MENU_', '<span id="'+tmpId+'"></span>' )
 			);
 	
 		// Save text node content for macro updating
@@ -13437,7 +13438,7 @@
 		__lengthCounter++;
 	
 		// Swap in the select list
-		div.find('span').replaceWith(select);
+		div.find('#' + tmpId).replaceWith(select);
 	
 		// Can't use `select` variable as user might provide their own and the
 		// reference is broken by the use of outerHTML
