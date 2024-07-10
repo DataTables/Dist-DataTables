@@ -12836,7 +12836,7 @@
 		var n = $('<div>')[0];
 	
 		_divProp(n, 'className', opts.className);
-		_divProp(n, 'id', opts.className);
+		_divProp(n, 'id', opts.id);
 		_divProp(n, 'innerHTML', opts.html);
 		_divProp(n, 'textContent', opts.text);
 	
