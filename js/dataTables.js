@@ -1,11 +1,11 @@
-/*! DataTables 2.1.0
+/*! DataTables 2.1.2
  * © SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     DataTables
  * @description Paginate, search and order HTML tables
- * @version     2.1.0
+ * @version     2.1.2
  * @author      SpryMedia Ltd
  * @contact     www.datatables.net
  * @copyright   SpryMedia Ltd.
@@ -9804,7 +9804,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "2.1.0";
+	DataTable.version = "2.1.2";
 	
 	/**
 	 * Private data store, containing all of the settings objects that are
