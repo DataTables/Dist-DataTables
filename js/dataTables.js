@@ -1270,7 +1270,7 @@
 	
 	// Replaceable function in api.util
 	var _stripHtml = function (input) {
-		if (! input) {
+		if (! input || typeof input !== 'string') {
 			return input;
 		}
 	
