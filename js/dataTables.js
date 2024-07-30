@@ -4969,6 +4969,11 @@
 	 */
 	function _fnProcessingDisplay ( settings, show )
 	{
+		// Ignore cases when we are still redrawing
+		if (settings.bDrawing && show === false) {
+			return;
+		}
+	
 		_fnCallbackFire( settings, null, 'processing', [settings, show] );
 	}
 	
