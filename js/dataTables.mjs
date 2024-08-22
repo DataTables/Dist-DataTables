@@ -6729,6 +6729,7 @@ _Api = function ( context, data )
 		return new _Api( context, data );
 	}
 
+	var i;
 	var settings = [];
 	var ctxSettings = function ( o ) {
 		var a = _toSettings( o );
@@ -6738,7 +6739,7 @@ _Api = function ( context, data )
 	};
 
 	if ( Array.isArray( context ) ) {
-		for ( var i=0, ien=context.length ; i<ien ; i++ ) {
+		for ( i=0 ; i<context.length ; i++ ) {
 			ctxSettings( context[i] );
 		}
 	}
@@ -6753,7 +6754,16 @@ _Api = function ( context, data )
 
 	// Initial data
 	if ( data ) {
-		this.push.apply(this, data);
+		// Chrome can throw a max stack error if apply is called with
+		// too large an array, but apply is faster.
+		if (data.length < 10000) {
+			this.push.apply(this, data);
+		}
+		else {
+			for (i=0 ; i<data.length ; i++) {
+				this.push(data[i]);
+			}
+		}
 	}
 
 	// selector
