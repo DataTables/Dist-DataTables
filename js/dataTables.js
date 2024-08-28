@@ -2156,7 +2156,11 @@
 		for (var i=0 ; i<cols.length ; i++) {
 			var width = _fnColumnsSumWidth(settings, [i], false, false);
 	
-			cols[i].colEl.css('width', width);
+			// Need to set the min-width, otherwise the browser might try to collapse
+			// it further
+			cols[i].colEl
+				.css('width', width)
+				.css('min-width', width);
 		}
 	}
 	
@@ -5400,7 +5404,11 @@
 			var width = _fnColumnsSumWidth( settings, this, true, false );
 	
 			if ( width ) {
+				// Need to set the width and min-width, otherwise the browser
+				// will attempt to collapse the table beyond want might have
+				// been specified
 				this.style.width = width;
+				this.style.minWidth = width;
 	
 				// For scrollX we need to force the column width otherwise the
 				// browser will collapse it. If this width is smaller than the
