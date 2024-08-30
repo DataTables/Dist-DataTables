@@ -3073,6 +3073,9 @@ function _fnCreateTr ( oSettings, iRow, nTrIn, anTds )
 				_fnWriteCell(nTd, display[i]);
 			}
 
+			// column class
+			_addClass(nTd, oCol.sClass);
+
 			// Visibility - add or remove as required
 			if ( oCol.bVisible && create )
 			{
@@ -3404,7 +3407,6 @@ function _fnDraw( oSettings, ajaxComplete )
 				var td = aoData.anCells[i];
 
 				_addClass(td, _ext.type.className[col.sType]); // auto class
-				_addClass(td, col.sClass); // column class
 				_addClass(td, oSettings.oClasses.tbody.cell); // all cells
 			}
 
