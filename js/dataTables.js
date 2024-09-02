@@ -254,6 +254,7 @@
 				"caption",
 				"layout",
 				"orderDescReverse",
+				"typeDetect",
 				[ "iCookieDuration", "iStateDuration" ], // backwards compat
 				[ "oSearch", "oPreviousSearch" ],
 				[ "aoSearchCols", "aoPreSearchCols" ],
@@ -2274,12 +2275,6 @@
 		var i, ien, j, jen, k, ken;
 		var col, detectedType, cache;
 	
-		// If SSP then we don't have the full data set, so any type detection would be
-		// unreliable and error prone
-		if (_fnDataSource( settings ) === 'ssp') {
-			return;
-		}
-	
 		// For each column, spin over the data type detection functions, seeing if one matches
 		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
 			col = columns[i];
@@ -2289,6 +2284,12 @@
 				col.sType = col._sManualType;
 			}
 			else if ( ! col.sType ) {
+				// With SSP type detection can be unreliable and error prone, so we provide a way
+				// to turn it off.
+				if (! settings.typeDetect) {
+					return;
+				}
+	
 				for ( j=0, jen=types.length ; j<jen ; j++ ) {
 					var typeDetect = types[j];
 	
@@ -4340,6 +4341,7 @@
 		}
 		settings.aiDisplay = settings.aiDisplayMaster.slice();
 	
+		_fnColumnTypes(settings);
 		_fnDraw( settings, true );
 		_fnInitComplete( settings );
 		_fnProcessingDisplay( settings, false );
@@ -11960,7 +11962,10 @@
 		colgroup: null,
 	
 		/** Delay loading of data */
-		deferLoading: null
+		deferLoading: null,
+	
+		/** Allow auto type detection */
+		typeDetect: true
 	};
 	
 	/**
