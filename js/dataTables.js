@@ -478,7 +478,7 @@
 				} );
 			}
 			else {
-				_fnCallbackFire( oSettings, null, 'i18n', [oSettings]);
+				_fnCallbackFire( oSettings, null, 'i18n', [oSettings], true);
 				_fnInitialise( oSettings );
 			}
 		} );
