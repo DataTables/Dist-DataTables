@@ -9709,7 +9709,7 @@
 				fn.call(this);
 			}
 			else {
-				this.on('init', function () {
+				this.on('init.dt.DT', function () {
 					fn.call(this);
 				});
 			}
