@@ -2988,8 +2988,8 @@ function _fnGetRowElements( settings, row, colIdx, d )
  * @returns 
  */
 function _fnGetRowDisplay (settings, rowIdx) {
-	let rowModal = settings.aoData[rowIdx];
-	let columns = settings.aoColumns;
+	var rowModal = settings.aoData[rowIdx];
+	var columns = settings.aoColumns;
 
 	if (! rowModal.displayData) {
 		// Need to render and cache
@@ -7661,7 +7661,7 @@ var _selector_opts = function ( opts )
 // Reduce the API instance to the first item found
 var _selector_first = function ( old )
 {
-	let inst = new _Api(old.context[0]);
+	var inst = new _Api(old.context[0]);
 
 	// Use a push rather than passing to the constructor, since it will
 	// merge arrays down automatically, which isn't what is wanted here
