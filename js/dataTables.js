@@ -13526,7 +13526,7 @@
 	
 		// Save text node content for macro updating
 		var textNodes = [];
-		Array.from(div.find('label')[0].childNodes).forEach(function (el) {
+		Array.prototype.slice.call(div.find('label')[0].childNodes).forEach(function (el) {
 			if (el.nodeType === Node.TEXT_NODE) {
 				textNodes.push({
 					el: el,
