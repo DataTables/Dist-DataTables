@@ -8583,7 +8583,8 @@
 				.map( function () {
 					return _fnColumnsFromHeader( this ); // `nodes` is column index complete and in order
 				} )
-				.toArray();
+				.toArray()
+				.sort();
 	
 			if ( jqResult.length || ! s.nodeName ) {
 				return jqResult;
