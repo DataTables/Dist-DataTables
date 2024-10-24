@@ -9441,10 +9441,12 @@
 					return __moment;
 	
 				case 'bootstrap':
-					return __bootstrap;
+					// Use local if set, otherwise try window, which could be undefined
+					return __bootstrap || window.bootstrap;
 	
 				case 'foundation':
-					return __foundation;
+					// Ditto
+					return __foundation || window.Foundation;
 	
 				default:
 					return null;
