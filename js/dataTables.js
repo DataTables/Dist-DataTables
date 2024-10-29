@@ -8584,7 +8584,9 @@
 					return _fnColumnsFromHeader( this ); // `nodes` is column index complete and in order
 				} )
 				.toArray()
-				.sort();
+				.sort(function (a, b) {
+					return a - b;
+				});
 	
 			if ( jqResult.length || ! s.nodeName ) {
 				return jqResult;
