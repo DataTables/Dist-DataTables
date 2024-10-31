@@ -12117,7 +12117,7 @@ function __mldObj (d, format, locale) {
 			return null;
 		}
 
-		dt.setLocale(locale);
+		dt = dt.setLocale(locale);
 	}
 	else if (! format) {
 		// No format given, must be ISO
