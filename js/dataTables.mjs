@@ -4458,7 +4458,7 @@ function _fnFilterCustom( settings )
 		// So the array reference doesn't break set the results into the
 		// existing array
 		displayRows.length = 0;
-		displayRows.push.apply(displayRows, rows);
+		_fnArrayApply(displayRows, rows);
 	}
 }
 
@@ -6582,6 +6582,30 @@ function _fnMacros ( settings, str, entries )
 		replace(/_ENTRIES-TOTAL_/g, settings.api.i18n('entries', '', vis) );
 }
 
+/**
+ * Add elements to an array as quickly as possible, but stack stafe.
+ *
+ * @param {*} arr Array to add the data to
+ * @param {*} data Data array that is to be added
+ * @returns 
+ */
+function _fnArrayApply(arr, data) {
+	if (! data) {
+		return;
+	}
+
+	// Chrome can throw a max stack error if apply is called with
+	// too large an array, but apply is faster.
+	if (data.length < 10000) {
+		arr.push.apply(arr, data);
+	}
+	else {
+		for (i=0 ; i<data.length ; i++) {
+			arr.push(data[i]);
+		}
+	}
+}
+
 
 
 /**
@@ -6774,18 +6798,7 @@ _Api = function ( context, data )
 		: settings;
 
 	// Initial data
-	if ( data ) {
-		// Chrome can throw a max stack error if apply is called with
-		// too large an array, but apply is faster.
-		if (data.length < 10000) {
-			this.push.apply(this, data);
-		}
-		else {
-			for (i=0 ; i<data.length ; i++) {
-				this.push(data[i]);
-			}
-		}
-	}
+	_fnArrayApply(this, data);
 
 	// selector
 	this.selector = {
@@ -7166,7 +7179,7 @@ var __table_selector = function ( selector, a )
 		selector.forEach(function (sel) {
 			var inner = __table_selector(sel, a);
 
-			result.push.apply(result, inner);
+			_fnArrayApply(result, inner);
 		});
 
 		return result.filter( function (item) {
@@ -8020,7 +8033,7 @@ _api_register( 'rows.add()', function ( rows ) {
 	// Return an Api.rows() extended instance, so rows().nodes() etc can be used
 	var modRows = this.rows( -1 );
 	modRows.pop();
-	modRows.push.apply(modRows, newRows);
+	_fnArrayApply(modRows, newRows);
 
 	return modRows;
 } );
