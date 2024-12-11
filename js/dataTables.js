@@ -13343,7 +13343,7 @@
 				'data-dt-idx': button,
 				'tabIndex': btnInfo.disabled
 					? -1
-					: settings.iTabIndex
+					: settings.iTabIndex && btn.clicker[0].nodeName.toLowerCase() !== 'span'
 						? settings.iTabIndex
 						: null, // `0` doesn't need a tabIndex since it is the default
 			});
@@ -13410,7 +13410,6 @@
 		switch ( button ) {
 			case 'ellipsis':
 				o.display = '&#x2026;';
-				o.disabled = true;
 				break;
 	
 			case 'first':
