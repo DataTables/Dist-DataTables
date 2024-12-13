@@ -12881,6 +12881,7 @@
 					var indexes = columns.indexes();
 					var sortDirs = columns.orderable(true).flatten();
 					var orderedColumns = _pluck(sorting, 'col');
+					var tabIndex = settings.iTabIndex;
 	
 					cell
 						.removeClass(
@@ -12946,7 +12947,10 @@
 					// Make the headers tab-able for keyboard navigation
 					if (orderable) {
 						cell.find('.dt-column-title').attr('role', 'button');
-						cell.attr('tabindex', 0)
+	
+						if (tabIndex !== -1) {
+							cell.attr('tabindex', 0);
+						}
 					}
 				} );
 			}
