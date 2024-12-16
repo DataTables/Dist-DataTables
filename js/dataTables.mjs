@@ -5363,7 +5363,6 @@ function _fnCalculateColumnWidths ( settings )
 
 		if ( width ) {
 			this.style.width = width;
-			console.log(width, this.style.width);
 
 			// For scrollX we need to force the column width otherwise the
 			// browser will collapse it. If this width is smaller than the
