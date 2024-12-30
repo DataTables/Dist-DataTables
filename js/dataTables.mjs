@@ -13663,7 +13663,6 @@ DataTable.feature.register( 'pageLength', function ( settings, opts ) {
 
 	// Next, the select itself, along with the options
 	var select = $('<select/>', {
-		'name':          tableId+'_length',
 		'aria-controls': tableId,
 		'class':         classes.select
 	} );
