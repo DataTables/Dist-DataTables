@@ -1,4 +1,4 @@
-/*! DataTables 2.2.0-dev
+/*! DataTables 2.2.0
  * © SpryMedia Ltd - datatables.net/license
  */
 
@@ -9949,7 +9949,7 @@ _api_register( 'i18n()', function ( token, def, plural ) {
  *  @type string
  *  @default Version number
  */
-DataTable.version = "2.2.0-dev";
+DataTable.version = "2.2.0";
 
 /**
  * Private data store, containing all of the settings objects that are
