@@ -5885,10 +5885,14 @@
 			displayMaster = oSettings.aiDisplayMaster,
 			aSort;
 	
+		// Make sure the columns all have types defined
+		_fnColumnTypes(oSettings);
+	
 		// Allow a specific column to be sorted, which will _not_ alter the display
 		// master
 		if (col !== undefined) {
 			var srcCol = oSettings.aoColumns[col];
+	
 			aSort = [{
 				src:       col,
 				col:       col,
