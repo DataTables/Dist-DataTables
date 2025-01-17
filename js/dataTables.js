@@ -5550,6 +5550,7 @@
 						width: '100%',
 						height: 0
 					})
+					.addClass('dt-autosize')
 					.appendTo(settings.nTableWrapper);
 	
 				settings.resizeObserver = new ResizeObserver(function (e) {
