@@ -13050,16 +13050,16 @@
 						cell.removeAttr('aria-sort');
 					}
 	
-					cell.attr('aria-label', orderable
-						? col.ariaTitle + ctx.api.i18n('oAria.orderable' + ariaType)
-						: col.ariaTitle
-					);
-	
 					// Make the headers tab-able for keyboard navigation
 					if (orderable) {
 						var orderSpan = cell.find('.dt-column-order');
 						
-						orderSpan.attr('role', 'button');
+						orderSpan
+							.attr('role', 'button')
+							.attr('aria-label', orderable
+								? col.ariaTitle + ctx.api.i18n('oAria.orderable' + ariaType)
+								: col.ariaTitle
+							);
 	
 						if (tabIndex !== -1) {
 							orderSpan.attr('tabindex', tabIndex);
