@@ -9265,7 +9265,10 @@
 		// otherwise a 2D array was passed in
 	
 		return this.iterator( 'table', function ( settings ) {
-			settings.aaSorting = Array.isArray(order) ? order.slice() : order;
+			var resolved = [];
+			_fnSortResolve(settings, resolved, order);
+	
+			settings.aaSorting = resolved;
 		} );
 	} );
 	
