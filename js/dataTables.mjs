@@ -3951,6 +3951,7 @@ function _fnDetectHeader ( settings, thead, write )
 				cell.nodeName.toUpperCase() == 'TH'
 			) {
 				var cols = [];
+				var jqCell = $(cell);
 
 				// Get the col and rowspan attributes from the DOM and sanitise them
 				colspan = cell.getAttribute('colspan') * 1;
@@ -3971,7 +3972,7 @@ function _fnDetectHeader ( settings, thead, write )
 				if ( write ) {
 					if (unique) {
 						// Allow column options to be set from HTML attributes
-						_fnColumnOptions( settings, shifted, $(cell).data() );
+						_fnColumnOptions( settings, shifted, jqCell.data() );
 						
 						// Get the width for the column. This can be defined from the
 						// width attribute, style attribute or `columns.width` option
@@ -4013,12 +4014,12 @@ function _fnDetectHeader ( settings, thead, write )
 						// Fall back to the aria-label attribute on the table header if no ariaTitle is
 						// provided.
 						if (! columnDef.ariaTitle) {
-							columnDef.ariaTitle = $(cell).attr("aria-label") || columnDef.sTitle;
+							columnDef.ariaTitle = jqCell.attr("aria-label") || columnDef.sTitle;
 						}
 
 						// Column specific class names
 						if ( columnDef.className ) {
-							$(cell).addClass( columnDef.className );
+							jqCell.addClass( columnDef.className );
 						}
 					}
 
@@ -4033,6 +4034,8 @@ function _fnDetectHeader ( settings, thead, write )
 					if (
 						settings.orderIndicators &&
 						isHeader &&
+						jqCell.filter(':not([data-dt-order=disable])').length !== 0 &&
+						jqCell.parent(':not([data-dt-order=disable])').length !== 0 &&
 						$('span.dt-column-order', cell).length === 0
 					) {
 						$('<span>')
