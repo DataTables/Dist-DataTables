@@ -1,4 +1,4 @@
-/*! DataTables 2.3.0-dev
+/*! DataTables 2.3.0
  * © SpryMedia Ltd - datatables.net/license
  */
 
@@ -10193,7 +10193,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "2.3.0-dev";
+	DataTable.version = "2.3.0";
 	
 	/**
 	 * Private data store, containing all of the settings objects that are
