@@ -3538,7 +3538,9 @@ function _fnReDraw( settings, holdPosition, recompute )
 
 	_fnDraw( settings );
 
-	settings._drawHold = false;
+	settings.api.one('draw', function () {
+		settings._drawHold = false;
+	});
 }
 
 
