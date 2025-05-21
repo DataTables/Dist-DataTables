@@ -77,7 +77,7 @@ var DataTable = function ( selector, options )
 		_fnCamelToHungarian( defaults.column, defaults.column, true );
 		
 		/* Setting up the initialisation object */
-		_fnCamelToHungarian( defaults, $.extend( oInit, $this.data() ), true );
+		_fnCamelToHungarian( defaults, $.extend( oInit, _fnEscapeObject($this.data()) ), true );
 		
 		
 		
@@ -507,6 +507,11 @@ DataTable.ext = _ext = {
 	 */
 	errMode: "alert",
 
+	/** HTML entity escaping */
+	escape: {
+		/** When reading data-* attributes for initialisation options */
+		attributes: false
+	},
 
 	/**
 	 * Legacy so v1 plug-ins don't throw js errors on load
@@ -6817,6 +6822,19 @@ function _fnListener(that, name, src) {
 	for (i=0 ; i<src.length ; i++) {
 		that.on(name + '.dt', src[i]);
 	}
+}
+
+/**
+ * Escape HTML entities in strings, in an object
+ */
+function _fnEscapeObject(obj) {
+	if (DataTable.ext.escape.attributes) {
+		$.each(obj, function (key, val) {
+			obj[key] = _escapeHtml(val);
+		})
+	}
+
+	return obj;
 }
 
 
