@@ -4264,7 +4264,7 @@
 			// to the object for the callback.
 			var empty = {};
 	
-			DataTable.util.set(ajax.dataSrc)(empty, []);
+			_fnAjaxDataSrc(oSettings, empty, []);
 			callback(empty);
 		}
 		else {
@@ -5792,9 +5792,11 @@
 			var run = false;
 			var columns = column === undefined
 				? _fnColumnsFromHeader( e.target )
-				: Array.isArray(column)
-					? column
-					: [column];
+				: typeof column === 'function'
+					? column()
+					: Array.isArray(column)
+						? column
+						: [column];
 	
 			if ( columns.length ) {
 				for ( var i=0, ien=columns.length ; i<ien ; i++ ) {
