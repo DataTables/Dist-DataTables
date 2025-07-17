@@ -696,7 +696,7 @@ DataTable.ext = _ext = {
 	 * 
 	 * The extension options for ordering of data available here is complimentary
 	 * to the default type based ordering that DataTables typically uses. It
-	 * allows much greater control over the the data that is being used to
+	 * allows much greater control over the data that is being used to
 	 * order a column, but is necessarily therefore more complex.
 	 * 
 	 * This type of ordering is useful if you want to do ordering based on data
@@ -3921,7 +3921,7 @@ function _fnLayoutDom( settings, dom, insert )
 /**
  * Use the DOM source to create up an array of header cells. The idea here is to
  * create a layout grid (array) of rows x columns, which contains a reference
- * to the cell that that point in the grid (regardless of col/rowspan), such that
+ * to the cell that point in the grid (regardless of col/rowspan), such that
  * any column / row could be removed and the new grid constructed
  *  @param {node} thead The header/footer element for the table
  *  @returns {array} Calculated layout array
@@ -5433,7 +5433,7 @@ function _fnCalculateColumnWidths ( settings )
 		.removeAttr( 'id' );
 
 	// Clean up the table body
-	tmpTable.append('<tbody>')
+	tmpTable.append('<tbody/>')
 	var tr = $('<tr/>').appendTo( tmpTable.find('tbody') );
 
 	// Clone the table header and footer - we can't use the header / footer
@@ -11166,7 +11166,7 @@ DataTable.defaults = {
 		/**
 		 * When using Ajax sourced data and during the first draw when DataTables is
 		 * gathering the data, this message is shown in an empty row in the table to
-		 * indicate to the end user the the data is being loaded. Note that this
+		 * indicate to the end user the data is being loaded. Note that this
 		 * parameter is not used when loading data by server-side processing, just
 		 * Ajax sourced data with client-side processing.
 		 */
@@ -11486,7 +11486,7 @@ DataTable.defaults.column = {
 	 * This property is the rendering partner to `data` and it is suggested that
 	 * when you want to manipulate data for display (including filtering,
 	 * sorting etc) without altering the underlying data for the table, use this
-	 * property. `render` can be considered to be the the read only companion to
+	 * property. `render` can be considered to be the read only companion to
 	 * `data` which is read / write (then as such more complex). Like `data`
 	 * this option can be given in a number of different ways to effect its
 	 * behaviour:
