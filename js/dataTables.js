@@ -6152,7 +6152,7 @@
 					nextSortIdx = 0; // can't remove sorting completely
 				}
 	
-				if ( nextSortIdx === null ) {
+				if ( nextSortIdx === null || asSorting[ nextSortIdx ] === '' ) {
 					sorting.splice( sortIdx, 1 );
 				}
 				else {
