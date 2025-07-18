@@ -10188,9 +10188,11 @@
 		}
 	
 		if ( $.isPlainObject( resolved ) ) {
-			resolved = plural !== undefined && resolved[ plural ] !== undefined ?
-				resolved[ plural ] :
-				resolved._;
+			resolved = plural !== undefined && resolved[ plural ] !== undefined
+				? resolved[ plural ]
+				: plural === false
+					? resolved
+					: resolved._;
 		}
 	
 		return typeof resolved === 'string'
