@@ -5974,7 +5974,7 @@
 	function _fnSort ( oSettings, col, dir )
 	{
 		var
-			i, iLen, iLen,
+			i, iLen,
 			aiOrig = [],
 			extSort = DataTable.ext.type.order,
 			aoData = oSettings.aoData,
