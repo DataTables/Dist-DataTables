@@ -4326,7 +4326,6 @@
 										: 'function'
 									};
 							})
-							.filter((val) => val !== null)
 					}
 				};
 			}),
@@ -4351,7 +4350,6 @@
 								: 'function'
 						};
 					})
-					.filter((val) => val !== null)
 			}
 		};
 	}

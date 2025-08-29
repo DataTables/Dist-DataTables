@@ -4291,7 +4291,6 @@ function _fnAjaxParameters(settings) {
 									: 'function'
 								};
 						})
-						.filter((val) => val !== null)
 				}
 			};
 		}),
@@ -4316,7 +4315,6 @@ function _fnAjaxParameters(settings) {
 							: 'function'
 					};
 				})
-				.filter((val) => val !== null)
 		}
 	};
 }
