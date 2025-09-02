@@ -6449,7 +6449,9 @@ function _fnImplementState ( settings, s, callback) {
 
 			// If the api is defined then we need to adjust the columns once the visibility has been changed
 			if (api) {
-				api.columns.adjust();
+				api.one('draw', function () {
+					api.columns.adjust();
+				});
 			}
 		}
 	}
