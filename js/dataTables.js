@@ -5455,6 +5455,7 @@
 		// the hard work of calculating table widths
 		var tmpTable = $(table.cloneNode())
 			.css( 'visibility', 'hidden' )
+			.css( 'margin', 0 )
 			.removeAttr( 'id' );
 	
 		// Clean up the table body
@@ -5516,7 +5517,8 @@
 	
 					var longest = longestData[j][i] || '';
 					var autoClass = _ext.type.className[column.sType];
-					var text = longest + column.sContentPadding;
+					var padding = column.sContentPadding || (scrollX ? '-' : '');
+					var text = longest + padding;
 					var insert = longest.indexOf('<') === -1
 						? document.createTextNode(text)
 						: text
