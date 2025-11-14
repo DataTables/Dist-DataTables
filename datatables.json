@@ -10,6 +10,6 @@
         "types/types.d.ts"
     ],
     "src-repo": "http://github.com/DataTables/DataTablesSrc",
-    "last-tag": "2.3.4",
+    "last-tag": "2.3.5",
     "last-sync": "d8c0b84d669af57b39f87de2148827909f939d92"
 }
