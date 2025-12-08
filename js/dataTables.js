@@ -5523,7 +5523,7 @@
 					var autoClass = _ext.type.className[column.sType];
 					var padding = column.sContentPadding || (scrollX ? '-' : '');
 					var text = longest + padding;
-					var insert = longest.indexOf('<') === -1
+					var insert = longest.indexOf('<') === -1 && longest.indexOf('&') === -1
 						? document.createTextNode(text)
 						: text
 	
