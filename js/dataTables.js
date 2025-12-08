@@ -1280,7 +1280,7 @@
 	};
 	
 	// Replaceable function in api.util
-	var _stripHtml = function (input) {
+	var _stripHtml = function (input, replacement) {
 		if (! input || typeof input !== 'string') {
 			return input;
 		}
@@ -1292,7 +1292,7 @@
 	
 		var previous;
 	
-		input = input.replace(_re_html, ''); // Complete tags
+		input = input.replace(_re_html, replacement || ''); // Complete tags
 	
 		// Safety for incomplete script tag - use do / while to ensure that
 		// we get all instances
@@ -1757,7 +1757,7 @@
 			}
 		},
 	
-		stripHtml: function (mixed) {
+		stripHtml: function (mixed, replacement) {
 			var type = typeof mixed;
 	
 			if (type === 'function') {
@@ -1765,7 +1765,7 @@
 				return;
 			}
 			else if (type === 'string') {
-				return _stripHtml(mixed);
+				return _stripHtml(mixed, replacement);
 			}
 			return mixed;
 		},
@@ -5711,7 +5711,7 @@
 					.replace(/id=".*?"/g, '')
 					.replace(/name=".*?"/g, '');
 	
-				var noHtml = _stripHtml(cellString)
+				var noHtml = _stripHtml(cellString, ' ')
 					.replace( /&nbsp;/g, ' ' );
 		
 				// The length is calculated on the text only, but we keep the HTML
