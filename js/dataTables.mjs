@@ -212,6 +212,7 @@ var DataTable = function ( selector, options )
 			"orderHandler",
 			"titleRow",
 			"typeDetect",
+			"columnTitleTag",
 			[ "iCookieDuration", "iStateDuration" ], // backwards compat
 			[ "oSearch", "oPreviousSearch" ],
 			[ "aoSearchCols", "aoPreSearchCols" ],
@@ -3340,7 +3341,7 @@ function _fnHeaderLayout( settings, source, incColumns )
 					colspan++;
 				}
 
-				var titleSpan = $('span.dt-column-title', cell);
+				var titleSpan = $('.dt-column-title', cell);
 
 				structure[row][column] = {
 					cell: cell,
@@ -4054,8 +4055,8 @@ function _fnDetectHeader ( settings, thead, write )
 					}
 
 					// Wrap the column title so we can write to it in future
-					if ( $('span.dt-column-title', cell).length === 0) {
-						$('<span>')
+					if ( $('.dt-column-title', cell).length === 0) {
+						$(document.createElement(settings.columnTitleTag))
 							.addClass('dt-column-title')
 							.append(cell.childNodes)
 							.appendTo(cell);
@@ -4066,9 +4067,9 @@ function _fnDetectHeader ( settings, thead, write )
 						isHeader &&
 						jqCell.filter(':not([data-dt-order=disable])').length !== 0 &&
 						jqCell.parent(':not([data-dt-order=disable])').length !== 0 &&
-						$('span.dt-column-order', cell).length === 0
+						$('.dt-column-order', cell).length === 0
 					) {
-						$('<span>')
+						$(document.createElement(settings.columnTitleTag))
 							.addClass('dt-column-order')
 							.appendTo(cell);
 					}
@@ -4077,7 +4078,7 @@ function _fnDetectHeader ( settings, thead, write )
 					// layout for those elements
 					var headerFooter = isHeader ? 'header' : 'footer';
 
-					if ( $('span.dt-column-' + headerFooter, cell).length === 0) {
+					if ( $('div.dt-column-' + headerFooter, cell).length === 0) {
 						$('<div>')
 							.addClass('dt-column-' + headerFooter)
 							.append(cell.childNodes)
@@ -8749,7 +8750,7 @@ var __column_header = function ( settings, column, row ) {
 		// Automatic - find the _last_ unique cell from the top that is not empty (last for
 		// backwards compatibility)
 		for (var i=0 ; i<header.length ; i++) {
-			if (header[i][column].unique && $('span.dt-column-title', header[i][column].cell).text()) {
+			if (header[i][column].unique && $('.dt-column-title', header[i][column].cell).text()) {
 				target = i;
 			}
 		}
@@ -9056,7 +9057,7 @@ _api_registerPlural( 'columns().titles()', 'column().title()', function (title, 
 			title = undefined;
 		}
 
-		var span = $('span.dt-column-title', this.column(column).header(row));
+		var span = $('.dt-column-title', this.column(column).header(row));
 
 		if (title !== undefined) {
 			span.html(title);
@@ -10230,8 +10231,8 @@ _api_register( 'i18n()', function ( token, def, plural ) {
 
 // Needed for header and footer, so pulled into its own function
 function cleanHeader(node, className) {
-	$(node).find('span.dt-column-order').remove();
-	$(node).find('span.dt-column-title').each(function () {
+	$(node).find('.dt-column-order').remove();
+	$(node).find('.dt-column-title').each(function () {
 		var title = $(this).html();
 		$(this).parent().parent().append(title);
 		$(this).remove();
@@ -11417,7 +11418,10 @@ DataTable.defaults = {
 	iDeferLoading: null,
 
 	/** Event listeners */
-	on: null
+	on: null,
+
+	/** Title wrapper element type */
+	columnTitleTag: 'span'
 };
 
 _fnHungarianMap( DataTable.defaults );
@@ -12381,7 +12385,10 @@ DataTable.models.oSettings = {
 	orderHandler: true,
 
 	/** Title row indicator */
-	titleRow: null
+	titleRow: null,
+
+	/** Title wrapper element type */
+	columnTitleTag: 'span'
 };
 
 /**
