@@ -5721,7 +5721,7 @@
 					.replace(/name=".*?"/g, '');
 	
 				// Don't want Javascript at all in these calculation cells.
-				cellString = cellString.replace(/<script.*?<\/script>/g);
+				cellString = cellString.replace(/<script.*?<\/script>/gi);
 	
 				var noHtml = _stripHtml(cellString, ' ')
 					.replace( /&nbsp;/g, ' ' );
