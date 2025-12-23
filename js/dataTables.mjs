@@ -413,7 +413,7 @@ var DataTable = function ( selector, options )
 		if ( tfoot.length === 0 ) {
 			// If we are a scrolling table, and no footer has been given, then we need to create
 			// a tfoot element for the caption element to be appended to
-			tfoot = $('<tfoot/>').insertAfter(thead);
+			tfoot = $('<tfoot/>').appendTo($this);
 		}
 		oSettings.nTFoot = tfoot[0];
 		
