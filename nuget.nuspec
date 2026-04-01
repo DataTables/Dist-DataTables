@@ -21,6 +21,10 @@
         <file src="js/dataTables.js" target="contentFiles\any\any\wwwroot\js"/>
         <file src="js/dataTables.min.js" target="content\Scripts"/>
         <file src="js/dataTables.min.js" target="contentFiles\any\any\wwwroot\js"/>
+        <file src="js/dataTables.min.mjs" target="content\Scripts"/>
+        <file src="js/dataTables.min.mjs" target="contentFiles\any\any\wwwroot\js"/>
+        <file src="js/dataTables.mjs" target="content\Scripts"/>
+        <file src="js/dataTables.mjs" target="contentFiles\any\any\wwwroot\js"/>
     </files>
 </package>
 
