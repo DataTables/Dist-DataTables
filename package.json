@@ -1,6 +1,6 @@
 {
     "name": "datatables.net",
-    "description": "jQuery DataTables",
+    "description": "DataTables - The Javascript table library",
     "main": "js/dataTables.js",
     "module": "js/dataTables.mjs",
     "types": "./types/types.d.ts",
