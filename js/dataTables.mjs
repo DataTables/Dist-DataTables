@@ -12573,7 +12573,7 @@ function __mldObj (d, format, locale) {
 	resolveWindowLibs();
 
 	if (__moment) {
-		dt = __moment.utc( d, format, locale, true );
+		dt = __moment( d, format, locale, true );
 
 		if (! dt.isValid()) {
 			return null;
@@ -12695,8 +12695,7 @@ function __mlHelper (localeString) {
 			
 			var formatted = to === null
 				? __mld(dt, 'toDate', 'toJSDate', '')[localeString](
-					navigator.language,
-					{ timeZone: "UTC" }
+					navigator.language
 				)
 				: __mld(dt, 'format', 'toFormat', 'toISOString', to);
 
