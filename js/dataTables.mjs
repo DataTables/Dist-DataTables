@@ -12553,6 +12553,7 @@ function __mld( dtLib, momentFn, luxonFn, dateFn, arg1 ) {
 var __mlWarning = false;
 var __luxon; // Can be assigned in DateTable.use()
 var __moment; // Can be assigned in DateTable.use()
+var __reIsoTimezone = /[T\s]\d{2}.*?(Z|[+-]\d{2}(?::?\d{2})?)$/;
 
 /**
  * 
@@ -12683,6 +12684,16 @@ function __mlHelper (localeString) {
 				return d;
 			}
 
+			// Determine if there is a timezone. If there is, we want to reuse
+			// it for the output, so the timezone doesn't change between the
+			// input and output.
+			let options = {};
+			let tzMatch = typeof d === 'string' ? d.match(__reIsoTimezone) : null;
+
+			if (tzMatch) {
+				options.timeZone = tzMatch[1] === 'Z' ? 'UTC' : tzMatch[1];
+			}
+
 			var dt = __mldObj(d, from, locale);
 
 			if (dt === null) {
@@ -12695,7 +12706,8 @@ function __mlHelper (localeString) {
 			
 			var formatted = to === null
 				? __mld(dt, 'toDate', 'toJSDate', '')[localeString](
-					navigator.language
+					navigator.language,
+					options
 				)
 				: __mld(dt, 'format', 'toFormat', 'toISOString', to);
 
