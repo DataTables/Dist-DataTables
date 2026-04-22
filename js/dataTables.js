@@ -3595,6 +3595,11 @@
 		if ( holdPosition !== true ) {
 			settings._iDisplayStart = 0;
 		}
+		else {
+			// Keep position, but make sure that there is actually data to display,
+			// otherwise we need to rewind a bit (e.g. if rows were deleted)
+			_fnLengthOverflow(settings);
+		}
 	
 		// Let any modules know about the draw hold position state (used by
 		// scrolling internally)
