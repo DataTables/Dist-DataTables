@@ -1,4 +1,4 @@
-/*! DataTables 2.3.7
+/*! DataTables 2.3.8
  * © SpryMedia Ltd - datatables.net/license
  */
 
@@ -10276,7 +10276,7 @@ function cleanHeader(node, className) {
  *  @type string
  *  @default Version number
  */
-DataTable.version = "2.3.7";
+DataTable.version = "2.3.8";
 
 /**
  * Private data store, containing all of the settings objects that are
