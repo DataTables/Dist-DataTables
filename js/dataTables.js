@@ -4914,7 +4914,7 @@
 		var args = [settings, settings.json];
 	
 		// If the footer element is empty after initialisation, then remove it
-		let tfoot = $(settings.tfoot);
+		let tfoot = $(settings.nTFoot);
 		if (tfoot.children().length === 0) {
 			tfoot.remove();
 		}
