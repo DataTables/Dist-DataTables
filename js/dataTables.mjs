@@ -4099,7 +4099,7 @@ function arrayApply(arr, data) {
 function listener(that, name, src) {
     let srcArr = Array.isArray(src) ? src : [src];
     for (var i = 0; i < srcArr.length; i++) {
-        that.on(name + '.dt', srcArr[i]);
+        that.on(name + '.dt.DT', srcArr[i]);
     }
 }
 /**
@@ -11054,10 +11054,10 @@ register('caption()', function (value, side) {
             caption.css('caption-side', side);
             caption.get(0)._captionSide = side;
         }
-        if (container.find('div.dataTables_scroll').count()) {
-            var selector = side === 'top' ? 'Head' : 'Foot';
+        if (container.find('div.dt-scroll').count()) {
+            var selector = side === 'top' ? 'head' : 'foot';
             container
-                .find('div.dataTables_scroll' + selector + ' table')
+                .find('div.dt-scroll-' + selector + ' table')
                 .prepend(caption);
         }
         else {
@@ -11455,6 +11455,7 @@ register$2('pageLength', function (settings, optsIn) {
     var select = Dom
         .c('select')
         .attr('aria-controls', tableId)
+        .attr('autocomplete', 'off')
         .classAdd(classes.select);
     for (i = 0; i < lengths.length; i++) {
         // Attempt to look up the length from the i18n options
@@ -11503,7 +11504,9 @@ register$2('search', function (settings, optsIn) {
     let classes = settings.classes.search;
     let tableId = settings.tableId;
     let language = settings.language;
-    let input = '<input type="search" class="' + classes.input + '"/>';
+    let input = '<input type="search" class="' +
+        classes.input +
+        '" autocomplete="off"/>';
     let opts = util.object.assignDeep({
         columns: '*',
         placeholder: language.searchPlaceholder,
