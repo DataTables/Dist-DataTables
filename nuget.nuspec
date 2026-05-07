@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
-        <version>2.3.7</version>
+        <version>3.0.0-beta.2</version>
         <id>datatables.net</id>
-        <description>This is jQuery DataTables</description>
-        <repository type="git" url="https://github.com/DataTables/Dist-DataTables.git"/>
+        <description>DataTables - The Javascript table library</description>
+        <repository type="git" url="https://github.com/DataTables/DataTablesSrc"/>
         <authors>SpryMedia Ltd</authors>
         <projectUrl>http://datatables.net</projectUrl>
         <license type="expression">MIT</license>
-        <tags> Datatables jQuery table</tags>
+        <tags> DataTables table</tags>
         <dependencies>
-            <dependency id="jquery" version="1.7.0"/>
         </dependencies>
         <contentFiles>
             <files include="**/*" buildAction="Content"/>
         </contentFiles>
+        <readme>Readme.md</readme>
     </metadata>
     <files>
+        <file src="Readme.md" target=""/>
         <file src="js/dataTables.js" target="content\Scripts"/>
         <file src="js/dataTables.js" target="contentFiles\any\any\wwwroot\js"/>
         <file src="js/dataTables.min.js" target="content\Scripts"/>
@@ -27,4 +28,3 @@
         <file src="js/dataTables.mjs" target="contentFiles\any\any\wwwroot\js"/>
     </files>
 </package>
-
