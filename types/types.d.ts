@@ -3091,7 +3091,7 @@ declare const _default: {
  * @param jq jQuery
  * @returns Indicator
  */
-declare function factory(root: Window & typeof globalThis, jq: JQueryStatic): boolean;
+declare function factory(root: Window & typeof globalThis, jq: any): boolean;
 
 type Unpacked<T> = T extends (infer U)[] ? U : T extends (...args: any[]) => infer U ? U : T extends Promise<infer U> ? U : T;
 type DomSelector = string | Node | HTMLElement | JQuery | Dom;
@@ -5042,6 +5042,12 @@ interface DataTablesStatic {
      * @returns true the given table is a DataTable, false otherwise
      */
     isDataTable(table: string | Node | JQuery | Api<any>): boolean;
+    /**
+     * Set the DataTables Plus license key.
+     *
+     * @param key Your DataTables Plus license key
+     */
+    key(key: string): void;
     /**
      * The models that DataTables uses for data storage.
      *
