@@ -535,11 +535,16 @@ function ajax(optionsIn) {
     if (options.data instanceof FormData) {
         sendData = options.data;
     }
-    else if (method !== 'GET' && options.data && typeof options.data !== 'string') {
-        sendData = serialize(options.data, options.traditional);
-        sendData = convertSpaces(sendData, options);
-        // So beforeSend matches how jQuery behaves
-        options.data = sendData;
+    else if (method !== 'GET' && options.data) {
+        if (typeof options.data === 'string') {
+            sendData = options.data;
+        }
+        else {
+            sendData = serialize(options.data, options.traditional);
+            sendData = convertSpaces(sendData, options);
+            // So beforeSend matches how jQuery behaves
+            options.data = sendData;
+        }
     }
     xhr.onreadystatechange = function () {
         if (xhr.readyState != 4) {
