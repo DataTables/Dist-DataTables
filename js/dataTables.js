@@ -10114,18 +10114,19 @@ registerPlural('columns().widths()', 'column().width()', function () {
     // Injects a fake row into the table for just a moment so the widths can
     // be read, regardless of colspan in the header and rows being present
     // in the body
-    var columns = this.columns(':visible').count();
+    var columns = this.columns(':visible');
     var row = Dom
         .c('tr')
-        .html('<td>' + Array(columns).join('</td><td>') + '</td>');
+        .html('<td>' + Array(columns.count()).join('</td><td>') + '</td>');
     Dom.s(this.table().body()).append(row);
-    var widths = row.children().mapTo(el => {
-        return Dom.s(el).width('outer');
+    var widths = [];
+    var indexes = columns.indexes();
+    row.children().each((el, idx) => {
+        widths[indexes[idx]] = Dom.s(el).width('outer');
     });
     row.remove();
-    return this.iterator('column', function (settings, column) {
-        var visIdx = columnIndexToVisible(settings, column);
-        return visIdx !== null ? widths[visIdx] : 0;
+    return this.iterator('column', (settings, column) => {
+        return widths[column] || 0;
     }, true);
 });
 registerPlural('columns().indexes()', 'column().index()', function (type) {
