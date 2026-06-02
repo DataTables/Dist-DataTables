@@ -1323,7 +1323,7 @@ var timer = /*#__PURE__*/Object.freeze({
  * @returns true if this version of DataTables is greater or equal to the
  *   required version, or false if this version of DataTales is not suitable
  */
-function check(version1, version2) {
+function check$1(version1, version2) {
     let dt = external('datatable');
     var parts1 = version2 ? version2.split('.') : dt.ext.version.split('.');
     var parts2 = version1.split('.');
@@ -1343,7 +1343,7 @@ function check(version1, version2) {
 
 var version = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    check: check
+    check: check$1
 });
 
 // Note that the aliased properties are for compatibility with DataTables 2-
@@ -3875,7 +3875,7 @@ Object.assign(ext, {
     oStdClasses: ext.classes,
     oPagination: ext.pager,
     sVersion: ext.version,
-    fnVersionCheck: check
+    fnVersionCheck: check$1
 });
 
 /**
@@ -11087,10 +11087,15 @@ register('caption.node()', function () {
  * Please support DataTables and open source by purchasing a Plus license from
  * https://datatables.net/plus .
  */
-let _isPlus = false;
 let _ready = false;
 let _notice;
 let _processingKey = false;
+let _delayedReleaseDate = null;
+const _licenseInfo = {
+    type: null,
+    expires: null,
+    valid: null
+};
 const _wm = Dom.c('div');
 const _publicKey = 'BE1A9w9D9U/4s4/TogY+1sW/dLJ8IquzK1PmV70J93ZTIvXMZ0eV2NAb52ntpgwVFySSB2fOI7geLNO737rQAyo=';
 /**
@@ -11101,6 +11106,54 @@ const _publicKey = 'BE1A9w9D9U/4s4/TogY+1sW/dLJ8IquzK1PmV70J93ZTIvXMZ0eV2NAb52nt
  */
 function b64ToBuf(b64) {
     return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+}
+/**
+ * Logic to check the trial and plus license expiry and display messages if
+ * needed. There is particular consideration for checking a release date of
+ * software, as the license for DataTables Plus is perpetual for the version
+ * purchased, and it shouldn't show a message for the purchased version ever.
+ *
+ * @param releaseDate The date the software was released on.
+ * @returns true if valid, false otherwise
+ */
+function check(releaseDate) {
+    let expires = _licenseInfo.expires;
+    if (_licenseInfo.valid === false) {
+        noticePrep('License key invalid');
+        noticeDisplay();
+    }
+    else if (_licenseInfo.type === 'trial') {
+        let remaining = expires
+            ? Math.ceil((expires.getTime() - new Date().getTime()) / 86400000)
+            : -1;
+        if (remaining < 0) {
+            // Trial expires
+            consoleMsg('Your trial has now expired - https://datatables.net/plus', 'warn');
+            noticePrep('Trial expired');
+            noticeDisplay();
+            return false;
+        }
+        else {
+            // Let the user know when it is going to expire with a console
+            // message.
+            consoleMsg('Your trial expires in ' +
+                remaining +
+                ' day' +
+                (remaining === 1 ? '' : 's'));
+            return true;
+        }
+    }
+    else if (_licenseInfo.type === 'plus') {
+        if (!expires || new Date(releaseDate) > expires) {
+            noticePrep('Upgrade required for this version');
+            noticeDisplay();
+            return false;
+        }
+        return true;
+    }
+    noticePrep();
+    noticeDisplay();
+    return false;
 }
 /**
  * Common log message handling
@@ -11123,33 +11176,11 @@ const key = function (key) {
     verify(key)
         .then(result => {
         _processingKey = false;
-        if (result.state === 'valid') {
-            _isPlus = true;
-            // If it is a trial with an up coming expiry, let the user
-            // know when it is going to expire with a console message.
-            if (result.type === 'trial') {
-                let remaining = Math.ceil((result.expires.getTime() - new Date().getTime()) /
-                    86400000);
-                consoleMsg('Your trial expires in ' +
-                    remaining +
-                    ' day' +
-                    (remaining === 1 ? '' : 's'));
-            }
-        }
-        else if (result.state === 'expired') {
-            // When it has expired
-            consoleMsg('Your trial has now expired - https://datatables.net/plus', 'warn');
-            noticePrep('Trial expired');
-            noticeDisplay();
-        }
-        else {
-            noticePrep('License key invalid');
-            noticeDisplay();
-        }
+        check(_delayedReleaseDate);
     })
         .catch(() => {
         _processingKey = false;
-        noticeDisplay();
+        check(_delayedReleaseDate);
     });
 };
 /**
@@ -11199,8 +11230,7 @@ function noticePrep(text) {
  * Display the license notice
  */
 function noticeDisplay() {
-    noticePrep();
-    if (!_processingKey && !_isPlus && !document.body.contains(_wm[0])) {
+    if (!_processingKey && !document.body.contains(_wm[0])) {
         document.body.appendChild(_wm[0]);
     }
 }
@@ -11215,18 +11245,19 @@ function noticeDisplay() {
 function verify(licenseString) {
     return new Promise(function (resolve) {
         try {
-            var parts = licenseString.split(';');
+            var parts = licenseString.split(':');
             if (parts.length !== 2) {
-                return resolve({ state: 'invalid' });
+                _licenseInfo.valid = false;
+                return resolve();
             }
-            var payloadB64 = parts[0];
+            var payload = parts[0];
             var signatureB64 = parts[1];
             // Backwards compat for old browsers
             var cryptoObj = window.crypto || window.msCrypto;
             var subtle = cryptoObj.subtle || cryptoObj.webkitSubtle;
             var rawKey = b64ToBuf(_publicKey);
             var rawSig = b64ToBuf(signatureB64);
-            var data = new TextEncoder().encode(payloadB64);
+            var data = new TextEncoder().encode(payload);
             subtle
                 .importKey('raw', rawKey, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['verify'])
                 .then(function (key) {
@@ -11234,65 +11265,67 @@ function verify(licenseString) {
             })
                 .then(function (isValid) {
                 if (!isValid) {
-                    return resolve({ state: 'invalid' });
+                    _licenseInfo.valid = false;
+                    return resolve();
                 }
-                // Extract the payload and validate the expiry if there is
-                // one for trials
-                var payload = JSON.parse(atob(payloadB64));
-                if (payload.t === 'plus') {
-                    resolve({ state: 'valid', type: payload.t });
+                // Extract the payload to be useful
+                var payloadParts = payload.match(/(plus|trial)_(\d{4})(\d{2})(\d{2})/);
+                if (!payloadParts || payloadParts.length !== 5) {
+                    _licenseInfo.valid = false;
+                    return resolve();
                 }
-                var expires = new Date(payload.e);
-                if (new Date() > expires) {
-                    resolve({
-                        state: 'expired',
-                        type: payload.t,
-                        expires: expires
-                    });
-                }
-                else {
-                    resolve({
-                        state: 'valid',
-                        type: payload.t,
-                        expires: expires
-                    });
-                }
+                _licenseInfo.valid = true;
+                _licenseInfo.expires = new Date(payloadParts[2] +
+                    '-' +
+                    payloadParts[3] +
+                    '-' +
+                    payloadParts[4]);
+                _licenseInfo.type = payloadParts[1];
+                resolve();
             })
                 .catch(function () {
-                resolve({ state: 'invalid' });
+                _licenseInfo.valid = false;
+                resolve();
             });
         }
         catch (e) {
-            resolve({ state: 'invalid' });
+            _licenseInfo.valid = false;
+            resolve();
         }
     });
 }
 /**
- * Create the `plus` parameter on `DataTable` which Plus extensions can check
- * for
+ * Create the `plus` function on `DataTable` which Plus extensions can call to
+ * determine if the license key is valid and in date for the release. The
+ * resulting function is called like this: `DataTable.plus('2026-12-25')` and
+ * will return `true` or `false` depending on the key that was given (or not).
  *
  * @param DataTable The DataTable host object
  */
 function plus (DataTable) {
     Object.defineProperty(DataTable, 'plus', {
-        get: () => {
+        value: function (releaseDate) {
             // Unsecure sites are only useful for development, so allow there
             // and on the site.
             let host = window.location.hostname;
-            let isDev = host === 'localhost' ||
-                host === '127.0.0.1' ||
-                host === '192.168.234.234' ||
+            host === '192.168.234.234' ||
                 host.endsWith('.datatables.net') ||
                 host === 'datatables.net';
-            if (isDev || _isPlus) {
+            // if (isDev) {
+            // 	return true;
+            // }
+            if (_processingKey) {
+                // The validation of the key is async, so there is a chance that
+                // it could still be happening when this runs. We just queue the
+                // last one if that is the case.
+                _delayedReleaseDate = releaseDate;
                 return true;
             }
-            noticeDisplay();
-            return false;
+            return check(releaseDate);
         },
-        set: () => { },
         configurable: false,
-        enumerable: false
+        enumerable: false,
+        writable: false
     });
 }
 
