@@ -11688,8 +11688,7 @@ register$2('pageLength', function (settings, optsIn) {
     }
     // Wrapper element - use a span as a holder for where the select will go
     var tmpId = 'tmp-' + +new Date();
-    var div = Dom
-        .c('div')
+    var div = Dom.c('div')
         .classAdd(classes.container)
         .html(str.replace('_MENU_', '<span id="' + tmpId + '"></span>'));
     // Save text node content for macro updating
@@ -11711,8 +11710,7 @@ register$2('pageLength', function (settings, optsIn) {
         });
     };
     // Next, the select itself, along with the options
-    var select = Dom
-        .c('select')
+    var select = Dom.c('select')
         .attr('aria-controls', tableId)
         .attr('autocomplete', 'off')
         .classAdd(classes.select);
@@ -11745,7 +11743,26 @@ register$2('pageLength', function (settings, optsIn) {
     // Update node value whenever anything changes the table's length
     Dom.s(settings.table).on('length.dt.DT', function (e, s, len) {
         if (settings === s) {
-            div.find('select').val(len);
+            let localSelect = div.find('select');
+            // Remove any temporary values
+            localSelect.find('option[data-dt-len-tmp]').remove();
+            let option = localSelect.find('option[value="' + len + '"]');
+            // If the select list doesn't have the target value, then we
+            // need to add it for display.
+            if (!option.length) {
+                let after = findInsertBeforePoint(select, len);
+                let tempOption = Dom.c('option')
+                    .val(len)
+                    .text(len)
+                    .attr('data-dt-len-tmp', true);
+                if (after && after.length) {
+                    tempOption.insertBefore(after);
+                }
+                else {
+                    localSelect.append(tempOption);
+                }
+            }
+            localSelect.val(len);
             // Resolve plurals in the text for the new length
             updateEntries(len);
         }
@@ -11753,6 +11770,19 @@ register$2('pageLength', function (settings, optsIn) {
     updateEntries(settings.pageLength);
     return div;
 }, 'l');
+/**
+ * Find the element to insert the temporary option before to keep the sequence.
+ *
+ * @param select Select element
+ * @param insertValue Page length value
+ * @returns Target option or null if not found
+ */
+function findInsertBeforePoint(select, insertValue) {
+    let options = select.find('option');
+    let values = options.mapTo(el => parseInt(el.value));
+    let idx = values.findIndex(val => val > insertValue);
+    return idx < -1 ? null : options.eq(idx);
+}
 
 let __searchCounter = 0;
 register$2('search', function (settings, optsIn) {
