@@ -11342,12 +11342,12 @@ function plus (DataTable) {
             // Unsecure sites are only useful for development, so allow there
             // and on the site.
             let host = window.location.hostname;
-            host === '192.168.234.234' ||
+            let isDev = host === '192.168.234.234' ||
                 host.endsWith('.datatables.net') ||
                 host === 'datatables.net';
-            // if (isDev) {
-            // 	return true;
-            // }
+            if (isDev) {
+                return true;
+            }
             if (_processingKey) {
                 // The validation of the key is async, so there is a chance that
                 // it could still be happening when this runs. We just queue the
