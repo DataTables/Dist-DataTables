@@ -1595,7 +1595,7 @@ function parseEventName(original) {
         isFocus = true;
     }
     else if (name === 'blur') {
-        name = 'blurout';
+        name = 'focusout';
         isFocus = true;
     }
     return {
