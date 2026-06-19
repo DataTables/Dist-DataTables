@@ -1688,7 +1688,7 @@ function remove(el, nameFull, handler, selector) {
             wrapped.delegateSelector === selector &&
             wrapped.original === handler);
     }
-    if (eventName && selector) {
+    else if (eventName && selector) {
         removeEvents = stored.filter(wrapped => wrapped.type === eventName &&
             wrapped.delegateSelector === selector);
     }
