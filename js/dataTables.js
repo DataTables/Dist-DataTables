@@ -5029,6 +5029,7 @@ function invalidate(settings, rowIdx, src, colIdx) {
         // Update DataTables special `DT_*` attributes for the row
         rowAttributes(settings, row);
     }
+    callbackFire(settings, null, 'rowInvalidate', [settings, rowIdx, colIdx], false);
 }
 /**
  * Get the cells and data for a given row - from a <tr> element
@@ -10776,7 +10777,7 @@ register('row().data()', function (data) {
         util.set(ctx[0].rowId)(data, row.tr.id);
     }
     // Automatically invalidate
-    invalidate(ctx[0], this[0], 'data');
+    invalidate(ctx[0], this[0][0], 'data');
     return this;
 });
 register('row().node()', function () {
