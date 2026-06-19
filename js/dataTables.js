@@ -628,6 +628,7 @@ function ajax(optionsIn) {
     if (options.beforeSend) {
         if (options.beforeSend.call(options, xhr, options) === false) {
             xhr.abort();
+            return xhr;
         }
     }
     xhr.send(sendData);
@@ -1657,6 +1658,11 @@ function add(el, nameFull, handler, selector, one) {
         if (selector) {
             let dTarget = delegateTarget(el, selector, event);
             if (!dTarget) {
+                return;
+            }
+            if (isHover &&
+                event.relatedTarget &&
+                dTarget.contains(event.relatedTarget)) {
                 return;
             }
             callScope = dTarget;
