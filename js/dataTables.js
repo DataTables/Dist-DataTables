@@ -11132,7 +11132,9 @@ let _ready = false;
 let _notice;
 let _processingKey = false;
 let _delayedReleaseDate = null;
+let _delayedSoftware = null;
 const _licenseInfo = {
+    developers: 0,
     type: null,
     expires: null,
     valid: null
@@ -11155,15 +11157,18 @@ function b64ToBuf(b64) {
  * purchased, and it shouldn't show a message for the purchased version ever.
  *
  * @param releaseDate The date the software was released on.
+ * @param software The software name being validated. Can be null for a general
+ *   "Plus" check.
  * @returns true if valid, false otherwise
  */
-function check(releaseDate) {
+function check(releaseDate, software) {
     let expires = _licenseInfo.expires;
     if (_licenseInfo.valid === false) {
         noticePrep('License key invalid');
         noticeDisplay();
     }
     else if (_licenseInfo.type === 'trial') {
+        // Trail is for plus, so the software type isn't taken into account
         let remaining = expires
             ? Math.ceil((expires.getTime() - new Date().getTime()) / 86400000)
             : -1;
@@ -11184,13 +11189,19 @@ function check(releaseDate) {
             return true;
         }
     }
-    else if (_licenseInfo.type === 'plus') {
+    else if (_licenseInfo.type === 'plus' ||
+        (_licenseInfo.type === 'editor' && software === 'editor')) {
         if (!expires || new Date(releaseDate) > expires) {
             noticePrep('Upgrade required for this version');
             noticeDisplay();
             return false;
         }
         return true;
+    }
+    else if (_licenseInfo.type === 'editor' && software !== 'editor') {
+        noticePrep('License for Editor only. Upgrade for Plus');
+        noticeDisplay();
+        return false;
     }
     noticePrep();
     noticeDisplay();
@@ -11217,11 +11228,11 @@ const key = function (key) {
     verify(key)
         .then(result => {
         _processingKey = false;
-        check(_delayedReleaseDate);
+        check(_delayedReleaseDate, _delayedSoftware);
     })
         .catch(() => {
         _processingKey = false;
-        check(_delayedReleaseDate);
+        check(_delayedReleaseDate, _delayedSoftware);
     });
 };
 /**
@@ -11310,18 +11321,19 @@ function verify(licenseString) {
                     return resolve();
                 }
                 // Extract the payload to be useful
-                var payloadParts = payload.match(/(plus|trial)_(\d{4})(\d{2})(\d{2})/);
-                if (!payloadParts || payloadParts.length !== 5) {
+                var payloadParts = payload.match(/(plus|trial|editor)_(\d+)_(\d{4})(\d{2})(\d{2})/);
+                if (!payloadParts || payloadParts.length !== 6) {
                     _licenseInfo.valid = false;
                     return resolve();
                 }
                 _licenseInfo.valid = true;
-                _licenseInfo.expires = new Date(payloadParts[2] +
-                    '-' +
-                    payloadParts[3] +
-                    '-' +
-                    payloadParts[4]);
                 _licenseInfo.type = payloadParts[1];
+                _licenseInfo.developers = parseInt(payloadParts[2]);
+                _licenseInfo.expires = new Date(payloadParts[3] +
+                    '-' +
+                    payloadParts[4] +
+                    '-' +
+                    payloadParts[5]);
                 resolve();
             })
                 .catch(function () {
@@ -11345,7 +11357,7 @@ function verify(licenseString) {
  */
 function plus (DataTable) {
     Object.defineProperty(DataTable, 'plus', {
-        value: function (releaseDate) {
+        value: function (releaseDate, software = null) {
             // Unsecure sites are only useful for development, so allow there
             // and on the site.
             let host = window.location.hostname;
@@ -11360,9 +11372,10 @@ function plus (DataTable) {
                 // it could still be happening when this runs. We just queue the
                 // last one if that is the case.
                 _delayedReleaseDate = releaseDate;
+                _delayedSoftware = software;
                 return true;
             }
-            return check(releaseDate);
+            return check(releaseDate, software);
         },
         configurable: false,
         enumerable: false,
