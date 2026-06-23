@@ -9572,12 +9572,13 @@ function selectCells(settings, selector, opts) {
         // Otherwise the selector is a node, and there is one last option - the
         // element might be a child of an element which has dt-row and dt-column
         // data attributes
-        host = Dom.s(s).closest('*[data-dt-row]');
-        return host.count()
+        let rowHost = Dom.s(s).closest('*[data-dt-row]');
+        let columnHost = Dom.s(s).closest('*[data-dt-column]');
+        return rowHost.count()
             ? [
                 {
-                    row: host.data('dt-row'),
-                    column: host.data('dt-column')
+                    row: parseInt(rowHost.attr('data-dt-row')),
+                    column: parseInt(columnHost.attr('data-dt-column'))
                 }
             ]
             : [];
@@ -9890,7 +9891,7 @@ function selectColumns(settings, selector, opts) {
         // Otherwise a node which might have a `dt-column` data attribute, or be
         // a child or such an element
         var host = Dom.s(s).closest('*[data-dt-column]');
-        return host.count() ? [host.data('dt-column')] : [];
+        return host.count() ? [parseInt(host.attr('data-dt-column'))] : [];
     };
     var selected = selectorRun('column', selector, run, settings, opts);
     return opts.columnOrder && opts.columnOrder === 'index'
@@ -10571,7 +10572,7 @@ function selectRows(settings, selector, opts) {
             }
             else {
                 var host = Dom.s(sel).closest('*[data-dt-row]');
-                return host.count() ? [host.data('dt-row')] : [];
+                return host.count() ? [parseInt(host.attr('data-dt-row'))] : [];
             }
         }
         // ID selector. Want to always be able to select rows by id, regardless
@@ -10603,8 +10604,7 @@ function selectRows(settings, selector, opts) {
         // Get nodes in the order from the `rows` array with null values removed
         var nodes = util.array.removeEmpty(util.array.pluckOrder(settings.data, rows, 'tr'));
         // Selector - selector string, array of nodes or jQuery object.
-        return Dom
-            .s(nodes)
+        return Dom.s(nodes)
             .filter(sel)
             .mapTo((el) => el._DT_RowIndex);
     };
