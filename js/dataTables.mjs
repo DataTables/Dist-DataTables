@@ -7248,13 +7248,13 @@ function implementState(settings, s, callback) {
                 let idx = currentNames.indexOf(col[0]);
                 if (idx < 0) {
                     // If the column was not found ignore it and continue
-                    return;
+                    continue;
                 }
                 set[0] = idx;
             }
             else if (set[0] >= columns.length) {
                 // If the column index is out of bounds ignore it and continue
-                return;
+                continue;
             }
             settings.order.push(set);
         }
