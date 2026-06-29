@@ -815,7 +815,7 @@ function allUnique(src) {
  * @returns Flattened array
  */
 function flatten(out, val) {
-    if (Array.isArray(val)) {
+    if (Array.isArray(val) || arrayLike(val)) {
         for (var i = 0; i < val.length; i++) {
             flatten(out, val[i]);
         }
@@ -1953,35 +1953,32 @@ class Dom {
         if (!content) {
             return this;
         }
-        let fragment = new DocumentFragment();
-        let append = (node) => {
-            fragment.append(node);
-        };
-        if (Array.isArray(content)) {
-            content.forEach(c => this.append(c));
-            return this;
+        if (!arrayLike(content)) {
+            content = [content];
         }
-        if (content instanceof Dom) {
-            content.each(item => {
-                append(item);
-            });
-        }
-        else if (typeof content === 'string') {
+        // Generate a flat array of the content to be added, with nulls removed
+        // this means it will be an array of nodes and / or strings
+        let flatContent = flatten([], content).filter(c => !!c);
+        /// Got a string somewhere in it, so need to use insertAdjacentHTML
+        if (flatContent.find(val => typeof val === 'string')) {
             return this.each(el => {
-                el.insertAdjacentHTML('beforeend', content);
+                for (let i = 0; i < flatContent.length; i++) {
+                    if (typeof flatContent[i] === 'string') {
+                        el.insertAdjacentHTML('beforeend', flatContent[i]);
+                    }
+                    else {
+                        el.append(flatContent[i]);
+                    }
+                }
             });
         }
-        else if (arrayLike(content)) {
-            // Allow for a jQuery-like object being passed
-            let arrayLike = content;
-            for (let i = 0; i < arrayLike.length; i++) {
-                append(arrayLike[i]);
-            }
-        }
-        else {
-            append(content);
-        }
+        // Otherwise we can use a document fragment for a single mutation
+        // on the main document
         return this.each(el => {
+            let fragment = new DocumentFragment();
+            for (let i = 0; i < flatContent.length; i++) {
+                fragment.append(flatContent[i]);
+            }
             el.append(fragment);
         });
     }
