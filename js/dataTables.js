@@ -4264,9 +4264,11 @@ function __mlHelper(localeString) {
                         // gives milliseconds epoch
                         return d.valueOf();
                     }
-                },
-                className: 'dt-right'
+                }
             });
+        }
+        if (!store.className[typeName]) {
+            store.className[typeName] = 'dt-right';
         }
         return function (d, type) {
             // Allow for a default value
@@ -4368,9 +4370,11 @@ function datetime(format, locale) {
                 pre: function (d) {
                     return __mldObj(d, format, locale) || 0;
                 }
-            },
-            className: 'dt-right'
+            }
         });
+    }
+    if (!store.className[typeName]) {
+        store.className[typeName] = 'dt-right';
     }
 }
 /**
