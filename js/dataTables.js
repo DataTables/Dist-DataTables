@@ -1953,29 +1953,36 @@ class Dom {
         if (!content) {
             return this;
         }
+        let fragment = new DocumentFragment();
+        let append = (node) => {
+            fragment.append(node);
+        };
         if (Array.isArray(content)) {
             content.forEach(c => this.append(c));
             return this;
         }
-        return this.each(el => {
-            if (content instanceof Dom) {
-                content.each(item => {
-                    el.append(item);
-                });
-            }
-            else if (typeof content === 'string') {
+        if (content instanceof Dom) {
+            content.each(item => {
+                append(item);
+            });
+        }
+        else if (typeof content === 'string') {
+            return this.each(el => {
                 el.insertAdjacentHTML('beforeend', content);
+            });
+        }
+        else if (arrayLike(content)) {
+            // Allow for a jQuery-like object being passed
+            let arrayLike = content;
+            for (let i = 0; i < arrayLike.length; i++) {
+                append(arrayLike[i]);
             }
-            else if (arrayLike(content)) {
-                // Allow for a jQuery object being passed
-                let arrayLike = content;
-                for (let i = 0; i < arrayLike.length; i++) {
-                    el.append(arrayLike[i]);
-                }
-            }
-            else {
-                el.append(content);
-            }
+        }
+        else {
+            append(content);
+        }
+        return this.each(el => {
+            el.append(fragment);
         });
     }
     /**
@@ -2142,9 +2149,7 @@ class Dom {
     css(rule, value) {
         // String getter
         if (typeof rule === 'string' && value === undefined) {
-            return this.length
-                ? getComputedStyle(this[0])[rule]
-                : null;
+            return this.length ? getComputedStyle(this[0])[rule] : null;
         }
         return this.each(el => {
             if (typeof rule === 'string') {
@@ -2172,11 +2177,11 @@ class Dom {
             return this.length ? dataConvert(this[0].dataset[name]) : null;
         }
         if (typeof name === 'string') {
-            this.each(el => el.dataset[name] = JSON.stringify(value));
+            this.each(el => (el.dataset[name] = JSON.stringify(value)));
         }
         else {
             each(name, (key, val) => {
-                this.each(el => el.dataset[key] = JSON.stringify(val));
+                this.each(el => (el.dataset[key] = JSON.stringify(val)));
             });
         }
         return this;
