@@ -5956,6 +5956,7 @@ function columnTypes(settings) {
     var types = ext.type.detect;
     var i, iLen, j, jen, k, ken;
     var col, detectedType, cache;
+    var originalTypes = columns.map(c => c.type).join(',');
     // For each column, spin over the data type detection functions, seeing if
     // one matches
     for (i = 0, iLen = columns.length; i < iLen; i++) {
@@ -6052,6 +6053,10 @@ function columnTypes(settings) {
             col.renderer = util.get(renderer);
             _columnAutoRender(settings, i);
         }
+    }
+    var newTypes = columns.map(c => c.type).join(',');
+    if (newTypes !== originalTypes) {
+        callbackFire(settings, null, 'columnTypes', [settings], false);
     }
 }
 /**
@@ -8379,11 +8384,10 @@ function draw(settings, ajaxComplete) {
  */
 function reDraw(settings, holdPosition, recompute) {
     let features = settings.features, doSort = features.ordering, doFilter = features.searching;
-    // Resolve column types
-    columnTypes(settings);
-    // Announce that we are going to do the draw
-    callbackFire(settings, null, 'initDraw', [settings], false);
     if (recompute === undefined || recompute === true) {
+        // Resolve any column types that are unknown due to addition or
+        // invalidation
+        columnTypes(settings);
         if (doSort) {
             sort(settings);
         }
