@@ -8379,6 +8379,8 @@ function draw(settings, ajaxComplete) {
  */
 function reDraw(settings, holdPosition, recompute) {
     let features = settings.features, doSort = features.ordering, doFilter = features.searching;
+    // Announce that we are going to do the draw
+    callbackFire(settings, null, 'initDraw', [settings], false);
     if (recompute === undefined || recompute === true) {
         // Resolve any column types that are unknown due to addition or
         // invalidation
