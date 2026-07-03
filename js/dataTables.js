@@ -1599,6 +1599,9 @@ function parseEventName(original) {
         name = 'focusout';
         isFocus = true;
     }
+    else if (name === 'ready') {
+        name = 'DOMContentLoaded';
+    }
     return {
         eventName: name,
         isFocus,
@@ -1634,6 +1637,14 @@ function add(el, nameFull, handler, selector, one) {
     let { eventName, namespaces, isFocus, isHover } = parseEventName(nameFull);
     if (!eventName) {
         return;
+    }
+    // Special handling for the "ready" event - it will trigger when the content
+    // is ready, but also if it is already ready, when added.
+    if (el === document && eventName === 'DOMContentLoaded' && nameFull.includes('ready')) {
+        if (document.readyState === 'complete') {
+            handler(new Event('DOMContentLoaded'));
+            return;
+        }
     }
     // Create a function that will be the actual event handler, and performs any
     // logic we need, such as delegate handling and adding properties.
