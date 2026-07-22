@@ -3913,7 +3913,7 @@ const ext = {
      * Software version
      *  @type string
      */
-    version: '3.0.0-beta.2'
+    version: '3.0.0'
 };
 //
 // Backwards compatibility. Alias to pre 1.10 Hungarian notation counter parts
