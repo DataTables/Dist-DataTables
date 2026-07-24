@@ -5364,9 +5364,9 @@ function getWideStrings(settings, colIdx) {
             // Don't want script, dialog or template tags in the width
             // calculations as they are hidden content
             cellString = cellString
-                .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-                .replace(/<dialog[\s\S]*?<\/dialog>/gi, ' ')
-                .replace(/<template[\s\S]*?<\/template>/gi, ' ');
+                .replace(/<script[\s\S]*?<\/script(?:\s[^>]*)?>/gi, ' ')
+                .replace(/<dialog[\s\S]*?<\/dialog(?:\s[^>]*)?>/gi, ' ')
+                .replace(/<template[\s\S]*?<\/template(?:\s[^>]*)?>/gi, ' ');
             var noHtml = util.string
                 .stripHtml(cellString, ' ')
                 .replace(/&nbsp;/g, ' ');
