@@ -11177,7 +11177,14 @@ function check(releaseDate, software) {
             return true;
         }
     }
-    else if (_licenseInfo.type === 'plus' ||
+    else if (software === null) {
+        // Validating the key only - there hasn't been any specific software
+        // calling the `plus` parameter yet. The key is good, so carry on.
+        return true;
+    }
+    else if (
+    // Checking if the build version can be used with this key
+    _licenseInfo.type === 'plus' ||
         (_licenseInfo.type === 'editor' && software === 'editor')) {
         if (!expires || new Date(releaseDate) > expires) {
             noticePrep('Upgrade required for this version');
@@ -11187,6 +11194,7 @@ function check(releaseDate, software) {
         return true;
     }
     else if (_licenseInfo.type === 'editor' && software !== 'editor') {
+        // Editor specific license
         noticePrep('License for Editor only. Upgrade for Plus');
         noticeDisplay();
         return false;
@@ -11345,16 +11353,13 @@ function verify(licenseString) {
  */
 function plus (DataTable) {
     Object.defineProperty(DataTable, 'plus', {
-        value: function (releaseDate, software = null) {
+        value: function (releaseDate, software = '') {
             // Unsecure sites are only useful for development, so allow there
             // and on the site.
             let host = window.location.hostname;
-            let isDev = host === '192.168.234.234' ||
+            host === '192.168.234.234' ||
                 host.endsWith('.datatables.net') ||
                 host === 'datatables.net';
-            if (isDev) {
-                return true;
-            }
             if (_processingKey) {
                 // The validation of the key is async, so there is a chance that
                 // it could still be happening when this runs. We just queue the
