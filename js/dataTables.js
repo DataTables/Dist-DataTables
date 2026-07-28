@@ -11610,7 +11610,7 @@ function _pagingDraw(settings, host, opts) {
     if (!settings.initDone) {
         return;
     }
-    let plugin = opts.type ? ext.pager[opts.type] : _pagingDynamic, aria = settings.language.aria.paginate || {}, start = settings.displayStart, len = settings.pageLength, visRecords = recordsDisplay(settings), all = len === -1, page = all ? 0 : Math.ceil(start / len), pages = Math.ceil(visRecords / (all ? 1 : len)), buttons = [], buttonEls = [], buttonsNested = plugin(opts).map(function (val) {
+    let plugin = opts.type ? ext.pager[opts.type] : _pagingDynamic, aria = settings.language.aria.paginate || {}, start = settings.displayStart, len = settings.pageLength, visRecords = recordsDisplay(settings), all = len === -1, page = all ? 0 : Math.ceil(start / len), pages = all ? 1 : Math.ceil(visRecords / len), buttons = [], buttonEls = [], buttonsNested = plugin(opts).map(function (val) {
         return val === 'numbers'
             ? pagingNumbers(page, pages, opts.buttons, opts.boundaryNumbers)
             : val;
