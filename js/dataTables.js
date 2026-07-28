@@ -12279,7 +12279,8 @@ const defaults = {
     },
     stateSaveParams: null,
     tabIndex: 0,
-    titleRow: null
+    titleRow: null,
+    typeDetect: true
 };
 
 const DataTable = function (selector, options) {

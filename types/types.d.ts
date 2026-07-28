@@ -1728,6 +1728,8 @@ interface Defaults {
     tabIndex: number;
     /** Specify which row is the title row in the header. */
     titleRow: null | number | boolean;
+    /** Ability to enable / disable auto type detection. */
+    typeDetect: boolean;
 }
 type LanguageOption = string | {
     [key: string | number]: LanguageOption;
