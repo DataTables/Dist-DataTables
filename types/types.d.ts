@@ -1222,9 +1222,9 @@ type LayoutElement = {
 };
 type LayoutComponent = LayoutElement | LayoutFeatures | (() => HTMLElement) | HTMLElement | JQuery<HTMLElement> | Dom | null;
 type Layout = Partial<Record<LayoutKeys, LayoutComponent>>;
-type FunctionColumnRender = (this: DataTableDom, data: any, type: any, row: any, meta: CellMetaSettings) => any;
+type ColumnRenderFunction = (this: DataTableDom, data: any, type: any, row: any, meta: CellMeta) => any;
 type FunctionColumnCreatedCell = (this: DataTableDom, cell: HTMLTableCellElement, cellData: any, rowData: any, row: number, col: number) => void;
-interface CellMetaSettings {
+interface CellMeta {
     row: number;
     col: number;
     settings: Context;
@@ -1248,8 +1248,8 @@ interface OrderFixed {
     post?: any[];
 }
 interface FunctionColumnData {
-    (row: any, type: 'set', s: any, meta: CellMetaSettings): void;
-    (row: any, type: 'display' | 'sort' | 'filter' | 'type', s: undefined, meta: CellMetaSettings): any;
+    (row: any, type: 'set', s: any, meta: CellMeta): void;
+    (row: any, type: 'display' | 'sort' | 'filter' | 'type', s: undefined, meta: CellMeta): any;
 }
 interface ObjectColumnData {
     _: string | number | FunctionColumnData;
@@ -1259,11 +1259,11 @@ interface ObjectColumnData {
     sort?: string | number | FunctionColumnData;
 }
 interface ObjectColumnRender {
-    _?: string | number | FunctionColumnRender;
-    filter?: string | number | FunctionColumnRender;
-    display?: string | number | FunctionColumnRender;
-    type?: string | number | FunctionColumnRender;
-    sort?: string | number | FunctionColumnRender;
+    _?: string | number | ColumnRenderFunction;
+    filter?: string | number | ColumnRenderFunction;
+    display?: string | number | ColumnRenderFunction;
+    type?: string | number | ColumnRenderFunction;
+    sort?: string | number | ColumnRenderFunction;
 }
 interface AjaxData {
     draw?: number;
@@ -1411,7 +1411,7 @@ interface Defaults$1 {
     /**
      * Render (process) the data for use in the table.
      */
-    render: number | string | ObjectColumnData | FunctionColumnRender | ObjectColumnRender | null;
+    render: number | string | ObjectColumnData | ColumnRenderFunction | ObjectColumnRender | null;
     search: SearchOptions | null;
     /**
      * Enable or disable filtering on the data in this column.
@@ -5342,4 +5342,4 @@ interface DataTable extends DataTablesStatic {}
 declare const DataTable: typeof DataTable$1;
 
 export { Api, Settings as ColumnContext, DataTable, Dom, DataTable as default, _default as util };
-export type { AjaxMethods, AjaxOptions, ApiAjax, ApiCaption, ApiCell, ApiCellMethods, ApiCells, ApiCellsMethods, ApiColumn, ApiColumnMethods, ApiColumnSearch, ApiColumns, ApiColumnsMethods, ApiColumnsSearch, ApiConstructor, ApiOrder, ApiPage, ApiPageInfo, ApiRow, ApiRowChildMethods, ApiRowMethods, ApiRows, ApiRowsMethods, ApiScopeable, ApiSearch, ApiSelector, ApiState, ApiStatic, ApiStaticRegisterFn, ApiTableFooterMethods, ApiTableHeaderMethods, ApiTableMethods, ApiTablesMethods, CellIdx, CellIdxWithVisible, CellSelector, ColumnIdx, ColumnSelector, Options$1 as ColumnsConfig, Context, DataTablesStatic, DataTablesStaticExtButtons, DataTablesStaticRender, Defaults, DomSelector, Ext, ExtButtons, ExtTypeSettings, HeaderStructure, IColumnControlContent, InstSelector, ConfigLanguage as Language, Options, RowChildMethods, Row as RowContext, RowIdx, RowSelector, SelectorModifier, Context as Settings, State, StateLoad, TableSelector };
+export type { AjaxMethods, AjaxOptions, ApiAjax, ApiCaption, ApiCell, ApiCellMethods, ApiCells, ApiCellsMethods, ApiColumn, ApiColumnMethods, ApiColumnSearch, ApiColumns, ApiColumnsMethods, ApiColumnsSearch, ApiConstructor, ApiOrder, ApiPage, ApiPageInfo, ApiRow, ApiRowChildMethods, ApiRowMethods, ApiRows, ApiRowsMethods, ApiScopeable, ApiSearch, ApiSelector, ApiState, ApiStatic, ApiStaticRegisterFn, ApiTableFooterMethods, ApiTableHeaderMethods, ApiTableMethods, ApiTablesMethods, CellIdx, CellIdxWithVisible, CellMeta, CellSelector, ColumnIdx, ColumnRenderFunction, ColumnSelector, Options$1 as ColumnsConfig, Context, DataTablesStatic, DataTablesStaticExtButtons, DataTablesStaticRender, Defaults, DomSelector, Ext, ExtButtons, ExtTypeSettings, HeaderStructure, IColumnControlContent, InstSelector, ConfigLanguage as Language, Options, RowChildMethods, Row as RowContext, RowIdx, RowSelector, SelectorModifier, Context as Settings, State, StateLoad, TableSelector };
