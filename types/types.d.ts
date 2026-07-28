@@ -91,7 +91,7 @@ declare class Dom<T extends HTMLElement = HTMLElement> implements ArrayLike<T> {
     /**
      * Add an element (or multiple) to the instance. Will ensure uniqueness.
      *
-     * @param el Element(s) to add
+     * @param selector Element(s) to add
      * @param sort Indicate if the element should be added in document order.
      * @returns Self for chaining
      */
@@ -330,7 +330,7 @@ declare class Dom<T extends HTMLElement = HTMLElement> implements ArrayLike<T> {
     /**
      * Get all matching descendants
      *
-     * @param selector Elements to find
+     * @param input Elements to find
      * @returns A new Dom instance with all matching elements
      */
     find<R extends HTMLElement = T>(input: Dom | string | HTMLElement | Element | null): Dom<R>;
@@ -2356,6 +2356,7 @@ type RegisterCallback<T> = (settings: Context, options: T) => HTMLElement | Dom 
  * @param name The name of the new feature.
  * @param cb A function that will create the elements and event listeners for
  * the feature being added.
+ * @param legacyChar
  */
 declare function register$1<T>(name: string, cb: RegisterCallback<T>, legacyChar?: string): void;
 
@@ -2640,6 +2641,7 @@ declare function pluck(a: any[], prop: string | number, prop2?: string | number)
  * as the indexes to pick from the source array
  *
  * @param a Array to get values from
+ * @param order Indexes to pick
  * @param prop Property to read values from
  * @param prop2 Inner property to get values from if a 2D array
  * @returns Array of read values
@@ -2954,7 +2956,7 @@ declare function escapeHtml<T>(mixed: T): T;
 /**
  * Set the function to use for HTML entity encoding from a string
  *
- * @param fn HTML escape function
+ * @param mixed HTML escape function
  */
 declare function escapeHtml<T = TEscapeHtml>(mixed: T): void;
 /**
@@ -2970,13 +2972,14 @@ declare function normalize(mixed: string, both?: boolean): string;
 /**
  * Set the function to use for string normalisation
  *
- * @param mixed Normalisation function
+ * @param fn Normalisation function
  */
 declare function normalize<T = TNormalize>(fn: T): void;
 /**
  * Strip HTML from a string, if a string is given, otherwise no action
  *
  * @param mixed Value to remove HTML from
+ * @param replacement
  * @returns The stripped value (or original if not a string)
  */
 declare function stripHtml<T>(mixed: T, replacement?: string): T;
@@ -3004,7 +3007,7 @@ declare namespace string {
  * Debounce a function
  *
  * @param fn Function to be called
- * @param timeout Call frequency in mS
+ * @param freq Call frequency in mS
  * @returns Wrapped function
  */
 declare function debounce(fn: () => void, freq?: number): () => void;
@@ -3508,6 +3511,7 @@ interface ApiScopeable<T, S> {
      * Add one or more items to the end of an API instance's result set.
      *
      * @param value_1 Item to add to the API instance's result set.
+     * @param value_2 Additional items to add.
      * @returns The length of the modified API instance
      */
     push(value_1: any, ...value_2: any[]): number;
@@ -3523,7 +3527,7 @@ interface ApiScopeable<T, S> {
      */
     ready(this: S, fn: (this: Api<T>) => void): Api<T>;
     /**
-     * Apply a callback function against and accumulator and each element in the
+     * Apply a callback function against an accumulator and each element in the
      * Api's result set (left-to-right).
      *
      * @param fn Callback function which is called for each item in the API
@@ -3608,6 +3612,7 @@ interface ApiScopeable<T, S> {
      * @param howMany Number of elements to remove from the result set.
      * @param value_1 Item to add to the result set at the index specified by
      * the first parameter.
+     * @param value_2 Additional items to add.
      * @returns An array of the items which were removed. If no elements were
      * removed, an empty array is returned.
      */
@@ -3684,6 +3689,7 @@ interface ApiScopeable<T, S> {
      * Add one or more items to the start of an API instance's result set.
      *
      * @param value_1 Item to add to the API instance's result set.
+     * @param value_2 Additional items to add.
      * @returns The length of the modified API instance
      */
     unshift(value_1: any, ...value_2: any[]): number;
@@ -3697,7 +3703,7 @@ interface ApiCaption {
      * Set the contents of the `-tag caption` element. If the table doesn't have
      * a `-tag caption` element, one will be created automatically.
      *
-     * @param string The value to show in the table's `caption` tag.
+     * @param set The value to show in the table's `caption` tag.
      * @param side `top` or `bottom` to set where the table will be shown on the
      *   table. If not given the previous value will be used (can also be set in
      *   CSS).
@@ -4399,7 +4405,7 @@ interface ApiColumnSearch<T> {
      * Set the search term for the matched column.
      *
      * @param input Search to apply.
-     * @param Search Search configuration options
+     * @param options Search configuration options
      * @returns DataTables API instance
      */
     (input: SearchInput<T>, options: Partial<SearchOptions>): Api<any>;
@@ -4621,7 +4627,7 @@ interface ApiColumnsSearch<T> {
      * Set the search term for the matched columns.
      *
      * @param input Search to apply.
-     * @param Search Search configuration options
+     * @param options Search configuration options
      * @returns DataTables API instance
      */
     (input: SearchInput<T>, options: Partial<SearchOptions>): Api<any>;
@@ -5116,7 +5122,7 @@ interface DataTablesStatic {
     /**
      * Get all DataTable tables that have been initialised - as HTML elements
      *
-     * @param options Indicate if you want all tables on the page should be
+     * @param visible Indicate if you want all tables on the page should be
      * returned (false), or visible tables only (true).
      * @returns Array of HTML table Elements
      */
@@ -5201,7 +5207,6 @@ interface DataTablesStaticRender {
      * Format an ISO8061 date value using the specified format
      * @param to Display format
      * @param locale Locale
-     * @param def Default value if empty
      */
     date(to: string, locale?: string): DateTimeRenderer;
     /**
@@ -5220,7 +5225,6 @@ interface DataTablesStaticRender {
      * Format an ISO8061 datetime value using the specified format
      * @param to Display format
      * @param locale Locale
-     * @param def Default value if empty
      */
     datetime(to: string, locale?: string): DateTimeRenderer;
     /**
@@ -5258,7 +5262,6 @@ interface DataTablesStaticRender {
      * Format an ISO8061 time value using the specified format
      * @param to Display format
      * @param locale Locale
-     * @param def Default value if empty
      */
     time(to: string, locale?: string): DateTimeRenderer;
     /**
