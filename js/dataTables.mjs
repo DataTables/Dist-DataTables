@@ -9468,7 +9468,7 @@ const __reload = function (settings, holdPosition, callback) {
         processingDisplay(settings, true);
         // Cancel an existing request
         var xhr = settings.jqXHR;
-        if (xhr && xhr.readyState !== 4) {
+        if (xhr && xhr.readyState !== 4 && typeof xhr.abort === 'function') {
             xhr.abort();
         }
         // Trigger xhr
