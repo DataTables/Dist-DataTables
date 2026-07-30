@@ -3122,6 +3122,9 @@ type HeaderStructure = {
     rowspan: number;
     title: string;
 };
+interface DataTableEvent<T = any> extends Event {
+    dt: Api<T>;
+}
 interface ApiConstructor {
     new (content: InstSelector, data?: any): Api;
     (content: InstSelector, data?: any): Api;
@@ -3429,7 +3432,7 @@ interface ApiScopeable<T, S> {
      * unbind a single event listener.
      * @returns DataTables Api instance
      */
-    off(event: string, callback?: (this: HTMLElement, e: Event, ...args: any[]) => void): Api<T>;
+    off(event: string, callback?: (this: HTMLElement, e: DataTableEvent, ...args: any[]) => void): Api<T>;
     /**
      * Remove event handlers from selected elements
      *
@@ -3439,7 +3442,7 @@ interface ApiScopeable<T, S> {
      * unbind a single event listener.
      * @returns DataTables Api instance
      */
-    off(event: string, selector: string, callback?: (this: HTMLElement, e: Event, ...args: any[]) => void): Api<T>;
+    off(event: string, selector: string, callback?: (this: HTMLElement, e: DataTableEvent, ...args: any[]) => void): Api<T>;
     /**
      * Table events listener.
      *
@@ -3447,7 +3450,7 @@ interface ApiScopeable<T, S> {
      * @param callback Event handler.
      * @returns DataTables Api instance
      */
-    on(event: string, callback: (this: HTMLElement, e: Event, ...args: any[]) => void): Api<T>;
+    on(event: string, callback: (this: HTMLElement, e: DataTableEvent, ...args: any[]) => void): Api<T>;
     /**
      * Listen for events from selected elements
      *
@@ -3456,7 +3459,7 @@ interface ApiScopeable<T, S> {
      * @param callback Event handler.
      * @returns DataTables Api instance
      */
-    on(event: string, selector: string, callback: (this: HTMLElement, e: Event, ...args: any[]) => void): Api<T>;
+    on(event: string, selector: string, callback: (this: HTMLElement, e: DataTableEvent, ...args: any[]) => void): Api<T>;
     /**
      * Listen for a table event once and then remove the listener.
      *
@@ -3465,7 +3468,7 @@ interface ApiScopeable<T, S> {
      * Listen for events from tables and fire a callback when they occur
      * @returns DataTables Api instance
      */
-    one(event: string, callback: (this: HTMLElement, e: Event, ...args: any[]) => void): Api<T>;
+    one(event: string, callback: (this: HTMLElement, e: DataTableEvent, ...args: any[]) => void): Api<T>;
     /**
      * Listen for events from a selected element and trigger only once then
      * remove the listener.
@@ -3475,7 +3478,7 @@ interface ApiScopeable<T, S> {
      * @param callback Event handler.
      * @returns DataTables Api instance
      */
-    one(event: string, selector: string, callback: (this: HTMLElement, e: Event, ...args: any[]) => void): Api<T>;
+    one(event: string, selector: string, callback: (this: HTMLElement, e: DataTableEvent, ...args: any[]) => void): Api<T>;
     /**
      * Order Methods / object
      */
@@ -5339,4 +5342,4 @@ interface DataTable extends DataTablesStatic {}
 declare const DataTable: typeof DataTable$1;
 
 export { Api, Settings as ColumnContext, DataTable, Dom, DataTable as default, _default as util };
-export type { AjaxMethods, AjaxOptions, ApiAjax, ApiCaption, ApiCell, ApiCellMethods, ApiCells, ApiCellsMethods, ApiColumn, ApiColumnMethods, ApiColumnSearch, ApiColumns, ApiColumnsMethods, ApiColumnsSearch, ApiConstructor, ApiOrder, ApiPage, ApiPageInfo, ApiRow, ApiRowChildMethods, ApiRowMethods, ApiRows, ApiRowsMethods, ApiScopeable, ApiSearch, ApiSelector, ApiState, ApiStatic, ApiStaticRegisterFn, ApiTableFooterMethods, ApiTableHeaderMethods, ApiTableMethods, ApiTablesMethods, CellIdx, CellIdxWithVisible, CellMeta, CellSelector, ColumnIdx, ColumnRenderFunction, ColumnSelector, Options$1 as ColumnsConfig, Context, DataTablesStatic, DataTablesStaticExtButtons, DataTablesStaticRender, Defaults, DomSelector, Ext, ExtButtons, ExtTypeSettings, HeaderStructure, IColumnControlContent, InstSelector, ConfigLanguage as Language, Options, RowChildMethods, Row as RowContext, RowIdx, RowSelector, SelectorModifier, Context as Settings, State, StateLoad, TableSelector };
+export type { AjaxMethods, AjaxOptions, ApiAjax, ApiCaption, ApiCell, ApiCellMethods, ApiCells, ApiCellsMethods, ApiColumn, ApiColumnMethods, ApiColumnSearch, ApiColumns, ApiColumnsMethods, ApiColumnsSearch, ApiConstructor, ApiOrder, ApiPage, ApiPageInfo, ApiRow, ApiRowChildMethods, ApiRowMethods, ApiRows, ApiRowsMethods, ApiScopeable, ApiSearch, ApiSelector, ApiState, ApiStatic, ApiStaticRegisterFn, ApiTableFooterMethods, ApiTableHeaderMethods, ApiTableMethods, ApiTablesMethods, CellIdx, CellIdxWithVisible, CellMeta, CellSelector, ColumnIdx, ColumnRenderFunction, ColumnSelector, Options$1 as ColumnsConfig, Context, DataTableEvent, DataTablesStatic, DataTablesStaticExtButtons, DataTablesStaticRender, Defaults, DomSelector, Ext, ExtButtons, ExtTypeSettings, HeaderStructure, IColumnControlContent, InstSelector, ConfigLanguage as Language, Options, RowChildMethods, Row as RowContext, RowIdx, RowSelector, SelectorModifier, Context as Settings, State, StateLoad, TableSelector };
