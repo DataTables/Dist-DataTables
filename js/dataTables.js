@@ -551,7 +551,10 @@ function ajax(optionsIn) {
             options.contentType = 'application/json; charset=utf-8';
         }
     }
-    xhr.open(method, options.url + (options.url.includes('?') ? '&' : '?') + urlParams, true, options.username || null, options.password || null);
+    xhr.open(method, options.url +
+        (urlParams
+            ? (options.url.includes('?') ? '&' : '?') + urlParams
+            : ''), true, options.username || null, options.password || null);
     // Content type for FormData requests gets set by the browser.
     if (options.contentType && !(options.data instanceof FormData)) {
         xhr.setRequestHeader('Content-Type', options.contentType);
