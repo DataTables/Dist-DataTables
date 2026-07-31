@@ -1,4 +1,4 @@
-/*! DataTables 3.0.0
+/*! DataTables 3.0.1
  * Copyright (c) SpryMedia Ltd - datatables.net/license
  */
 
@@ -3883,7 +3883,7 @@ const ext = {
      * Software version
      *  @type string
      */
-    version: '3.0.0'
+    version: '3.0.1'
 };
 //
 // Backwards compatibility. Alias to pre 1.10 Hungarian notation counter parts
