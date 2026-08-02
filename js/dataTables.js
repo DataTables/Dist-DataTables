@@ -6002,13 +6002,15 @@ function _typeResult(typeDetect, res) {
  * Calculate the 'type' of a column
  * @param settings DataTables settings object
  */
-function columnTypes(settings) {
+function columnTypes(settings, originalTypes = '') {
     var columns = settings.columns;
     var data = settings.data;
     var types = ext.type.detect;
     var i, iLen, j, jen, k, ken;
     var col, detectedType, cache;
-    var originalTypes = columns.map(c => c.type).join(',');
+    if (!originalTypes) {
+        originalTypes = columns.map(c => c.type).join(',');
+    }
     // For each column, spin over the data type detection functions, seeing if
     // one matches
     for (i = 0, iLen = columns.length; i < iLen; i++) {
@@ -7707,6 +7709,7 @@ function ajaxUpdateDraw(settings, json) {
     var drawUnique = ajaxDataSrcParam(settings, 'draw', json);
     var recordsTotal = ajaxDataSrcParam(settings, 'recordsTotal', json);
     var recordsFiltered = ajaxDataSrcParam(settings, 'recordsFiltered', json);
+    var existingTypes = settings.columns.map(c => c.type).join(',');
     if (drawUnique !== undefined) {
         // Protect against out of sequence returns
         if (drawUnique * 1 < settings.drawCount) {
@@ -7726,7 +7729,7 @@ function ajaxUpdateDraw(settings, json) {
         addData(settings, data[i]);
     }
     settings.display = settings.displayMaster.slice();
-    columnTypes(settings);
+    columnTypes(settings, existingTypes);
     draw(settings, true);
     initComplete(settings);
     processingDisplay(settings, false);
