@@ -1562,7 +1562,7 @@ interface Defaults {
      * Add event listeners during the DataTables startup
      */
     on: {
-        [name: string]: (this: HTMLElement, e: Event, ...args: any[]) => void;
+        [name: string]: (this: HTMLElement, e: DataTableEvent, ...args: any[]) => void;
     };
     /**
      * Initial order (sort) to apply to the table.
