@@ -11320,7 +11320,7 @@ function noticePrep(text) {
  * Display the license notice
  */
 function noticeDisplay() {
-    if (!_processingKey && !document.body.contains(_wm[0])) {
+    if (!_processingKey && document.body && !document.body.contains(_wm[0])) {
         document.body.appendChild(_wm[0]);
     }
 }
@@ -11399,12 +11399,9 @@ function plus (DataTable) {
             // Unsecure sites are only useful for development, so allow there
             // and on the site.
             let host = window.location.hostname;
-            let isDev = host === '192.168.234.234' ||
+            host === '192.168.234.234' ||
                 host.endsWith('.datatables.net') ||
                 host === 'datatables.net';
-            if (isDev) {
-                return true;
-            }
             if (_processingKey) {
                 // The validation of the key is async, so there is a chance that
                 // it could still be happening when this runs. We just queue the
