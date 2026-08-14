@@ -11193,7 +11193,11 @@ function b64ToBuf(b64) {
  */
 function check(releaseDate, software) {
     let expires = _licenseInfo.expires;
-    if (_licenseInfo.valid === false) {
+    if (!getSubtle()) {
+        noticePrep('Unable to validate license key');
+        noticeDisplay();
+    }
+    else if (_licenseInfo.valid === false) {
         noticePrep('License key invalid');
         noticeDisplay();
     }
@@ -11351,16 +11355,14 @@ function verify(licenseString) {
             _licenseInfo.type = payloadParts[1];
             _licenseInfo.developers = parseInt(payloadParts[2]);
             _licenseInfo.expires = new Date(payloadParts[3] + '-' + payloadParts[4] + '-' + payloadParts[5]);
-            // Backwards compat for old browsers
-            var cryptoObj = window.crypto || window.msCrypto;
-            var subtle = cryptoObj.subtle || cryptoObj.webkitSubtle;
+            var subtle = getSubtle();
             var rawKey = b64ToBuf(_publicKey);
             var rawSig = b64ToBuf(signatureB64);
             var data = new TextEncoder().encode(payload);
+            // Non-secure environments don't have cryptographic verification
+            // available.
             if (!subtle) {
-                // Non-secure environments don't have cryptographic verification
-                // available.
-                _licenseInfo.valid = true;
+                _licenseInfo.valid = false;
                 resolve();
                 return;
             }
@@ -11418,6 +11420,12 @@ function plus (DataTable) {
         enumerable: false,
         writable: false
     });
+}
+function getSubtle() {
+    // Backwards compat for old browsers
+    let cryptoObj = window.crypto || window.msCrypto;
+    let subtle = cryptoObj.subtle || cryptoObj.webkitSubtle;
+    return subtle;
 }
 
 /**
