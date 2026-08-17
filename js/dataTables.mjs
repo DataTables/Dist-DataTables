@@ -4978,7 +4978,7 @@ function clearTable(settings) {
  * @param colIdx Column index to invalidate. If undefined the whole row will be
  *    invalidated
  */
-function invalidate(settings, rowIdx, src, colIdx) {
+function invalidateRow(settings, rowIdx, src, colIdx) {
     var row = settings.data[rowIdx];
     var i, iLen;
     if (!row) {
@@ -5008,6 +5008,18 @@ function invalidate(settings, rowIdx, src, colIdx) {
             }
         }
     }
+    invalidColumn(settings, colIdx);
+    // Update DataTables special `DT_*` attributes for the row
+    rowAttributes(settings, row);
+    callbackFire(settings, null, 'rowInvalidate', [settings, rowIdx, colIdx], false);
+}
+/**
+ * Column specific invalidation
+ *
+ * @param settings DataTables settings object
+ * @param colIdx Column index to invalidate, or all columns if not given
+ */
+function invalidColumn(settings, colIdx) {
     // Column specific invalidation
     var cols = settings.columns;
     if (colIdx !== undefined) {
@@ -5018,14 +5030,12 @@ function invalidate(settings, rowIdx, src, colIdx) {
         cols[colIdx].wideStrings = null;
     }
     else {
-        for (i = 0, iLen = cols.length; i < iLen; i++) {
+        for (let i = 0, iLen = cols.length; i < iLen; i++) {
             cols[i].type = null;
             cols[i].wideStrings = null;
         }
-        // Update DataTables special `DT_*` attributes for the row
-        rowAttributes(settings, row);
     }
-    callbackFire(settings, null, 'rowInvalidate', [settings, rowIdx, colIdx], false);
+    settings.containerWidth = -1;
 }
 /**
  * Get the cells and data for a given row - from a <tr> element
@@ -5115,9 +5125,20 @@ function readCellData(settings, cell, data, colIdx) {
 }
 
 /**
+ * Recalculate the column widths, if needed (by a column having been
+ * invalidated)
+ *
+ * @param settings DataTables settings object
+ */
+function columnWidths(settings) {
+    if (settings.columns.map(c => c.wideStrings).includes(null)) {
+        calculateColumnWidths(settings);
+    }
+}
+/**
  * Calculate the width of columns for the table
  *
- * @param settings dataTables settings object
+ * @param settings DataTables settings object
  */
 function calculateColumnWidths(settings) {
     // Not interested in doing column width calculation if auto-width is disabled
@@ -5665,13 +5686,13 @@ function scrollDraw(settings) {
             // Check against what the colgroup > col is set to and correct if needed
             for (let i = 0; i < colSizes.length; i++) {
                 let colEl = settings.columns[colSizes[i].idx].colEl;
-                let colWidth = colEl.width();
-                if (colWidth !== colSizes[i].width) {
-                    colEl.css('width', colSizes[i].width + 'px');
-                    if (scroll.x) {
-                        colEl.css('minWidth', colSizes[i].width + 'px');
-                    }
+                // let colWidth = colEl.width();
+                // if (colWidth !== colSizes[i].width) {
+                colEl.css('width', colSizes[i].width + 'px');
+                if (scroll.x) {
+                    colEl.css('minWidth', colSizes[i].width + 'px');
                 }
+                // }
             }
         }
     }
@@ -8407,6 +8428,7 @@ function reDraw(settings, holdPosition, recompute) {
         // Resolve any column types that are unknown due to addition or
         // invalidation
         columnTypes(settings);
+        columnWidths(settings);
         if (doSort) {
             sort(settings);
         }
@@ -9723,7 +9745,7 @@ registerPlural('cells().indexes()', 'cell().index()', function () {
 });
 registerPlural('cells().invalidate()', 'cell().invalidate()', function (src) {
     return this.iterator('cell', function (settings, row, column) {
-        invalidate(settings, row, src, column);
+        invalidateRow(settings, row, src, column);
     });
 });
 register('cell()', function (rowSelector, columnSelector, opts) {
@@ -9740,7 +9762,7 @@ register('cell().data()', function (data) {
     }
     // Set
     setCellData(ctx[0], cell[0].row, cell[0].column, data);
-    invalidate(ctx[0], cell[0].row, 'data', cell[0].column);
+    invalidateRow(ctx[0], cell[0].row, 'data', cell[0].column);
     return this;
 });
 
@@ -10692,7 +10714,7 @@ register('rows().data()', function () {
 });
 registerPlural('rows().invalidate()', 'row().invalidate()', function (src) {
     return this.iterator('row', function (settings, row) {
-        invalidate(settings, row, src);
+        invalidateRow(settings, row, src);
     });
 });
 registerPlural('rows().indexes()', 'row().index()', function () {
@@ -10779,7 +10801,7 @@ register('row().data()', function (data) {
         util.set(ctx[0].rowId)(data, row.tr.id);
     }
     // Automatically invalidate
-    invalidate(ctx[0], this[0][0], 'data');
+    invalidateRow(ctx[0], this[0][0], 'data');
     return this;
 });
 register('row().node()', function () {
@@ -10793,12 +10815,15 @@ register('row().node()', function () {
     return null;
 });
 register('row.add()', function (row) {
-    // Allow a jQuery object to be passed in - only a single row is added from
-    // it though - the first element in the set
+    // Allow an array-like object to be passed in - only a single row is added
+    // from it though - the first element in the set
     if (row && row.fn && row.length) {
         row = row[0];
     }
     var rows = this.iterator('table', function (settings) {
+        // New column could cause a change in the cached column properties such
+        // as type and width.
+        invalidColumn(settings);
         if (row.nodeName && row.nodeName.toUpperCase() === 'TR') {
             return addTr(settings, Dom.s(row))[0];
         }
