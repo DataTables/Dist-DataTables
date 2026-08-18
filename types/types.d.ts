@@ -1,4 +1,4 @@
-/*! DataTables 3.0.1
+/*! DataTables 3.0.2
  * Copyright (c) SpryMedia Ltd - datatables.net/license
  */
 
