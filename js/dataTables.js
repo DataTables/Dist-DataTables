@@ -4431,7 +4431,7 @@ var helpers = {
                 }
                 flo = flo.toFixed(precision);
                 var absPart = Math.abs(flo);
-                var intPart = parseInt(flo, 10);
+                var intPart = Math.abs(parseInt(flo, 10));
                 var floatPart = precision
                     ? decimal +
                         (absPart - intPart).toFixed(precision).substring(2)
