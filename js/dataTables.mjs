@@ -7220,17 +7220,17 @@ function loadState(settings, callback) {
         callback();
         return;
     }
-    var loaded = function (state) {
-        implementState(settings, state, callback);
+    var loaded = function (state, ignoreTime = false) {
+        implementState(settings, state, ignoreTime, callback);
     };
     var state = settings.stateLoadCallback.call(settings.instance, settings, loaded);
     if (state !== undefined) {
-        implementState(settings, state, callback);
+        implementState(settings, state, false, callback);
     }
     // otherwise, wait for the loaded callback to be executed
     return true;
 }
-function implementState(settings, s, callback) {
+function implementState(settings, s, ignoreTime, callback) {
     var i, iLen;
     var columns = settings.columns;
     var currentNames = pluck(settings.columns, 'name');
@@ -7239,17 +7239,19 @@ function implementState(settings, s, callback) {
     // any time Not just initialisation. To do this an api instance is required
     // in some places
     var api = settings.initDone ? new Api(settings) : null;
-    if (!s || !s.time) {
-        settings.loadingState = false;
-        callback();
-        return;
-    }
-    // Reject old data
-    var duration = settings.stateDuration;
-    if (duration > 0 && s.time < +new Date() - duration * 1000) {
-        settings.loadingState = false;
-        callback();
-        return;
+    if (!ignoreTime) {
+        if (!s || !s.time) {
+            settings.loadingState = false;
+            callback();
+            return;
+        }
+        // Reject old data
+        var duration = settings.stateDuration;
+        if (duration > 0 && s.time < +new Date() - duration * 1000) {
+            settings.loadingState = false;
+            callback();
+            return;
+        }
     }
     // Allow custom and plug-in manipulation functions to alter the saved data
     // set and cancelling of loading by returning false
@@ -10978,7 +10980,7 @@ register(['columns().search.fixed()', 'column().search.fixed()'], function (name
     });
 });
 
-register('state()', function (set, ignoreTime) {
+register('state()', function (set, ignoreTime = true) {
     // getter
     if (!set) {
         return this.context.length ? this.context[0].stateSaved : null;
@@ -10986,10 +10988,7 @@ register('state()', function (set, ignoreTime) {
     let setMutate = assignDeep({}, set);
     // setter
     return this.iterator('table', function (settings) {
-        if (ignoreTime !== false) {
-            setMutate.time = +new Date() + 100;
-        }
-        implementState(settings, setMutate, function () { });
+        implementState(settings, setMutate, ignoreTime, function () { });
     });
 });
 register('state.clear()', function () {

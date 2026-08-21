@@ -1338,7 +1338,7 @@ type FunctionInfoCallback = (this: DataTableDom, settings: Context, start: numbe
 type FunctionInitComplete = (this: DataTableDom, settings: Context, json: object) => void;
 type FunctionPreDrawCallback = (this: DataTableDom, settings: Context) => void;
 type FunctionRowCallback = (this: DataTableDom, row: HTMLTableRowElement, data: any[] | object, index: number) => void;
-type FunctionStateLoadCallback = (this: DataTableDom, settings: Context, callback: (state: State) => void) => undefined | null | Partial<State>;
+type FunctionStateLoadCallback = (this: DataTableDom, settings: Context, callback: (state: Partial<State>, ignoreTime?: boolean) => void) => undefined | void | Partial<State>;
 type FunctionStateLoaded = (this: DataTableDom, settings: Context, data: object) => void;
 type FunctionStateLoadParams = (this: DataTableDom, settings: Context, data: object) => void;
 type FunctionStateSaveCallback = (this: DataTableDom, settings: Context, data: object) => void;
