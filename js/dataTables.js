@@ -10358,6 +10358,7 @@ register('processing()', function (show) {
     return this.iterator('table', ctx => processingDisplay(ctx, show));
 });
 
+// Add the state event handler in time for the initial draw to save state
 Dom.s(document).on('preInit.dt', function (e, context) {
     var api = new Api(context);
     api.on('stateSaveParams.DT', function (ev, settings, d) {
@@ -10379,6 +10380,10 @@ Dom.s(document).on('preInit.dt', function (e, context) {
     api.on('stateLoaded.DT', function (ev, settings, state) {
         detailsStateLoad(api, state);
     });
+});
+// But initial details can wait until the end
+Dom.s(document).on('plugin-init.dt', function (e, context) {
+    var api = context.api;
     // And the initial load state
     detailsStateLoad(api, api.state.loaded());
 });
