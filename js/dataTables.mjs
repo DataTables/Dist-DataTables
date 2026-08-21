@@ -10324,7 +10324,7 @@ register('processing()', function (show) {
     return this.iterator('table', ctx => processingDisplay(ctx, show));
 });
 
-Dom.s(document).on('plugin-init.dt', function (e, context) {
+Dom.s(document).on('preInit.dt', function (e, context) {
     var api = new Api(context);
     api.on('stateSaveParams.DT', function (ev, settings, d) {
         // This could be more compact with the API, but it is a lot faster as a
