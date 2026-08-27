@@ -573,7 +573,7 @@ function ajax(optionsIn) {
                 responseData = JSON.parse(responseData);
             }
             catch (e) {
-                statusText = 'parseerror';
+                statusText = 'parsererror';
             }
         }
         else if (!options.dataType) {
