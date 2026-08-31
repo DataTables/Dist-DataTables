@@ -9817,10 +9817,7 @@ function columnHeader(settings, column, row) {
         // backwards compatibility)
         for (var i = 0; i < header.length; i++) {
             if (header[i][column].unique &&
-                Dom
-                    .s(header[i][column].cell)
-                    .find('.dt-column-title')
-                    .text()) {
+                Dom.s(header[i][column].cell).find('.dt-column-title').text()) {
                 target = i;
             }
         }
@@ -9830,12 +9827,12 @@ function columnHeader(settings, column, row) {
     }
     return header[target][column].cell;
 }
-function columnHeaderCells(header) {
+function columnHeaderCells(header, column = null) {
     var out = [];
     for (var i = 0; i < header.length; i++) {
         for (var j = 0; j < header[i].length; j++) {
             var cell = header[i][j].cell;
-            if (!out.includes(cell)) {
+            if ((column === null || column === j) && !out.includes(cell)) {
                 out.push(cell);
             }
         }
@@ -9843,7 +9840,7 @@ function columnHeaderCells(header) {
     return out;
 }
 function selectColumns(settings, selector, opts) {
-    var columns = settings.columns, names, titles, nodes = columnHeaderCells(settings.header);
+    var columns = settings.columns, names, titles;
     var run = function (s) {
         var selInt = intVal(s);
         // Selector - all
@@ -9897,8 +9894,8 @@ function selectColumns(settings, selector, opts) {
                         }
                         // Selector
                         if (match && match[1]) {
-                            return Dom
-                                .s(nodes[mapIdx])
+                            let columnElements = columnHeaderCells(settings.header, col.idx);
+                            return Dom.s(columnElements)
                                 .filter(match[1])
                                 .count() > 0
                                 ? mapIdx
@@ -9934,11 +9931,10 @@ function selectColumns(settings, selector, opts) {
             return [s._DT_CellIndex.column];
         }
         // Selector on the TH elements for the columns
-        var result = Dom
-            .s(nodes)
+        var result = Dom.s(columnHeaderCells(settings.header))
             .filter(s)
             .mapTo(el => {
-            return columnsFromHeader(el); // `nodes` is column index complete and in order
+            return columnsFromHeader(el);
         })
             .flat()
             .sort(function (a, b) {
@@ -10075,9 +10071,7 @@ registerPlural('columns().titles()', 'column().title()', function (title, row) {
             row = title;
             title = undefined;
         }
-        var span = Dom
-            .s(this.column(column).header(row))
-            .find('.dt-column-title');
+        var span = Dom.s(this.column(column).header(row)).find('.dt-column-title');
         if (title !== undefined) {
             span.html(title);
             return this;
@@ -10148,9 +10142,7 @@ registerPlural('columns().widths()', 'column().width()', function () {
     // be read, regardless of colspan in the header and rows being present
     // in the body
     var columns = this.columns(':visible');
-    var row = Dom
-        .c('tr')
-        .html('<td>' + Array(columns.count()).join('</td><td>') + '</td>');
+    var row = Dom.c('tr').html('<td>' + Array(columns.count()).join('</td><td>') + '</td>');
     Dom.s(this.table().body()).append(row);
     var widths = [];
     var indexes = columns.indexes();
