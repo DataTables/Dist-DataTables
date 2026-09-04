@@ -5489,9 +5489,7 @@ function buildAjax(settings, data, fn) {
             }
         }
         settings.json = json;
-        for (let i = 0; i < settings.columns.length; i++) {
-            invalidColumn(settings, i);
-        }
+        invalidColumn(settings);
         callbackFire(settings, null, 'xhr', [settings, json, settings.jqXHR], true);
         fn(json);
     };
