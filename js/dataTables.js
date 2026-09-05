@@ -7702,8 +7702,9 @@ function compatMap(o, newKey, oldKey) {
  * change only.
  *
  * @param init Object to map
+ * @param defaults Indicate if the object is the defaults object or not
  */
-function compatOpts(init) {
+function compatOpts(init, defaults = false) {
     // Convert any old style parameters to camelCase
     hungarianToCamel(init);
     // Map old parameter names to new
@@ -7730,7 +7731,9 @@ function compatOpts(init) {
                 : true;
         init.orderHandler =
             init.ordering.handler !== undefined ? init.ordering.handler : true;
-        init.ordering = true;
+        if (!defaults) {
+            init.ordering = true;
+        }
     }
     else if (init.ordering === false) {
         init.orderIndicators = false;
@@ -12387,7 +12390,7 @@ const DataTable = function (selector, options) {
         }
         table.trigger('options.dt', true, [init]);
         // Backwards compatibility parameter mapping
-        compatOpts(defaults);
+        compatOpts(defaults, true);
         compatCols(defaults$2);
         // Allow data properties on the table element to be used as
         // initialisation options
