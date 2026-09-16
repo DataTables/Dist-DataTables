@@ -43,6 +43,13 @@ declare class Dom<T extends HTMLElement = HTMLElement> implements ArrayLike<T> {
      */
     static create: typeof create$3;
     /**
+     * Non-DOM event listener. Add an event listener with no document.
+     *
+     * @param name Event name
+     * @param fn Event callback
+     */
+    static on: (name: string, fn: EventHandler) => void;
+    /**
      * Select items from the document and wrap in a `Dom` instance (alias of
      * `select`)
      *
@@ -64,16 +71,28 @@ declare class Dom<T extends HTMLElement = HTMLElement> implements ArrayLike<T> {
      */
     static transitions: boolean;
     /**
+     * Trigger an event non-DOM events.
+     *
+     * @param name Event name. This can optionally include period separated
+     *   namespaces. Multiple events can be added by space separation of the
+     *   names.
+     * @param args Arguments to pass to the event handlers (after the event
+     *   object, which is always the first parameter).
+     * @param props An object of key/value pairs which should be added to the
+     *   event object that is created and fired for the events.
+     */
+    static trigger: (name: string, args?: any[] | null, props?: PlainObject | null) => void;
+    /**
      * Window object methods
      */
     static w: {
-        height(): number;
+        height(): any;
         off(name: string, cb?: EventHandler | null): void;
         on(name: string, cb: EventHandler): void;
         one(name: string, cb: EventHandler): void;
         scrollLeft(set?: number): number;
         scrollTop(set?: number): number;
-        width(): number;
+        width(): any;
     };
     /** Index access for the elements in the result set of this instance */
     [n: number]: T;
@@ -394,7 +413,7 @@ declare class Dom<T extends HTMLElement = HTMLElement> implements ArrayLike<T> {
      *
      * @returns true if is, false if detached
      */
-    isAttached(): boolean;
+    isAttached(): any;
     /**
      * Determine if the first element in the result set is visible or not.
      *
