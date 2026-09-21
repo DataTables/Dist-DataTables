@@ -11279,7 +11279,7 @@ function check(releaseDate, software) {
         noticeDisplay();
     }
     else if (_licenseInfo.valid === false) {
-        noticePrep('License key invalid');
+        noticePrep('Invalid license key');
         noticeDisplay();
     }
     else if (_licenseInfo.type === 'trial') {
@@ -11289,7 +11289,7 @@ function check(releaseDate, software) {
             : -1;
         if (remaining < 0) {
             // Trial expires
-            consoleMsg('Your trial has now expired - https://datatables.net/plus', 'warn');
+            consoleMsg('Your trial has now expired. Please visit https://datatables.net/plus to purchase a license', 'warn');
             noticePrep('Trial expired');
             noticeDisplay();
             return false;
@@ -11364,6 +11364,11 @@ const key = function (key) {
  * @returns
  */
 function noticePrep(text) {
+    // Already prep-ed. Rather than possibly showing multiple messages, just
+    // let the first one show.
+    if (_ready) {
+        return;
+    }
     if (!_ready) {
         if (!_wm) {
             _wm = Dom.c('div');
@@ -11379,29 +11384,50 @@ function noticePrep(text) {
             padding: '0.5em 1em',
             'font-family': 'sans-serif',
             'font-size': '12px',
+            'line-height': '1.4em',
+            'text-align': 'center',
             'border-radius': '4px',
             'z-index': '10000',
-            'box-shadow': '0 2px 5px rgba(0,0,0,0.2)'
+            'box-shadow': '1px 3px 5px rgba(0, 0, 0, 0.333)'
         });
-        Dom.c('a')
-            .attr('href', 'https://datatables.net/tn/25')
-            .attr('target', '_blank')
-            .css({
-            color: 'inherit',
-            'text-decoration': 'none'
-        })
-            .appendTo(notice);
-        if (!text) {
-            text = 'License key required';
-        }
         shadow.appendChild(notice[0]);
         _notice = notice;
         _ready = true;
     }
+    _notice.empty();
     if (text) {
+        // Specific notice
         _notice
-            .find('a')
-            .html('DataTables Plus: ' + text + ' - learn more &#187;');
+            .append(Dom.c('span').text('DataTables Plus'))
+            .append(Dom.c('br'))
+            .append(Dom.c('span').text(text + ' - '))
+            .append(Dom.c('a')
+            .attr('href', 'https://datatables.net/tn/25')
+            .attr('target', '_blank')
+            .css({
+            color: 'inherit'
+        })
+            .html('learn more &#187;'));
+    }
+    else {
+        _notice
+            .append(Dom.c('span').text('DataTables Plus - Evaluation Mode'))
+            .append(Dom.c('br'))
+            .append(Dom.c('a')
+            .attr('href', 'https://datatables.net/plus/trial')
+            .attr('target', '_blank')
+            .css({
+            color: 'inherit'
+        })
+            .text('Start a Free Trial'))
+            .append(Dom.c('span').text(' - '))
+            .append(Dom.c('a')
+            .attr('href', 'https://datatables.net/plus')
+            .attr('target', '_blank')
+            .css({
+            color: 'inherit'
+        })
+            .text('Purchase a License'));
     }
 }
 /**
