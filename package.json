@@ -36,6 +36,5 @@
         "./js/*": "./js/*",
         "./package.json": "./package.json"
     },
-    "sideEffects": true,
-    "dependencies": null
+    "sideEffects": true
 }
