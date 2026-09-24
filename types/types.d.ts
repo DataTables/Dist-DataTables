@@ -1167,7 +1167,9 @@ interface SearchObject extends SearchOptions {
  */
 declare function create$2(parts?: Partial<SearchOptions>): SearchObject;
 
-/** State object */
+/**
+ * State object for reading - i.e. using `state()` as a GETTER
+ */
 interface State {
     childRows?: string[];
     columns: Array<{
@@ -1182,7 +1184,11 @@ interface State {
     start: number;
     time: number;
 }
-/** State that can be loaded - every parameter is optional */
+/**
+ * State objects for loading - i.e. using `state()` as a SETTER.
+ *
+ * It is important to note that every parameter is optional in this object
+ */
 interface StateLoad {
     childRows?: string[];
     columns?: Array<{
@@ -1358,10 +1364,10 @@ type FunctionInitComplete = (this: DataTableDom, settings: Context, json: object
 type FunctionPreDrawCallback = (this: DataTableDom, settings: Context) => void;
 type FunctionRowCallback = (this: DataTableDom, row: HTMLTableRowElement, data: any[] | object, index: number) => void;
 type FunctionStateLoadCallback = (this: DataTableDom, settings: Context, callback: (state: StateLoad, ignoreTime?: boolean) => void) => undefined | void | StateLoad;
-type FunctionStateLoaded = (this: DataTableDom, settings: Context, data: object) => void;
-type FunctionStateLoadParams = (this: DataTableDom, settings: Context, data: object) => void;
-type FunctionStateSaveCallback = (this: DataTableDom, settings: Context, data: object) => void;
-type FunctionStateSaveParams = (this: DataTableDom, settings: Context, data: object) => void;
+type FunctionStateLoaded = (this: DataTableDom, settings: Context, data: StateLoad) => void;
+type FunctionStateLoadParams = (this: DataTableDom, settings: Context, data: StateLoad) => void;
+type FunctionStateSaveCallback = (this: DataTableDom, settings: Context, data: State) => void;
+type FunctionStateSaveParams = (this: DataTableDom, settings: Context, data: State) => void;
 
 interface ConfigColumnDefs extends Options$1 {
     /**
@@ -4066,7 +4072,7 @@ interface ApiState<T> extends Api<T> {
      *
      * @returns API instance, for chaining
      */
-    (this: Api, set: State, ignoreTime?: boolean): Api;
+    (this: Api, set: StateLoad, ignoreTime?: boolean): Api;
     /**
      * Clear the saved state of the table.
      *
