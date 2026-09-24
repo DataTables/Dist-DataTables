@@ -1334,7 +1334,8 @@ interface AjaxDataColumn {
     orderable: boolean;
     search: AjaxDataColumnSearch;
 }
-type FunctionAjax = (this: DataTableDom, data: object, callback: (data: any) => void, settings: Context) => void;
+type AjaxCallback = (data: any) => void;
+type AjaxFunction$1 = (this: DataTableDom, data: AjaxData, callback: AjaxCallback, settings: Context) => void;
 interface OrderIdx {
     idx: number;
     dir: 'asc' | 'desc';
@@ -1466,7 +1467,7 @@ interface Defaults {
     /**
      * Load data for the table's content from an Ajax source.
      */
-    ajax: null | string | DtAjaxOptions | FunctionAjax;
+    ajax: null | string | DtAjaxOptions | AjaxFunction$1;
     /**
      * Feature control DataTables' smart column width handling.
      */
@@ -5367,4 +5368,4 @@ interface DataTable extends DataTablesStatic {}
 declare const DataTable: typeof DataTable$1;
 
 export { Api, Settings as ColumnContext, DataTable, Dom, DataTable as default, _default as util };
-export type { AjaxMethods, AjaxOptions, ApiAjax, ApiCaption, ApiCell, ApiCellMethods, ApiCells, ApiCellsMethods, ApiColumn, ApiColumnMethods, ApiColumnSearch, ApiColumns, ApiColumnsMethods, ApiColumnsSearch, ApiConstructor, ApiOrder, ApiPage, ApiPageInfo, ApiRow, ApiRowChildMethods, ApiRowMethods, ApiRows, ApiRowsMethods, ApiScopeable, ApiSearch, ApiSelector, ApiState, ApiStatic, ApiStaticRegisterFn, ApiTableFooterMethods, ApiTableHeaderMethods, ApiTableMethods, ApiTablesMethods, CellIdx, CellIdxWithVisible, CellMeta, CellSelector, Defaults$1 as ColumnDefaults, ColumnIdx, Options$1 as ColumnOptions, ColumnRenderFunction, ColumnSelector, Options$1 as ColumnsConfig, Options as Config, Context, DataTableEvent, DataTablesStatic, DataTablesStaticExtButtons, DataTablesStaticRender, DataType, DataTypeDetect, Defaults, DomSelector, Ext, ExtButtons, ExtTypeSettings, HeaderStructure, IColumnControlContent, InstSelector, ConfigLanguage as Language, Options, RowChildMethods, Row as RowContext, RowIdx, RowSelector, SelectorModifier, Context as Settings, State, StateLoad, TableSelector };
+export type { AjaxCallback, AjaxData, AjaxFunction$1 as AjaxFunction, AjaxMethods, AjaxOptions, ApiAjax, ApiCaption, ApiCell, ApiCellMethods, ApiCells, ApiCellsMethods, ApiColumn, ApiColumnMethods, ApiColumnSearch, ApiColumns, ApiColumnsMethods, ApiColumnsSearch, ApiConstructor, ApiOrder, ApiPage, ApiPageInfo, ApiRow, ApiRowChildMethods, ApiRowMethods, ApiRows, ApiRowsMethods, ApiScopeable, ApiSearch, ApiSelector, ApiState, ApiStatic, ApiStaticRegisterFn, ApiTableFooterMethods, ApiTableHeaderMethods, ApiTableMethods, ApiTablesMethods, CellIdx, CellIdxWithVisible, CellMeta, CellSelector, Defaults$1 as ColumnDefaults, ColumnIdx, Options$1 as ColumnOptions, ColumnRenderFunction, ColumnSelector, Options$1 as ColumnsConfig, Options as Config, Context, DataTableEvent, DataTablesStatic, DataTablesStaticExtButtons, DataTablesStaticRender, DataType, DataTypeDetect, Defaults, DomSelector, Ext, ExtButtons, ExtTypeSettings, HeaderStructure, IColumnControlContent, InstSelector, ConfigLanguage as Language, Options, RowChildMethods, Row as RowContext, RowIdx, RowSelector, SelectorModifier, Context as Settings, State, StateLoad, TableSelector };
