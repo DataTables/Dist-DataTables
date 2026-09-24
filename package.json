@@ -30,8 +30,8 @@
         ".": {
             "types": "./types/types.d.ts",
             "import": "./js/dataTables.mjs",
-            "default": "./js/dataTables.mjs",
-            "require": "./js/dataTables.js"
+            "require": "./js/dataTables.js",
+            "default": "./js/dataTables.mjs"
         },
         "./js/*": "./js/*",
         "./package.json": "./package.json"
