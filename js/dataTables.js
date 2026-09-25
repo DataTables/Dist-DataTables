@@ -10271,11 +10271,14 @@ registerPlural('columns().widths()', 'column().width()', function () {
     // Injects a fake row into the table for just a moment so the widths can
     // be read, regardless of colspan in the header and rows being present
     // in the body
-    var columns = this.columns(':visible');
-    var row = Dom.c('tr').html('<td>' + Array(columns.count()).join('</td><td>') + '</td>');
+    let columns = this.columns(':visible');
+    let row = Dom.c('tr');
+    for (let i = 0; i < columns.count(); i++) {
+        Dom.c('td').appendTo(row);
+    }
     Dom.s(this.table().body()).append(row);
-    var widths = [];
-    var indexes = columns.indexes();
+    let widths = [];
+    let indexes = columns.indexes();
     row.children().each((el, idx) => {
         widths[indexes[idx]] = Dom.s(el).width('outer');
     });
