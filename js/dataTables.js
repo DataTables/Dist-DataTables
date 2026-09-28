@@ -7937,9 +7937,7 @@ function addColumn(settings) {
         data: defaults$2.data ? defaults$2.data : columnIdx,
         idx: columnIdx,
         searchFixed: {},
-        colEl: Dom
-            .c('col')
-            .attr('data-dt-column', columnIdx)
+        colEl: Dom.c('col').attr('data-dt-column', columnIdx)
     });
     settings.columns.push(column);
     // Legacy support for `searchCols` property. If set, and there is a value
@@ -7947,9 +7945,7 @@ function addColumn(settings) {
     // specific `search` option is applied in `columnOptions`, but we always
     // want the search object for the column to exist.
     let searchCols = settings.searchCols;
-    settings.searches[columnIdx] = create$1(searchCols[columnIdx]
-        ? hungarianToCamel(searchCols[columnIdx])
-        : {});
+    settings.searches[columnIdx] = create$1(searchCols[columnIdx] ? hungarianToCamel(searchCols[columnIdx]) : {});
     settings.searches[columnIdx].columns = [columnIdx];
 }
 /**
@@ -8439,12 +8435,18 @@ function columnsFromHeader(cell) {
  */
 function columnCells(header, row = null, column = null) {
     var out = [];
+    var included = [];
     for (var i = 0; i < header.length; i++) {
         if (row === null || row === i) {
             for (var j = 0; j < header[i].length; j++) {
                 var cell = header[i][j].cell;
-                if ((column === null || column === j) && !out.includes(cell)) {
-                    out.push(cell);
+                if ((column === null || column === j) &&
+                    !included.includes(cell)) {
+                    included.push(cell);
+                    out.push({
+                        cell,
+                        row: header[i].row
+                    });
                 }
             }
         }
@@ -8459,31 +8461,35 @@ function columnCells(header, row = null, column = null) {
  * @returns Array of selected elements
  */
 function columnOrderingCells(settings, notSelector) {
-    var cells = [];
-    var titleRow = settings.titleRow;
+    let combined = [];
+    let titleRow = settings.titleRow;
     if (titleRow === true) {
         // Top row (legacy `orderCellsTop`)
-        cells = columnCells(settings.header, 0);
+        combined = columnCells(settings.header, 0);
     }
     else if (titleRow === false) {
         // Bottom row (legacy `orderCellsTop`)
-        cells = columnCells(settings.header, settings.header.length - 1);
+        combined = columnCells(settings.header, settings.header.length - 1);
     }
     else if (titleRow !== null) {
         // Specific row
-        cells = columnCells(settings.header, titleRow);
+        combined = columnCells(settings.header, titleRow);
     }
     else {
         // All
-        cells = columnCells(settings.header);
+        combined = columnCells(settings.header);
     }
+    let cells = combined.map(c => c.cell);
+    let rows = combined.map(c => c.row);
     return Dom.s(cells)
         .filter('th' + notSelector + ', td' + notSelector)
         .filter(el => {
-        return (Dom.s(el)
-            .parent()
-            .filter(notSelector)
-            .length !== 0);
+        let idx = cells.indexOf(el);
+        if (idx >= 0) {
+            return Dom.s(rows[idx]).filter(notSelector).length !== 0;
+        }
+        // Shouldn't be able to get here!
+        return true;
     });
 }
 
@@ -10024,7 +10030,7 @@ function selectColumns(settings, selector, opts) {
                         }
                         // Selector
                         if (match && match[1]) {
-                            let columnElements = columnCells(settings.header, null, col.idx);
+                            let columnElements = columnCells(settings.header, null, col.idx).map(c => c.cell);
                             return Dom.s(columnElements)
                                 .filter(match[1])
                                 .count() > 0
@@ -10061,7 +10067,7 @@ function selectColumns(settings, selector, opts) {
             return [s._DT_CellIndex.column];
         }
         // Selector on the TH elements for the columns
-        var result = Dom.s(columnCells(settings.header))
+        var result = Dom.s(columnCells(settings.header).map(c => c.cell))
             .filter(s)
             .mapTo(el => {
             return columnsFromHeader(el);
