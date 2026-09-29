@@ -1272,18 +1272,20 @@ interface OrderFixed {
      */
     post?: any[];
 }
-interface FunctionColumnData {
+type ColumnData = number | string | ColumnDataObject | ColumnDataFunction | null;
+interface ColumnDataFunction {
     (row: any, type: 'set', s: any, meta: CellMeta): void;
     (row: any, type: 'display' | 'sort' | 'filter' | 'type', s: undefined, meta: CellMeta): any;
 }
-interface ObjectColumnData {
-    _: string | number | FunctionColumnData;
-    filter?: string | number | FunctionColumnData;
-    display?: string | number | FunctionColumnData;
-    type?: string | number | FunctionColumnData;
-    sort?: string | number | FunctionColumnData;
+interface ColumnDataObject {
+    _: string | number | ColumnDataFunction;
+    filter?: string | number | ColumnDataFunction;
+    display?: string | number | ColumnDataFunction;
+    type?: string | number | ColumnDataFunction;
+    sort?: string | number | ColumnDataFunction;
 }
-interface ObjectColumnRender {
+type ColumnRender = number | string | ColumnDataObject | ColumnRenderFunction | ColumnRenderObject | null;
+interface ColumnRenderObject {
     _?: string | number | ColumnRenderFunction;
     filter?: string | number | ColumnRenderFunction;
     display?: string | number | ColumnRenderFunction;
@@ -1412,7 +1414,7 @@ interface Defaults$1 {
     /**
      * Class to assign to each cell in the column.
      */
-    data: number | string | ObjectColumnData | FunctionColumnData | null;
+    data: ColumnData;
     /**
      * Set default, static, content for a column.
      */
@@ -1444,7 +1446,7 @@ interface Defaults$1 {
     /**
      * Render (process) the data for use in the table.
      */
-    render: number | string | ObjectColumnData | ColumnRenderFunction | ObjectColumnRender | null;
+    render: ColumnRender;
     search: SearchOptions | null;
     /**
      * Enable or disable filtering on the data in this column.
@@ -5375,4 +5377,4 @@ interface DataTable extends DataTablesStatic {}
 declare const DataTable: typeof DataTable$1;
 
 export { Api, Settings as ColumnContext, DataTable, Dom, DataTable as default, _default as util };
-export type { AjaxCallback, AjaxData, AjaxDataColumn, AjaxDataColumnSearch, AjaxDataOrder, AjaxDataSearch, AjaxFunction$1 as AjaxFunction, AjaxMethods, AjaxOptions, AjaxResponse, ApiAjax, ApiCaption, ApiCell, ApiCellMethods, ApiCells, ApiCellsMethods, ApiColumn, ApiColumnMethods, ApiColumnSearch, ApiColumns, ApiColumnsMethods, ApiColumnsSearch, ApiConstructor, ApiOrder, ApiPage, ApiPageInfo, ApiRow, ApiRowChildMethods, ApiRowMethods, ApiRows, ApiRowsMethods, ApiScopeable, ApiSearch, ApiSelector, ApiState, ApiStatic, ApiStaticRegisterFn, ApiTableFooterMethods, ApiTableHeaderMethods, ApiTableMethods, ApiTablesMethods, CellIdx, CellIdxWithVisible, CellMeta, CellSelector, Defaults$1 as ColumnDefaults, ColumnIdx, Options$1 as ColumnOptions, ColumnRenderFunction, ColumnSelector, Options$1 as ColumnsConfig, Options as Config, Context, DataTableEvent, DataTablesStatic, DataTablesStaticExtButtons, DataTablesStaticRender, DataType, DataTypeDetect, Defaults, DomSelector, Ext, ExtButtons, ExtTypeSettings, HeaderStructure, IColumnControlContent, InstSelector, ConfigLanguage as Language, Options, Order, OrderArray, OrderColumn, OrderCombined, RowChildMethods, Row as RowContext, RowIdx, RowSelector, SelectorModifier, Context as Settings, State, StateLoad, TableSelector };
+export type { AjaxCallback, AjaxData, AjaxDataColumn, AjaxDataColumnSearch, AjaxDataOrder, AjaxDataSearch, AjaxFunction$1 as AjaxFunction, AjaxMethods, AjaxOptions, AjaxResponse, ApiAjax, ApiCaption, ApiCell, ApiCellMethods, ApiCells, ApiCellsMethods, ApiColumn, ApiColumnMethods, ApiColumnSearch, ApiColumns, ApiColumnsMethods, ApiColumnsSearch, ApiConstructor, ApiOrder, ApiPage, ApiPageInfo, ApiRow, ApiRowChildMethods, ApiRowMethods, ApiRows, ApiRowsMethods, ApiScopeable, ApiSearch, ApiSelector, ApiState, ApiStatic, ApiStaticRegisterFn, ApiTableFooterMethods, ApiTableHeaderMethods, ApiTableMethods, ApiTablesMethods, CellIdx, CellIdxWithVisible, CellMeta, CellSelector, ColumnData, ColumnDataFunction, ColumnDataObject, Defaults$1 as ColumnDefaults, ColumnIdx, Options$1 as ColumnOptions, ColumnRender, ColumnRenderFunction, ColumnRenderObject, ColumnSelector, Options$1 as ColumnsConfig, Options as Config, Context, DataTableEvent, DataTablesStatic, DataTablesStaticExtButtons, DataTablesStaticRender, DataType, DataTypeDetect, Defaults, DomSelector, Ext, ExtButtons, ExtTypeSettings, HeaderStructure, IColumnControlContent, InstSelector, ConfigLanguage as Language, Options, Order, OrderArray, OrderColumn, OrderCombined, RowChildMethods, Row as RowContext, RowIdx, RowSelector, SelectorModifier, Context as Settings, State, StateLoad, TableSelector };
