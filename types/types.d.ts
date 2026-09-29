@@ -1895,7 +1895,7 @@ interface ConfigLanguage {
     zeroRecords: string;
 }
 interface Options extends DeepPartial<Omit<Defaults, 'columns'>> {
-    columns?: Options$1[];
+    columns?: Array<Options$1 | null>;
 }
 
 /**
