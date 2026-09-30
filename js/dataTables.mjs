@@ -4137,20 +4137,20 @@ function featureTable(settings) {
     let scrollBody = children.eq(1);
     let scrollFoot = children.eq(2);
     // When the body is scrolled, then we also want to scroll the header and
-    // footer. Note that each element has its own scroll listener, and that in
-    // turn sets the scroll for the other elements. However this doesn't lead to
-    // an infinite loop as `scroll` is only triggered if the value changes.
+    // footer. Equally we want changes in the header / footer to transition the
+    // body. The header and footer are `overflow: hidden`, so the user can't
+    // scroll those elements other than triggering a focus action in them.
     scrollBody.on('scroll.DT', () => {
         let scrollLeft = scrollBody.scrollLeft();
         scrollHead.scrollLeft(scrollLeft);
         scrollFoot.scrollLeft(scrollLeft);
     });
-    scrollHead.on('scroll.DT', () => {
+    scrollHead.on('focusin.DT', () => {
         let scrollLeft = scrollHead.scrollLeft();
         scrollBody.scrollLeft(scrollLeft);
         scrollFoot.scrollLeft(scrollLeft);
     });
-    scrollFoot.on('scroll.DT', () => {
+    scrollFoot.on('focusin.DT', () => {
         let scrollLeft = scrollFoot.scrollLeft();
         scrollHead.scrollLeft(scrollLeft);
         scrollBody.scrollLeft(scrollLeft);
@@ -4324,7 +4324,9 @@ function scrollDraw(settings) {
         .find('[role]')
         .attrRemove('role');
     table.find('tbody tr:not([role])').attr('role', 'row');
-    table.find('tbody td:not([role]), tbody th:not([role])').attr('role', 'cell');
+    table
+        .find('tbody td:not([role]), tbody th:not([role])')
+        .attr('role', 'cell');
     scrollAria(headerCopy);
     scrollAria(footerCopy);
     // Adjust the position of the header in case we loose the y-scrollbar
