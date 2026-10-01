@@ -979,6 +979,10 @@ declare class Settings {
      */
     width: string | null;
     /**
+     * Which cells to use when calculating the column width
+     */
+    widthCalc: 'display' | 'all';
+    /**
      * Width of the column when it was first "encountered"
      */
     widthOrig: string | null;
@@ -1468,6 +1472,13 @@ interface Defaults$1 {
      * Column width assignment.
      */
     width: string | null;
+    /**
+     * Determine which rows should be used from the column for the column width
+     * calculations. It can be beneficial to performance to limit this to the
+     * currently displayed rows if the display of the data requires significant
+     * calculation (e.g. using a React or Vue component).
+     */
+    widthCalc: 'display' | 'all';
 }
 interface Options$1 extends Partial<Defaults$1> {
 }
@@ -1898,6 +1909,9 @@ interface Options extends DeepPartial<Omit<Defaults, 'columns'>> {
     columns?: Array<Options$1 | null>;
 }
 
+interface RowDisplayData extends Array<HTMLElement | string | number> {
+    _complete?: boolean;
+}
 /**
  * Structure used to store information about each individual row in DataTables
  */
@@ -1919,7 +1933,7 @@ interface Row {
     /** Indicate if the row details should be shown */
     detailsShow: undefined | boolean;
     /** Cached display value */
-    displayData: Array<any> | null;
+    displayData: RowDisplayData | null;
     /**
      * Index in the data array. This saves an indexOf lookup when we have the
      * object, but want to know the index

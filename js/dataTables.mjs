@@ -3489,7 +3489,7 @@ function invalidateRow(settings, rowIdx, src, colIdx) {
     else {
         // Reading from data object, update the DOM
         var cells = row.cells;
-        var display = getRowDisplay(settings, rowIdx);
+        var display = getDisplay(settings, rowIdx);
         if (cells.length) {
             if (colIdx !== undefined) {
                 writeCell(cells[colIdx], display[colIdx]);
@@ -3748,8 +3748,7 @@ function calculateColumnWidths(settings) {
     // Construct a worst case table with the widest, assign any user defined
     // widths, then insert it into  the DOM and allow the browser to do all
     // the hard work of calculating table widths
-    var tmpTable = Dom
-        .s(table.cloneNode())
+    var tmpTable = Dom.s(table.cloneNode())
         .css('visibility', 'hidden')
         .css('margin', '0')
         .attrRemove('id');
@@ -3803,8 +3802,7 @@ function calculateColumnWidths(settings) {
                 var autoClass = ext.type.className[column.type];
                 var padding = column.contentPadding || (scrollX ? '-' : '');
                 var text = longest + padding;
-                var cell = Dom
-                    .c('td')
+                var cell = Dom.c('td')
                     .classAdd(autoClass)
                     .classAdd(column.className)
                     .appendTo(tr);
@@ -3826,8 +3824,7 @@ function calculateColumnWidths(settings) {
     // with minimal height, so it has no effect on if the container scrolls
     // or not. Otherwise it might trigger scrolling when it actually isn't
     // needed
-    var holder = Dom
-        .c('div')
+    var holder = Dom.c('div')
         .css(scrollX || scrollY
         ? {
             position: 'absolute',
@@ -3897,8 +3894,7 @@ function calculateColumnWidths(settings) {
             // This flag allows the above to be satisfied.
             var first = Dom.s(settings.tableWrapper).isVisible();
             // Use an empty div to attach the observer so it isn't impacted by height changes
-            var resizer = Dom
-                .c('div')
+            var resizer = Dom.c('div')
                 .css({
                 width: '100%',
                 height: '0'
@@ -3951,14 +3947,19 @@ function wrapperWidth(settings) {
  */
 function getWideStrings(settings, colIdx) {
     var column = settings.columns[colIdx];
-    // Do we need to recalculate (i.e. was invalidated), or just use the cached data?
-    if (!column.wideStrings) {
+    // Do we need to recalculate (i.e. was invalidated), or just use the cached
+    // data? Recalculate if display based for the column.
+    if (!column.wideStrings || column.widthCalc === 'display') {
         var allStrings = [];
         var collection = [];
+        let rows = settings.displayMaster;
+        if (column.widthCalc === 'display') {
+            rows = settings.display.slice(settings.displayStart, settings.displayStart + settings.pageLength);
+        }
         // Create an array with the string information for the column
-        for (var i = 0, iLen = settings.displayMaster.length; i < iLen; i++) {
-            var rowIdx = settings.displayMaster[i];
-            var data = getRowDisplay(settings, rowIdx)[colIdx];
+        for (var i = 0, len = rows.length; i < len; i++) {
+            var rowIdx = rows[i];
+            var data = getDisplay(settings, rowIdx, colIdx);
             var cellString = data && typeof data === 'object' && data.nodeType
                 ? data.innerHTML
                 : data + '';
@@ -6014,14 +6015,7 @@ function filterData(settings) {
     return wasInvalidated;
 }
 
-/**
- * Render and cache a row's display data for the columns, if required
- *
- * @param settings DataTables settings object
- * @param rowIdx Row index
- * @returns Array with display information
- */
-function getRowDisplay(settings, rowIdx) {
+function getDisplay(settings, rowIdx, colIdx = null) {
     var rowModal = settings.data[rowIdx];
     var columns = settings.columns;
     if (!rowModal) {
@@ -6030,11 +6024,29 @@ function getRowDisplay(settings, rowIdx) {
     if (!rowModal.displayData) {
         // Need to render and cache
         rowModal.displayData = [];
-        for (var colIdx = 0, len = columns.length; colIdx < len; colIdx++) {
-            rowModal.displayData.push(getCellData(settings, rowIdx, colIdx, 'display'));
+    }
+    const displayData = rowModal.displayData;
+    // Check if we need to actually perform the render to get the display data
+    if (!displayData._complete) {
+        if (colIdx !== null) {
+            // Single cell
+            if (!displayData[colIdx]) {
+                displayData[colIdx] = getCellData(settings, rowIdx, colIdx, 'display');
+            }
+        }
+        else {
+            // Whole row
+            for (var i = 0, len = columns.length; i < len; i++) {
+                if (!displayData[i]) {
+                    displayData[i] = getCellData(settings, rowIdx, i, 'display');
+                    displayData._complete = true;
+                }
+            }
         }
     }
-    return rowModal.displayData;
+    // At this point the item(s) we want will have been created - possibly all,
+    // but that doesn't matter, as long as we've got the one we want.
+    return colIdx !== null ? displayData[colIdx] : displayData;
 }
 /**
  * Create a new TR element (and it's TD children) for a row
@@ -6074,7 +6086,7 @@ function createTr(settings, rowIdx, trIn, tds) {
                 column: i
             };
             cells.push(td);
-            var display = getRowDisplay(settings, rowIdx);
+            var display = getDisplay(settings, rowIdx);
             // Need to create the HTML if new, or if a rendering function is
             // defined
             if (create ||
@@ -6467,10 +6479,8 @@ function _emptyRow(settings) {
     else if (lang.emptyTable && recordsTotal(settings) === 0) {
         zero = lang.emptyTable;
     }
-    return Dom
-        .c('tr')
-        .append(Dom
-        .c('td')
+    return Dom.c('tr')
+        .append(Dom.c('td')
         .attr('colSpan', visibleColumns(settings))
         .classAdd(settings.classes.empty.row)
         .html(zero))
@@ -6597,15 +6607,12 @@ function detectHeader(settings, thead, write) {
                         cell.parent(':not([data-dt-order=disable])').count() !==
                             0 &&
                         cell.find('div.dt-column-order').count() === 0) {
-                        Dom.c('div')
-                            .classAdd('dt-column-order')
-                            .appendTo(cell);
+                        Dom.c('div').classAdd('dt-column-order').appendTo(cell);
                     }
                     // We need to wrap the elements in the header in another
                     // element to use flexbox layout for those elements
                     var headerFooter = isHeader ? 'header' : 'footer';
-                    if (cell.find('div.dt-column-' + headerFooter).count() ===
-                        0) {
+                    if (cell.find('div.dt-column-' + headerFooter).count() === 0) {
                         Dom.c('div')
                             .classAdd('dt-column-' + headerFooter)
                             .append(Array.from(cell.get(0).childNodes))
@@ -7593,7 +7600,8 @@ const defaults$2 = {
     title: null,
     type: null,
     visible: true,
-    width: null
+    width: null,
+    widthCalc: 'all'
 };
 
 /**
@@ -7694,6 +7702,10 @@ class Settings {
          * Width of the column
          */
         this.width = null;
+        /**
+         * Which cells to use when calculating the column width
+         */
+        this.widthCalc = 'all';
         /**
          * Width of the column when it was first "encountered"
          */
