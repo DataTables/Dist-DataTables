@@ -5354,7 +5354,7 @@ declare global {
     interface JQueryDataTableJq extends DataTablesStatic {
         (opts?: Options): JQueryDataTables;
     }
-    interface JQuery {
+    interface JQuery<TElement = HTMLElement> extends Iterable<TElement> {
         /**
          * Create a new DataTable, returning a DataTables API instance.
          * @param opts Configuration settings
