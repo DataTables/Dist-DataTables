@@ -9547,7 +9547,7 @@ register('destroy()', function (remove) {
         callbackFire(settings, 'destroy', 'destroy', [settings], true);
         // If not being removed from the document, make all columns visible
         if (!remove) {
-            new Api(settings).columns().visible();
+            new Api(settings).columns().visible(true);
         }
         // Container width change listener
         if (settings.resizeObserver) {
