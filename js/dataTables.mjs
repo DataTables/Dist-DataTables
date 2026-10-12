@@ -2654,7 +2654,7 @@ class Dom {
      */
     prepend(content) {
         return this.each(el => {
-            if (content instanceof Dom) {
+            if (arrayLike(content) || dom(content)) {
                 // Reverse the array, so if there are multiple elements, they
                 // end up being added sequentially, just like jQuery
                 let itemsReversed = Array.from(content).reverse();

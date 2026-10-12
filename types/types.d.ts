@@ -591,7 +591,7 @@ declare class Dom<T extends HTMLElement = HTMLElement> implements ArrayLike<T> {
      * @param content Item(s) to prepend
      * @returns Self for chaining
      */
-    prepend(content: Element | Dom | string): this;
+    prepend(content: Element | Element[] | Dom | string): this;
     /**
      * Append the current data set items to the element from the selector
      *
@@ -2807,7 +2807,7 @@ declare namespace data {
  */
 declare function export_default(arg1: any, arg2?: any): any;
 
-declare function arrayLike(test: any): any;
+declare function arrayLike<T = any>(test: any): test is T[];
 /**
  * Determine if the input is a Dom instance
  *
