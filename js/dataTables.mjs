@@ -9489,8 +9489,10 @@ register('ready()', function (fn) {
             fn.call(api);
         }
         else {
-            this.on('init.dt.DT', function () {
-                fn.call(api);
+            this.on('init.dt.DT', function (e, s) {
+                if (ctx.includes(s)) {
+                    fn.call(api);
+                }
             });
         }
     });
