@@ -1242,7 +1242,7 @@ type LayoutNumber = '' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
 type LayoutSide = 'top' | 'bottom';
 type LayoutEdge = 'Start' | 'End';
 type LayoutKeys = `${LayoutSide}${LayoutNumber}${LayoutEdge}` | `${LayoutSide}${LayoutNumber}`;
-type LayoutFeatures = keyof Feature | Feature | Array<keyof Feature> | Feature[];
+type LayoutFeatures = keyof Feature | Feature | Array<keyof Feature | Feature> | Feature[];
 type LayoutElement = {
     /** Class to apply to the CELL in the layout grid */
     className?: string;
