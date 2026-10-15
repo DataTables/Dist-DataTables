@@ -1150,6 +1150,12 @@ interface SearchOptions {
      */
     smart: boolean;
 }
+interface SearchConfig extends SearchOptions {
+    /**
+     * Applied search term
+     */
+    search: SearchInput;
+}
 /**
  * Internal object
  */
@@ -1451,7 +1457,10 @@ interface Defaults$1 {
      * Render (process) the data for use in the table.
      */
     render: ColumnRender;
-    search: SearchOptions | null;
+    /**
+     * Column search configuration
+     */
+    search: SearchConfig | null;
     /**
      * Enable or disable filtering on the data in this column.
      */
@@ -1480,7 +1489,7 @@ interface Defaults$1 {
      */
     widthCalc: 'display' | 'all';
 }
-interface Options$1 extends Partial<Defaults$1> {
+interface Options$1 extends DeepPartial<Defaults$1> {
 }
 
 interface Defaults {
@@ -1709,11 +1718,11 @@ interface Defaults {
     /**
      * Set an initial filter in DataTables and / or filtering options.
      */
-    search: Partial<SearchOptions>;
+    search: Partial<SearchConfig>;
     /**
      * Define an initial search for individual columns.
      */
-    searchCols: Partial<SearchOptions>[];
+    searchCols: Partial<SearchConfig>[];
     /**
      * Set a throttle frequency for searching.
      */
