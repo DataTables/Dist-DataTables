@@ -230,7 +230,7 @@ function dom(input) {
  * @returns true if an HTML element was passed in
  */
 function element(input) {
-    return typeof input === 'object' && input.nodeName;
+    return input && typeof input === 'object' && input.nodeName;
 }
 /**
  * Check if a value is empty or not. Note that a string with `-` is considered
