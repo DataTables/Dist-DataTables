@@ -721,7 +721,7 @@ function ajax(optionsIn) {
                 // noop
             }
         }
-        if (statusText === 'success') {
+        if (statusText === 'success' || statusText === 'nocontent') {
             callback(options.success, responseData, statusText, xhr);
         }
         else {
