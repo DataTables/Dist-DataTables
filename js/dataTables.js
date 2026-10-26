@@ -10,9 +10,6 @@
 		});
 	}
 	else if (typeof exports === 'object') {
-		// CommonJS
-		var cjsRequires = function (root) {		};
-
 		if (typeof window === 'undefined') {
 			module.exports = function (root) {
 				if (! root) {
@@ -20,19 +17,17 @@
 					// root. This will give an error otherwise
 					root = window;
 				}
-
-				cjsRequires(root);
+				
 				return factory(root, root.document);
 			};
 		}
 		else {
-			cjsRequires(window);
 			module.exports = factory(window, window.document);
 		}
 	}
 	else {
 		// Browser
-		window.DataTable = factory(window, document);
+		window.DataTable = DataTable;factory(window, document);
 	}
 }(function(window, document) {
 'use strict';
