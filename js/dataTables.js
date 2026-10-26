@@ -27,7 +27,7 @@
 	}
 	else {
 		// Browser
-		window.DataTable = DataTable;factory(window, document);
+		window.DataTable = factory(window, document);
 	}
 }(function(window, document) {
 'use strict';
