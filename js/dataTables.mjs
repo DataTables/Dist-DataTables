@@ -5962,7 +5962,13 @@ function filterCreateSearch(searchIn, inOpts) {
                 match +
                 '.)*$';
     }
-    return new RegExp(search, options.caseInsensitive ? 'i' : '');
+    try {
+        return new RegExp(search, options.caseInsensitive ? 'i' : '');
+    }
+    catch (e) {
+        log(null, 1, 'Invalid regular expression for search: ' + search);
+    }
+    return null;
 }
 // Update the filtering data for each row if needed (by invalidation or first
 // run)
@@ -6720,7 +6726,7 @@ function log(ctx, level, msg, tn) {
                 'https://datatables.net/tn/' +
                 tn;
     }
-    {
+    if (!level) {
         // Backwards compatibility pre 1.10
         var type = ext.sErrMode || ext.errMode;
         if (ctx) {
@@ -6735,6 +6741,9 @@ function log(ctx, level, msg, tn) {
         else if (typeof type == 'function') {
             type(ctx, tn, msg);
         }
+    }
+    else if (window.console && console.log) {
+        console.log(msg);
     }
 }
 /**
