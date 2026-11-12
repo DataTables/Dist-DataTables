@@ -720,7 +720,7 @@ function ajax(optionsIn) {
         let responseData = xhr.responseText;
         let statusText = 'success';
         if (xhr.status === 0) {
-            return; // aborted
+            statusText = 'error'; // Network error
         }
         else if (xhr.status === 204 || method === 'HEAD') {
             statusText = 'nocontent';
