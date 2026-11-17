@@ -6980,7 +6980,12 @@ function listener(that, name, src) {
 function escapeObject(obj) {
     if (ext.escape.attributes) {
         each(obj, function (key, val) {
-            obj[key] = escapeHtml(val);
+            if (util.is.plainObject(val) || util.is.arrayLike(val)) {
+                escapeObject(obj[key]);
+            }
+            else {
+                obj[key] = escapeHtml(val);
+            }
         });
     }
     return obj;
