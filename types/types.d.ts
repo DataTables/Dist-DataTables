@@ -1594,7 +1594,7 @@ interface Defaults {
     /**
      * Language configuration object
      */
-    language: ConfigLanguage;
+    language: Language;
     /**
      * Table and control layout. This replaces the legacy `dom` option.
      */
@@ -1789,7 +1789,7 @@ interface Defaults {
 type LanguageOption = string | {
     [key: string | number]: LanguageOption;
 };
-interface ConfigLanguage {
+interface Language {
     [key: string]: LanguageOption | any;
     /**
      * Remote language loading
@@ -1913,6 +1913,8 @@ interface ConfigLanguage {
      * Table empty as a result of filtering string.
      */
     zeroRecords: string;
+}
+interface OptionsLanguage extends DeepPartial<Language> {
 }
 interface Options extends DeepPartial<Omit<Defaults, 'columns'>> {
     columns?: Array<Options$1 | null>;
@@ -2266,7 +2268,7 @@ interface Context {
     /** JSON returned from the server in the last Ajax request */
     json: JSON$1;
     /** Language information for the table. */
-    language: ConfigLanguage;
+    language: Language;
     /** Last applied sort */
     lastOrder: any[];
     layout: Layout;
@@ -5400,4 +5402,4 @@ interface DataTable extends DataTablesStatic {}
 declare const DataTable: typeof DataTable$1;
 
 export { Api, Settings as ColumnContext, DataTable, Dom, DataTable as default, _default as util };
-export type { AjaxCallback, AjaxData, AjaxDataColumn, AjaxDataColumnSearch, AjaxDataOrder, AjaxDataSearch, AjaxFunction$1 as AjaxFunction, AjaxMethods, AjaxOptions, AjaxResponse, ApiAjax, ApiCaption, ApiCell, ApiCellMethods, ApiCells, ApiCellsMethods, ApiColumn, ApiColumnMethods, ApiColumnSearch, ApiColumns, ApiColumnsMethods, ApiColumnsSearch, ApiConstructor, ApiOrder, ApiPage, ApiPageInfo, ApiRow, ApiRowChildMethods, ApiRowMethods, ApiRows, ApiRowsMethods, ApiScopeable, ApiSearch, ApiSelector, ApiState, ApiStatic, ApiStaticRegisterFn, ApiTableFooterMethods, ApiTableHeaderMethods, ApiTableMethods, ApiTablesMethods, CellIdx, CellIdxWithVisible, CellMeta, CellSelector, ColumnData, ColumnDataFunction, ColumnDataObject, Defaults$1 as ColumnDefaults, ColumnIdx, Options$1 as ColumnOptions, ColumnRender, ColumnRenderFunction, ColumnRenderObject, ColumnSelector, Options$1 as ColumnsConfig, Options as Config, Context, DataTableEvent, DataTablesStatic, DataTablesStaticExtButtons, DataTablesStaticRender, DataType, DataTypeDetect, Defaults, DomSelector, Ext, ExtButtons, ExtTypeSettings, Feature, HeaderStructure, IColumnControlContent, InstSelector, ConfigLanguage as Language, Options, Order, OrderArray, OrderColumn, OrderCombined, RowChildMethods, Row as RowContext, RowIdx, RowSelector, SelectorModifier, Context as Settings, State, StateLoad, TableSelector };
+export type { AjaxCallback, AjaxData, AjaxDataColumn, AjaxDataColumnSearch, AjaxDataOrder, AjaxDataSearch, AjaxFunction$1 as AjaxFunction, AjaxMethods, AjaxOptions, AjaxResponse, ApiAjax, ApiCaption, ApiCell, ApiCellMethods, ApiCells, ApiCellsMethods, ApiColumn, ApiColumnMethods, ApiColumnSearch, ApiColumns, ApiColumnsMethods, ApiColumnsSearch, ApiConstructor, ApiOrder, ApiPage, ApiPageInfo, ApiRow, ApiRowChildMethods, ApiRowMethods, ApiRows, ApiRowsMethods, ApiScopeable, ApiSearch, ApiSelector, ApiState, ApiStatic, ApiStaticRegisterFn, ApiTableFooterMethods, ApiTableHeaderMethods, ApiTableMethods, ApiTablesMethods, CellIdx, CellIdxWithVisible, CellMeta, CellSelector, ColumnData, ColumnDataFunction, ColumnDataObject, Defaults$1 as ColumnDefaults, ColumnIdx, Options$1 as ColumnOptions, ColumnRender, ColumnRenderFunction, ColumnRenderObject, ColumnSelector, Options$1 as ColumnsConfig, Options as Config, OptionsLanguage as ConfigLanguage, Context, DataTableEvent, DataTablesStatic, DataTablesStaticExtButtons, DataTablesStaticRender, DataType, DataTypeDetect, Defaults, DomSelector, Ext, ExtButtons, ExtTypeSettings, Feature, HeaderStructure, IColumnControlContent, InstSelector, Language, Options, OptionsLanguage, Order, OrderArray, OrderColumn, OrderCombined, RowChildMethods, Row as RowContext, RowIdx, RowSelector, SelectorModifier, Context as Settings, State, StateLoad, TableSelector };
