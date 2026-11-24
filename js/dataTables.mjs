@@ -5993,6 +5993,8 @@ function filterData(settings) {
         row = data[rowIdx];
         if (row && !row.searchCellCache) {
             const rowFilterData = [];
+            // Check if the column type was invalidated
+            columnTypes(settings);
             for (j = 0, jen = columns.length; j < jen; j++) {
                 column = columns[j];
                 if (column.searchable) {
