@@ -8625,10 +8625,8 @@ const header = (settings, cell, classes) => {
             var orderSpan = cell.find('.dt-column-order');
             orderSpan
                 .attr('role', 'button')
-                .attr('aria-label', orderable
-                ? col.ariaTitle +
-                    ctx.api.i18n('aria.orderable' + ariaType)
-                : col.ariaTitle);
+                .attr('aria-label', col.ariaTitle +
+                ctx.api.i18n('aria.orderable' + ariaType));
             if (tabIndex !== -1) {
                 orderSpan.attr('tabindex', tabIndex);
             }
